@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace Snai.CMS.Manage.Entities
     [Table("admin")]
     public class Admin
     {
+        [Key]
         [Column("id")]
         public int ID { get; set; }
 
@@ -17,6 +19,9 @@ namespace Snai.CMS.Manage.Entities
 
         [Column("password")]
         public string Password { get; set; }
+
+        [NotMapped]
+        public string RePassword { get; set; }
 
         [Column("state")]
         public byte State { get; set; }

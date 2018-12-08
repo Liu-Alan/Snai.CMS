@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Snai.CMS.Manage.DataAccess.Base;
+using Snai.CMS.Manage.DataAccess.Implement;
+using Snai.CMS.Manage.DataAccess.Interface;
 
 namespace Snai.CMS.Manage
 {
@@ -36,6 +38,8 @@ namespace Snai.CMS.Manage
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddDbContext<CMSContext>(options => options.UseMySQL(Configuration.GetConnectionString("SnaiCMSConnection")));
+
+            services.AddScoped<ICMSAdminDao, CMSAdminDao>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

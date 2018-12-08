@@ -14,8 +14,4 @@
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.13" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Business\" />
-  </ItemGroup>
-
 </Project>
