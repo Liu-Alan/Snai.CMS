@@ -30,7 +30,7 @@ namespace Snai.CMS.Manage.DataAccess.Implement
             return Context.Admins.ToList();
         }
 
-        //取某id管理员
+        //取管理员
         public Admin GetAdminByID(int id)
         {
             return Context.Admins.SingleOrDefault(s => s.ID == id);
@@ -42,7 +42,7 @@ namespace Snai.CMS.Manage.DataAccess.Implement
             return Context.Admins.SingleOrDefault(s => s.UserName == userName);
         }
 
-        //根据id更新管理员
+        //更新管理员
         public bool UpdateAdminByID(int id, string userName, string password, byte state, int roleID)
         {
             var upState = false;
@@ -80,14 +80,17 @@ namespace Snai.CMS.Manage.DataAccess.Implement
         }
 
         //更新状态
-        public bool UpdateStateByID(int id, byte state)
+        public bool UpdateStateByIDs(IEnumerable<int> ids, byte state)
         {
             var upState = false;
-            var admin = Context.Admins.SingleOrDefault(s => s.ID == id);
-
-            if (admin != null)
+            var admins = Context.Admins.Where(item => ids.Contains(item.ID));
+            if (admins != null && admins.Count() > 0)
             {
-                admin.State = state;
+                foreach (var admin in admins)
+                {
+                    admin.State = state;
+                }
+
                 upState = Context.SaveChanges() > 0;
             }
 
@@ -95,17 +98,17 @@ namespace Snai.CMS.Manage.DataAccess.Implement
         }
 
         //解锁
-        public bool UnlockByID(int id, int lockMinute)
+        public bool UnlockByIDs(IEnumerable<int> ids, int lockTime)
         {
             var upState = false;
-            var admin = Context.Admins.SingleOrDefault(s => s.ID == id);
-
-            if (admin != null)
+            var admins = Context.Admins.Where(item => ids.Contains(item.ID));
+            if (admins != null && admins.Count() > 0)
             {
-                admin.ErrorLogonCount = 0;
-
-
-
+                foreach (var admin in admins)
+                {
+                    admin.ErrorLogonCount = 0;
+                    admin.LockTime = lockTime;
+                }
 
                 upState = Context.SaveChanges() > 0;
             }
@@ -113,15 +116,7 @@ namespace Snai.CMS.Manage.DataAccess.Implement
             return upState;
         }
 
-        //根据id删掉管理员
-        public bool DeleteAdminByID(int id)
-        {
-            var admin = Context.Admins.SingleOrDefault(s => s.ID == id);
-            Context.Admins.Remove(admin);
-            return Context.SaveChanges() > 0;
-        }
-
-        //根据id删掉管理员
+        //删掉管理员
         public bool DeleteAdminByIDs(IEnumerable<int> ids)
         {
             var admins = Context.Admins.Where(item => ids.Contains(item.ID));

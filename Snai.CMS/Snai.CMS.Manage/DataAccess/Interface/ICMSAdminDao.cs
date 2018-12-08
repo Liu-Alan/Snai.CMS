@@ -14,28 +14,25 @@ namespace Snai.CMS.Manage.DataAccess.Interface
         //取全部管理员
         IEnumerable<Admin> GetAdmins();
 
-        //取某id管理员
+        //取管理员
         Admin GetAdminByID(int id);
 
         //取管理员
         Admin GetAdminByUserName(string userName);
 
-        //根据id更新管理员
+        //更新管理员
         bool UpdateAdminByID(int id, string userName,string password, byte state,int roleID);
 
         //修改密码
         bool UpdatePasswordByID(int id, string password);
 
         //更新状态
-        bool UpdateStateByID(int id, byte state);
+        bool UpdateStateByIDs(IEnumerable<int> ids, byte state);
 
         //解锁
-        bool UnlockByID(int id,int lockMinute);
+        bool UnlockByIDs(IEnumerable<int> ids, int lockTime);
 
-        //根据id删掉管理员
-        bool DeleteAdminByID(int id);
-
-        //根据id删掉管理员
+        //删掉管理员
         bool DeleteAdminByIDs(IEnumerable<int> ids);
     }
 }
