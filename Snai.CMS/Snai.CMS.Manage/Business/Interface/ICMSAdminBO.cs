@@ -11,5 +11,11 @@ namespace Snai.CMS.Manage.Business.Interface
     {
         //添加管理员
         Message CreateAdmin(Admin admin);
+
+        //取全部管理员
+        IEnumerable<Admin> GetAdmins();
+
+        //取管理员
+        Admin GetAdminByID(int id);
     }
 }
