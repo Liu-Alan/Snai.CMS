@@ -132,5 +132,28 @@ namespace Snai.CMS.Manage.Business.Implement
 
             return msg;
         }
+
+        //取全部管理员
+        public IEnumerable<Admin> GetAdmins()
+        {
+            var admins = CMSAdminDao.GetAdmins();
+
+            return admins;
+        }
+
+        //取管理员
+        public Admin GetAdminByID(int id)
+        {
+            var admin = CMSAdminDao.GetAdminByID(id);
+
+            if (admin != null)
+            {
+                return admin;
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }
