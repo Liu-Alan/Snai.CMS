@@ -7,10 +7,11 @@ USE snai_cms
 CREATE TABLE admin(
 	id INT AUTO_INCREMENT PRIMARY KEY,			-- 自增列需为主键
 	user_name NVARCHAR(32) NOT NULL,
-	'password' NVARCHAR(32) NOT NULL,
-	state TINYINT NOT NULL DEFAULT 1,			-- 1 正常，2 禁用
+	`password` VARCHAR(32) NOT NULL,
 	role_id INT NOT NULL,
+	state TINYINT NOT NULL DEFAULT 1,			-- 1 正常，2 禁用
 	create_time INT NOT NULL DEFAULT 0,
+	update_time INT NOT NULL DEFAULT 0,
 	last_logon_time INT NOT NULL DEFAULT 0,
 	error_logon_time INT NOT NULL DEFAULT 0,
 	error_logon_count INT NOT NULL DEFAULT 0,		-- 错误次数

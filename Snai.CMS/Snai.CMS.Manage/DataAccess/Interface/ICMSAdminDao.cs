@@ -8,6 +8,8 @@ namespace Snai.CMS.Manage.DataAccess.Interface
 {
     public interface ICMSAdminDao
     {
+        #region 管理员操作
+
         //添加管理员
         bool CreateAdmin(Admin admin);
 
@@ -21,7 +23,7 @@ namespace Snai.CMS.Manage.DataAccess.Interface
         Admin GetAdminByUserName(string userName);
 
         //更新管理员
-        bool UpdateAdminByID(int id, string userName,string password, byte state,int roleID);
+        bool UpdateAdminByID(int id, string userName, string password, byte state, int roleID, int updateTime);
 
         //修改密码
         bool UpdatePasswordByID(int id, string password);
@@ -34,5 +36,7 @@ namespace Snai.CMS.Manage.DataAccess.Interface
 
         //删掉管理员
         bool DeleteAdminByIDs(IEnumerable<int> ids);
+
+        #endregion
     }
 }

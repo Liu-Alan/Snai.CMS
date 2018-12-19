@@ -10,12 +10,22 @@ namespace Snai.CMS.Manage.DataAccess.Implement
 {
     public class CMSAdminDao : ICMSAdminDao
     {
+        #region 属性声明
+
         public CMSContext Context;
+        
+        #endregion
+
+        #region 构造函数
 
         public CMSAdminDao(CMSContext context)
         {
             Context = context;
         }
+
+        #endregion
+
+        #region 管理员操作
 
         //添加管理员
         public bool CreateAdmin(Admin admin)
@@ -43,7 +53,7 @@ namespace Snai.CMS.Manage.DataAccess.Implement
         }
 
         //更新管理员
-        public bool UpdateAdminByID(int id, string userName, string password, byte state, int roleID)
+        public bool UpdateAdminByID(int id, string userName, string password, byte state, int roleID, int updateTime)
         {
             var upState = false;
             var admin = Context.Admins.SingleOrDefault(s => s.ID == id);
@@ -57,6 +67,7 @@ namespace Snai.CMS.Manage.DataAccess.Implement
                 }
                 admin.State = state;
                 admin.RoleID = roleID;
+                admin.UpdateTime = updateTime;
 
                 upState = Context.SaveChanges() > 0;
             }
@@ -123,5 +134,7 @@ namespace Snai.CMS.Manage.DataAccess.Implement
             Context.Admins.RemoveRange(admins);
             return Context.SaveChanges() > 0;
         }
+
+        #endregion
     }
 }

@@ -9,6 +9,8 @@ namespace Snai.CMS.Manage.Business.Interface
 {
     public interface ICMSAdminBO
     {
+        #region 管理员操作
+
         //添加管理员
         Message CreateAdmin(Admin admin);
 
@@ -17,5 +19,13 @@ namespace Snai.CMS.Manage.Business.Interface
 
         //取管理员
         Admin GetAdminByID(int id);
+
+        //取管理员
+        Admin GetAdminByUserName(string userName);
+
+        //更新管理员
+        Message UpdateAdminByID(Admin admin);
+
+        #endregion
     }
 }

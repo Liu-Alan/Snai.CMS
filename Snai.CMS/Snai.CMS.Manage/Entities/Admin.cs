@@ -32,6 +32,9 @@ namespace Snai.CMS.Manage.Entities
         [Column("create_time")]
         public int CreateTime { get; set; }
 
+        [Column("update_time")]
+        public int UpdateTime { get; set; }
+
         [Column("last_logon_time")]
         public int LastLogonTime { get; set; }
 
