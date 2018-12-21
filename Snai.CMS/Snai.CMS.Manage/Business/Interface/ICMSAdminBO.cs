@@ -1,5 +1,5 @@
 ﻿using Snai.CMS.Manage.Common.Infrastructure;
-using Snai.CMS.Manage.Entities;
+using Snai.CMS.Manage.Entities.BackConfig;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +25,18 @@ namespace Snai.CMS.Manage.Business.Interface
 
         //更新管理员
         Message UpdateAdminByID(Admin admin);
+
+        //修改密码
+        Message UpdatePasswordByID(int id,string oldPassword, string password,string rePassword);
+
+        //更新状态
+        Message UpdateStateByIDs(IEnumerable<int> ids, byte state);
+
+        //解锁
+        Message UnlockByIDs(IEnumerable<int> ids);
+
+        //删除管理员
+        Message DeleteAdminByIDs(IEnumerable<int> ids);
 
         #endregion
     }

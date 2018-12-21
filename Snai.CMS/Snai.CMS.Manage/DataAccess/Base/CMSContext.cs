@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Snai.CMS.Manage.Entities;
+using Snai.CMS.Manage.Entities.BackConfig;
 using System;
 using System.Collections.Generic;
 using System.Linq;

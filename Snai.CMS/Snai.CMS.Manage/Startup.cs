@@ -9,9 +9,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Snai.CMS.Manage.Business.Implement;
+using Snai.CMS.Manage.Business.Interface;
 using Snai.CMS.Manage.DataAccess.Base;
 using Snai.CMS.Manage.DataAccess.Implement;
 using Snai.CMS.Manage.DataAccess.Interface;
+using Snai.CMS.Manage.Entities.Settings;
 
 namespace Snai.CMS.Manage
 {
@@ -37,9 +40,18 @@ namespace Snai.CMS.Manage
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            //注册数据库连接
             services.AddDbContext<CMSContext>(options => options.UseMySQL(Configuration.GetConnectionString("SnaiCMSConnection")));
 
+            //注册全局配置
+            services.AddOptions();
+            services.Configure<LogonSettings>(Configuration.GetSection(nameof(LogonSettings)));
+
+            //注册数据库实现
             services.AddScoped<ICMSAdminDao, CMSAdminDao>();
+
+            //注册业务实现
+            services.AddScoped<ICMSAdminBO, CMSAdminBO>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -9,7 +9,7 @@ CREATE TABLE admin(
 	user_name NVARCHAR(32) NOT NULL,
 	`password` VARCHAR(32) NOT NULL,
 	role_id INT NOT NULL,
-	state TINYINT NOT NULL DEFAULT 1,			-- 1 正常，2 禁用
+	state TINYINT NOT NULL DEFAULT 1,			-- 1 启用，2 禁用
 	create_time INT NOT NULL DEFAULT 0,
 	update_time INT NOT NULL DEFAULT 0,
 	last_logon_time INT NOT NULL DEFAULT 0,

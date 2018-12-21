@@ -1,7 +1,10 @@
-﻿using Snai.CMS.Manage.Common.Infrastructure;
+﻿using Microsoft.Extensions.Options;
+using Snai.CMS.Manage.Business.Interface;
+using Snai.CMS.Manage.Common.Infrastructure;
 using Snai.CMS.Manage.Common.Utils;
 using Snai.CMS.Manage.DataAccess.Interface;
-using Snai.CMS.Manage.Entities;
+using Snai.CMS.Manage.Entities.BackConfig;
+using Snai.CMS.Manage.Entities.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,18 +12,20 @@ using System.Threading.Tasks;
 
 namespace Snai.CMS.Manage.Business.Implement
 {
-    public class CMSAdminBO
+    public class CMSAdminBO: ICMSAdminBO
     {
         #region 属性声明
 
+        IOptions<LogonSettings> LogonSettings;
         public ICMSAdminDao CMSAdminDao;
 
         #endregion
 
         #region 构造函数
 
-        public CMSAdminBO(ICMSAdminDao cmsAdminDao)
+        public CMSAdminBO(IOptions<LogonSettings> logonSettings, ICMSAdminDao cmsAdminDao)
         {
+            LogonSettings = logonSettings;
             CMSAdminDao = cmsAdminDao;
         }
 
@@ -216,6 +221,7 @@ namespace Snai.CMS.Manage.Business.Implement
                 msg.Code = 11;
                 msg.Msg = "修改的管理员不存在";
 
+                return msg;
             }
 
             upAdmin = this.GetAdminByUserName(admin.UserName);
@@ -223,6 +229,8 @@ namespace Snai.CMS.Manage.Business.Implement
             {
                 msg.Code = 12;
                 msg.Msg = "修改的管理员用户名已存在";
+
+                return msg;
             }
 
             if (!string.IsNullOrEmpty(admin.Password.Trim()))
@@ -261,6 +269,172 @@ namespace Snai.CMS.Manage.Business.Implement
 
             return msg;
 
+        }
+
+        //修改密码
+        public Message UpdatePasswordByID(int id, string oldPassword, string password, string rePassword)
+        {
+            var msg = new Message(10, "");
+
+            var admin = this.GetAdminByID(id);
+            if (admin == null || admin.ID <= 0)
+            {
+                msg.Code = 11;
+                msg.Msg = "修改的管理员不存在";
+
+                return msg;
+            }
+
+            if (string.IsNullOrEmpty(oldPassword))
+            {
+                msg.Code = 101;
+                msg.Msg = "旧密码不能为空";
+
+                return msg;
+            }
+
+            oldPassword = EncryptMd5.EncryptByte(oldPassword);
+            if (!oldPassword.Equals(admin.Password))
+            {
+                msg.Code = 12;
+                msg.Msg = "旧密码输入错误";
+
+                return msg;
+            }
+
+            if (string.IsNullOrEmpty(password.Trim()) || !password.Trim().Equals(rePassword))
+            {
+                msg.Code = 102;
+                msg.Msg = "密码为空或两次密码不一致";
+
+                return msg;
+            }
+
+            var pwdMsg = this.VerifyPassword(password);
+            if (!pwdMsg.Success)
+            {
+                return msg;
+            }
+
+            password = EncryptMd5.EncryptByte(password.Trim());
+            var updateTime = (int)DateTimeUtil.DateTimeToUnixTimeStamp(DateTime.Now);
+
+            var upState = CMSAdminDao.UpdatePasswordByID(id, password, updateTime);
+
+            if (upState)
+            {
+                msg.Code = 0;
+                msg.Msg = "修改密码成功";
+            }
+            else
+            {
+                msg.Code = 1;
+                msg.Msg = "修改密码失败";
+            }
+
+            return msg;
+        }
+
+        //更新状态
+        public Message UpdateStateByIDs(IEnumerable<int> ids, byte state)
+        {
+            var msg = new Message(10, "");
+
+            if (state != 1 && state != 2)
+            {
+                msg.Code = 101;
+                msg.Msg = "要更改的状态有误";
+
+                return msg;
+            }
+
+            var stateDes = state == 1 ? "启用" : "禁用";
+
+            if (ids == null || ids.Count() <= 0)
+            {
+                msg.Code = 101;
+                msg.Msg = $"请选择要{stateDes}的管理员";
+
+                return msg;
+            }
+
+            var updateTime = (int)DateTimeUtil.DateTimeToUnixTimeStamp(DateTime.Now);
+
+            var upState = CMSAdminDao.UpdateStateByIDs(ids, state, updateTime);
+
+            if (upState)
+            {
+                msg.Code = 0;
+                msg.Msg = $"{stateDes}成功";
+            }
+            else
+            {
+                msg.Code = 1;
+                msg.Msg = $"{stateDes}失败";
+            }
+
+            return msg;
+        }
+
+        //解锁
+        public Message UnlockByIDs(IEnumerable<int> ids)
+        {
+            var msg = new Message(10, "");
+
+            if (ids == null || ids.Count() <= 0)
+            {
+                msg.Code = 101;
+                msg.Msg = "请选择要解锁的管理员";
+
+                return msg;
+            }
+
+            var lockTime = (int)DateTimeUtil.DateTimeToUnixTimeStamp(DateTime.Now.AddMinutes(-LogonSettings.Value.LockMinute));
+            var updateTime = (int)DateTimeUtil.DateTimeToUnixTimeStamp(DateTime.Now);
+
+            var upState = CMSAdminDao.UnlockByIDs(ids, lockTime, updateTime);
+
+            if (upState)
+            {
+                msg.Code = 0;
+                msg.Msg = "解锁成功";
+            }
+            else
+            {
+                msg.Code = 1;
+                msg.Msg = "解锁失败";
+            }
+
+            return msg;
+        }
+
+        //删除管理员
+        public Message DeleteAdminByIDs(IEnumerable<int> ids)
+        {
+            var msg = new Message(10, "");
+
+            if (ids == null || ids.Count() <= 0)
+            {
+                msg.Code = 101;
+                msg.Msg = "请选择要删除的管理员";
+
+                return msg;
+            }
+
+            var upState = CMSAdminDao.DeleteAdminByIDs(ids);
+
+            if (upState)
+            {
+                msg.Code = 0;
+                msg.Msg = "删除成功";
+            }
+            else
+            {
+                msg.Code = 1;
+                msg.Msg = "删除失败";
+            }
+
+            return msg;
         }
 
         #endregion

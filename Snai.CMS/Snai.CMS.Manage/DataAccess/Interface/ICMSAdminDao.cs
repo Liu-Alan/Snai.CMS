@@ -1,4 +1,4 @@
-﻿using Snai.CMS.Manage.Entities;
+﻿using Snai.CMS.Manage.Entities.BackConfig;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,15 +26,15 @@ namespace Snai.CMS.Manage.DataAccess.Interface
         bool UpdateAdminByID(int id, string userName, string password, byte state, int roleID, int updateTime);
 
         //修改密码
-        bool UpdatePasswordByID(int id, string password);
+        bool UpdatePasswordByID(int id, string password, int updateTime);
 
         //更新状态
-        bool UpdateStateByIDs(IEnumerable<int> ids, byte state);
+        bool UpdateStateByIDs(IEnumerable<int> ids, byte state, int updateTime);
 
         //解锁
-        bool UnlockByIDs(IEnumerable<int> ids, int lockTime);
+        bool UnlockByIDs(IEnumerable<int> ids, int lockTime, int updateTime);
 
-        //删掉管理员
+        //删除管理员
         bool DeleteAdminByIDs(IEnumerable<int> ids);
 
         #endregion
