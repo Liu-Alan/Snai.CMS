@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Snai.CMS.Manage.Entities.BackConfig
+namespace Snai.CMS.Manage.Entities.BackManage
 {
     [Table("admin")]
     public class Admin

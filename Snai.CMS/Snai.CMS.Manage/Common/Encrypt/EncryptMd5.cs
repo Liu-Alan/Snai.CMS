@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Snai.CMS.Manage.Common.Infrastructure
+namespace Snai.CMS.Manage.Common.Encrypt
 {
     public class EncryptMd5
     {

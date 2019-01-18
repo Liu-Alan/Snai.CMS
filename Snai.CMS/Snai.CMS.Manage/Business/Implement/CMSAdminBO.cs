@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.Options;
 using Snai.CMS.Manage.Business.Interface;
+using Snai.CMS.Manage.Common.Encrypt;
 using Snai.CMS.Manage.Common.Infrastructure;
 using Snai.CMS.Manage.Common.Utils;
 using Snai.CMS.Manage.DataAccess.Interface;
-using Snai.CMS.Manage.Entities.BackConfig;
+using Snai.CMS.Manage.Entities.BackManage;
 using Snai.CMS.Manage.Entities.Settings;
 using System;
 using System.Collections.Generic;
