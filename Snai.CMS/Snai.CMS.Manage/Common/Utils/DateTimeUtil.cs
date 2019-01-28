@@ -14,9 +14,8 @@ namespace Snai.CMS.Manage.Common.Utils
         /// <returns>返回单位秒</returns>
         public static long DateTimeToUnixTimeStamp(DateTime time)
         {
-            //System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
-            DateTime startTime = TimeZoneInfo.ConvertTime(new DateTime(1970, 1, 1), TimeZoneInfo.Local);
-            return Convert.ToInt64((time - startTime).TotalSeconds);
+            DateTimeOffset dto = new DateTimeOffset(time);
+            return dto.ToUnixTimeSeconds();
         }
 
         /// <summary>
@@ -26,9 +25,8 @@ namespace Snai.CMS.Manage.Common.Utils
         /// <returns></returns>
         public static DateTime UnixTimeStampToDateTime(long timeStamp)
         {
-            //System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
-            DateTime startTime = TimeZoneInfo.ConvertTime(new DateTime(1970, 1, 1), TimeZoneInfo.Local);
-            return startTime.AddSeconds(timeStamp);
+            var dto = DateTimeOffset.FromUnixTimeSeconds(timeStamp);
+            return dto.ToLocalTime().DateTime;
         }
     }
 }
