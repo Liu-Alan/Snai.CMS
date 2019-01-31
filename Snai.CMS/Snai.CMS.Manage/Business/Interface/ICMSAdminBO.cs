@@ -39,5 +39,12 @@ namespace Snai.CMS.Manage.Business.Interface
         Message DeleteAdminByIDs(IEnumerable<int> ids);
 
         #endregion
+
+        #region 管理员登录
+
+        //登录
+        Message AdminLogin(AdminLogin admin);
+
+        #endregion
     }
 }

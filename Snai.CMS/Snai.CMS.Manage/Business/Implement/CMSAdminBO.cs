@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Options;
 using Snai.CMS.Manage.Business.Interface;
+using Snai.CMS.Manage.Common;
 using Snai.CMS.Manage.Common.Encrypt;
 using Snai.CMS.Manage.Common.Infrastructure;
+using Snai.CMS.Manage.Common.Infrastructure.HttpContexts;
 using Snai.CMS.Manage.Common.Utils;
 using Snai.CMS.Manage.DataAccess.Interface;
 using Snai.CMS.Manage.Entities.BackManage;
@@ -19,6 +21,7 @@ namespace Snai.CMS.Manage.Business.Implement
 
         IOptions<LogonSettings> LogonSettings;
         public ICMSAdminDao CMSAdminDao;
+        public IHttpSession HttpSession;
 
         #endregion
 
@@ -390,7 +393,7 @@ namespace Snai.CMS.Manage.Business.Implement
                 return msg;
             }
 
-            var lockTime = (int)DateTimeUtil.DateTimeToUnixTimeStamp(DateTime.Now.AddMinutes(-LogonSettings.Value.LockMinute));
+            var lockTime = 0;
             var updateTime = (int)DateTimeUtil.DateTimeToUnixTimeStamp(DateTime.Now);
 
             var upState = CMSAdminDao.UnlockByIDs(ids, lockTime, updateTime);
@@ -434,6 +437,106 @@ namespace Snai.CMS.Manage.Business.Implement
                 msg.Code = 1;
                 msg.Msg = "删除失败";
             }
+
+            return msg;
+        }
+
+        #endregion
+
+        #region 管理员登录
+
+        //登录
+        public Message AdminLogin(AdminLogin adminLogin)
+        {
+            var msg = new Message(10, "");
+
+            if (string.IsNullOrEmpty(adminLogin.UserName) || string.IsNullOrEmpty(adminLogin.Password))
+            {
+                msg.Code = 101;
+                msg.Msg = "用户名或密码不能为空";
+
+                return msg;
+            }
+
+            if (string.IsNullOrEmpty(adminLogin.ValidateCode))
+            {
+                msg.Code = 102;
+                msg.Msg = "验证码不能为空";
+
+                return msg;
+            }
+
+            var validate = HttpSession.EqualsSessionValue(Consts.Session_ValidateCode, adminLogin.ValidateCode);
+            HttpSession.RemoveSession(Consts.Session_ValidateCode);
+            if(!validate)
+            {
+                msg.Code = 103;
+                msg.Msg = "验证码错误";
+
+                return msg;
+            }
+
+            var admin = this.GetAdminByUserName(adminLogin.UserName);
+            if (admin == null || admin.ID <= 0)
+            {
+                msg.Code = 11;
+                msg.Msg = "用户名或密码错误";
+
+                return msg;
+            }
+
+            var timeStamp = (int)DateTimeUtil.DateTimeToUnixTimeStamp(DateTime.Now);
+            if (admin.LockTime > timeStamp)
+            {
+                msg.Code = 12;
+                msg.Msg = $"帐号已锁定，请{LogonSettings.Value.LockMinute}分钟后再来登录";
+
+                return msg;
+            }
+
+            adminLogin.Password = EncryptMd5.EncryptByte(adminLogin.Password);
+            if (!admin.Password.Equals(adminLogin.Password))
+            {
+                if (admin.ErrorLogonTime + (LogonSettings.Value.ErrorTime * 60) < timeStamp)
+                {
+                    admin.ErrorLogonTime = timeStamp;
+                    admin.ErrorLogonCount = 1;
+                }
+                else
+                {
+                    admin.ErrorLogonCount += 1;
+                }
+
+                if (admin.ErrorLogonCount >= LogonSettings.Value.ErrorCount)
+                {
+                    admin.ErrorLogonTime = 0;
+                    admin.ErrorLogonCount = 0;
+                    admin.LockTime = timeStamp + (LogonSettings.Value.LockMinute * 60);
+
+                    //锁定帐号
+
+                    msg.Code = 13;
+                    msg.Msg = $"帐号或密码在{LogonSettings.Value.ErrorTime}分钟内，错误{LogonSettings.Value.ErrorCount}次，锁定帐号{LogonSettings.Value.LockMinute}分钟";
+
+                    return msg;
+                }
+                else
+                {
+                    //更新错误次数，时间
+
+                    msg.Code = 14;
+                    msg.Msg = $"帐号或密码错误，如在{LogonSettings.Value.ErrorTime}分钟内，错误{LogonSettings.Value.ErrorCount}次，将锁定帐号{LogonSettings.Value.LockMinute}分钟";
+
+                    return msg;
+                }
+            }
+
+            admin.LastLogonTime = timeStamp;
+            admin.ErrorLogonTime = 0;
+            admin.ErrorLogonCount = 0;
+            admin.LockTime = 0;
+
+            //更新用户信息
 
             return msg;
         }

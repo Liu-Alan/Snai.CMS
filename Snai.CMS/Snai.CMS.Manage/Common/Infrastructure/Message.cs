@@ -47,7 +47,7 @@ namespace Snai.CMS.Manage.Common.Infrastructure
         #region 公共属性
 
         /// <summary>
-        /// 状态代码
+        /// 状态代码 1~10 保留，11~100 数据层错误，101以上 业务错误
         /// </summary>
         public int Code { get; set; }
 

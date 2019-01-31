@@ -11,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Snai.CMS.Manage.Business.Implement;
 using Snai.CMS.Manage.Business.Interface;
+using Snai.CMS.Manage.Common.Infrastructure.HttpContexts;
+using Snai.CMS.Manage.Common.Infrastructure.ValidateCodes;
 using Snai.CMS.Manage.DataAccess.Base;
 using Snai.CMS.Manage.DataAccess.Implement;
 using Snai.CMS.Manage.DataAccess.Interface;
@@ -33,10 +35,15 @@ namespace Snai.CMS.Manage
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
+                options.CheckConsentNeeded = context => false;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(15);
+                options.Cookie.HttpOnly = true;
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -46,6 +53,12 @@ namespace Snai.CMS.Manage
             //注册全局配置
             services.AddOptions();
             services.Configure<LogonSettings>(Configuration.GetSection(nameof(LogonSettings)));
+            services.Configure<WebSettings>(Configuration.GetSection(nameof(WebSettings)));
+
+            //注册基础工具
+            services.AddTransient<IHttpCookie, HttpCookie>();
+            services.AddTransient<IHttpSession, HttpSession>();
+            services.AddTransient<IValidateCode, ValidateCode_Style1>();
 
             //注册数据库实现
             services.AddScoped<ICMSAdminDao, CMSAdminDao>();
@@ -68,6 +81,7 @@ namespace Snai.CMS.Manage
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseSession();
 
             app.UseMvc(routes =>
             {

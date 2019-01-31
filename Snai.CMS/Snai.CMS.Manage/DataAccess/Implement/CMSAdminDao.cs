@@ -120,6 +120,7 @@ namespace Snai.CMS.Manage.DataAccess.Implement
             {
                 foreach (var admin in admins)
                 {
+                    admin.ErrorLogonTime = 0;
                     admin.ErrorLogonCount = 0;
                     admin.LockTime = lockTime;
                     admin.UpdateTime = updateTime;

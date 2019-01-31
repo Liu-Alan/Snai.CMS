@@ -13,9 +13,9 @@ CREATE TABLE admin(
 	create_time INT NOT NULL DEFAULT 0,
 	update_time INT NOT NULL DEFAULT 0,
 	last_logon_time INT NOT NULL DEFAULT 0,
-	error_logon_time INT NOT NULL DEFAULT 0,
-	error_logon_count INT NOT NULL DEFAULT 0,		-- 错误次数
-	lock_time INT NOT NULL DEFAULT 0 			-- 锁定开始时间
+	error_logon_time INT NOT NULL DEFAULT 0,	-- 错误开始时间
+	error_logon_count INT NOT NULL DEFAULT 0,	-- 错误次数
+	lock_time INT NOT NULL DEFAULT 0 			-- 锁定结束时间
 )
 ;
 
