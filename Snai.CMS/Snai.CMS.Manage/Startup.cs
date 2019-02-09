@@ -59,6 +59,7 @@ namespace Snai.CMS.Manage
             services.AddTransient<IHttpCookie, HttpCookie>();
             services.AddTransient<IHttpSession, HttpSession>();
             services.AddTransient<IValidateCode, ValidateCode_Style1>();
+            services.AddTransient<ICMSAdminCookie, CMSAdminCookie>();
 
             //注册数据库实现
             services.AddScoped<ICMSAdminDao, CMSAdminDao>();

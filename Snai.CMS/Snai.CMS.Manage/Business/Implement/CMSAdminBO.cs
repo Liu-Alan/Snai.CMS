@@ -22,15 +22,17 @@ namespace Snai.CMS.Manage.Business.Implement
         IOptions<LogonSettings> LogonSettings;
         public ICMSAdminDao CMSAdminDao;
         public IHttpSession HttpSession;
+        public ICMSAdminCookie CMSAdminCookie;
 
         #endregion
 
         #region 构造函数
 
-        public CMSAdminBO(IOptions<LogonSettings> logonSettings, ICMSAdminDao cmsAdminDao)
+        public CMSAdminBO(IOptions<LogonSettings> logonSettings, ICMSAdminDao cmsAdminDao, ICMSAdminCookie cmsAdminCookie)
         {
             LogonSettings = logonSettings;
             CMSAdminDao = cmsAdminDao;
+            CMSAdminCookie = cmsAdminCookie;
         }
 
         #endregion
@@ -380,6 +382,70 @@ namespace Snai.CMS.Manage.Business.Implement
             return msg;
         }
 
+        //更新错误登录信息
+        public Message UpdateErrorLogon(int id, int errorLogonTime, int errorLogonCount)
+        {
+            var msg = new Message(10, "");
+
+            var admin = this.GetAdminByID(id);
+            if (admin == null || admin.ID <= 0)
+            {
+                msg.Code = 11;
+                msg.Msg = "更新的管理员不存在";
+
+                return msg;
+            }
+
+            var updateTime = (int)DateTimeUtil.DateTimeToUnixTimeStamp(DateTime.Now);
+
+            var upState = CMSAdminDao.UpdateErrorLogon(id, errorLogonTime, errorLogonCount, updateTime);
+
+            if (upState)
+            {
+                msg.Code = 0;
+                msg.Msg = "更新错误登录信息成功";
+            }
+            else
+            {
+                msg.Code = 1;
+                msg.Msg = "更新错误登录信息失败";
+            }
+
+            return msg;
+        }
+
+        //锁定管理员
+        public Message LockAdmin(int id, int lockTime)
+        {
+            var msg = new Message(10, "");
+
+            var admin = this.GetAdminByID(id);
+            if (admin == null || admin.ID <= 0)
+            {
+                msg.Code = 11;
+                msg.Msg = "锁定的管理员不存在";
+
+                return msg;
+            }
+
+            var updateTime = (int)DateTimeUtil.DateTimeToUnixTimeStamp(DateTime.Now);
+
+            var upState = CMSAdminDao.LockAdmin(id, lockTime, updateTime);
+
+            if (upState)
+            {
+                msg.Code = 0;
+                msg.Msg = "锁定的管理员成功";
+            }
+            else
+            {
+                msg.Code = 1;
+                msg.Msg = "锁定的管理员失败";
+            }
+
+            return msg;
+        }
+
         //解锁
         public Message UnlockByIDs(IEnumerable<int> ids)
         {
@@ -393,10 +459,9 @@ namespace Snai.CMS.Manage.Business.Implement
                 return msg;
             }
 
-            var lockTime = 0;
             var updateTime = (int)DateTimeUtil.DateTimeToUnixTimeStamp(DateTime.Now);
 
-            var upState = CMSAdminDao.UnlockByIDs(ids, lockTime, updateTime);
+            var upState = CMSAdminDao.UnlockAdminByIDs(ids, updateTime);
 
             if (upState)
             {
@@ -436,6 +501,38 @@ namespace Snai.CMS.Manage.Business.Implement
             {
                 msg.Code = 1;
                 msg.Msg = "删除失败";
+            }
+
+            return msg;
+        }
+
+        //更新管理员登录信息
+        public Message UpdateAdminLogon(int id, int lastLogonTime)
+        {
+            var msg = new Message(10, "");
+
+            var admin = this.GetAdminByID(id);
+            if (admin == null || admin.ID <= 0)
+            {
+                msg.Code = 11;
+                msg.Msg = "更新的管理员不存在";
+
+                return msg;
+            }
+
+            var updateTime = (int)DateTimeUtil.DateTimeToUnixTimeStamp(DateTime.Now);
+
+            var upState = CMSAdminDao.UpdateAdminLogon(id, lastLogonTime);
+
+            if (upState)
+            {
+                msg.Code = 0;
+                msg.Msg = "更新管理员登录信息成功";
+            }
+            else
+            {
+                msg.Code = 1;
+                msg.Msg = "更新管理员登录信息失败";
             }
 
             return msg;
@@ -485,10 +582,18 @@ namespace Snai.CMS.Manage.Business.Implement
                 return msg;
             }
 
+            if (admin.State == 2)
+            {
+                msg.Code = 12;
+                msg.Msg = "用户已禁用";
+
+                return msg;
+            }
+
             var timeStamp = (int)DateTimeUtil.DateTimeToUnixTimeStamp(DateTime.Now);
             if (admin.LockTime > timeStamp)
             {
-                msg.Code = 12;
+                msg.Code = 13;
                 msg.Msg = $"帐号已锁定，请{LogonSettings.Value.LockMinute}分钟后再来登录";
 
                 return msg;
@@ -514,17 +619,19 @@ namespace Snai.CMS.Manage.Business.Implement
                     admin.LockTime = timeStamp + (LogonSettings.Value.LockMinute * 60);
 
                     //锁定帐号
+                    this.LockAdmin(admin.ID, admin.LockTime);
 
-                    msg.Code = 13;
+                    msg.Code = 14;
                     msg.Msg = $"帐号或密码在{LogonSettings.Value.ErrorTime}分钟内，错误{LogonSettings.Value.ErrorCount}次，锁定帐号{LogonSettings.Value.LockMinute}分钟";
 
                     return msg;
                 }
                 else
                 {
-                    //更新错误次数，时间
+                    //更新错误登录信息
+                    this.UpdateErrorLogon(admin.ID, admin.ErrorLogonTime, admin.ErrorLogonCount);
 
-                    msg.Code = 14;
+                    msg.Code = 15;
                     msg.Msg = $"帐号或密码错误，如在{LogonSettings.Value.ErrorTime}分钟内，错误{LogonSettings.Value.ErrorCount}次，将锁定帐号{LogonSettings.Value.LockMinute}分钟";
 
                     return msg;
@@ -536,8 +643,13 @@ namespace Snai.CMS.Manage.Business.Implement
             admin.ErrorLogonCount = 0;
             admin.LockTime = 0;
 
-            //更新用户信息
+            //更新管理员登录信息
+            this.UpdateAdminLogon(admin.ID, admin.LastLogonTime);
 
+            CMSAdminCookie.SetAdiminCookie(adminLogin);
+
+            msg.Code = 0;
+            msg.Msg = "登录成功";
             return msg;
         }
 

@@ -32,11 +32,20 @@ namespace Snai.CMS.Manage.Business.Interface
         //更新状态
         Message UpdateStateByIDs(IEnumerable<int> ids, byte state);
 
+        //更新错误登录信息
+        Message UpdateErrorLogon(int id, int errorLogonTime, int errorLogonCount);
+
+        //锁定管理员
+        Message LockAdmin(int id, int lockTime);
+
         //解锁
         Message UnlockByIDs(IEnumerable<int> ids);
 
         //删除管理员
         Message DeleteAdminByIDs(IEnumerable<int> ids);
+
+        //更新管理员登录信息
+        Message UpdateAdminLogon(int id, int lastLogonTime);
 
         #endregion
 

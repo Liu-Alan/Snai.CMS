@@ -111,8 +111,46 @@ namespace Snai.CMS.Manage.DataAccess.Implement
             return upState;
         }
 
+        //更新错误登录信息
+        public bool UpdateErrorLogon(int id, int errorLogonTime, int errorLogonCount, int updateTime)
+        {
+            var upState = false;
+            var admin = Context.Admins.SingleOrDefault(item => item.ID == id);
+
+            if (admin != null)
+            {
+                admin.ErrorLogonTime = errorLogonTime;
+                admin.ErrorLogonCount = errorLogonCount;
+                admin.UpdateTime = updateTime;
+
+                upState = Context.SaveChanges() > 0;
+            }
+
+            return upState;
+        }
+
+        //锁定管理员
+        public bool LockAdmin(int id, int lockTime, int updateTime)
+        {
+            var upState = false;
+
+            var admin = Context.Admins.SingleOrDefault(item => item.ID == id);
+
+            if (admin != null)
+            {
+                admin.ErrorLogonTime = 0;
+                admin.ErrorLogonCount = 0;
+                admin.LockTime = lockTime;
+                admin.UpdateTime = updateTime;
+
+                upState = Context.SaveChanges() > 0;
+            }
+
+            return upState;
+        }
+
         //解锁
-        public bool UnlockByIDs(IEnumerable<int> ids, int lockTime, int updateTime)
+        public bool UnlockAdminByIDs(IEnumerable<int> ids, int updateTime)
         {
             var upState = false;
             var admins = Context.Admins.Where(item => ids.Contains(item.ID));
@@ -122,7 +160,7 @@ namespace Snai.CMS.Manage.DataAccess.Implement
                 {
                     admin.ErrorLogonTime = 0;
                     admin.ErrorLogonCount = 0;
-                    admin.LockTime = lockTime;
+                    admin.LockTime = 0;
                     admin.UpdateTime = updateTime;
                 }
 
@@ -138,6 +176,27 @@ namespace Snai.CMS.Manage.DataAccess.Implement
             var admins = Context.Admins.Where(item => ids.Contains(item.ID));
             Context.Admins.RemoveRange(admins);
             return Context.SaveChanges() > 0;
+        }
+
+
+        //更新管理员登录信息
+        public bool UpdateAdminLogon(int id, int lastLogonTime)
+        {
+            var upState = false;
+
+            var admin = Context.Admins.SingleOrDefault(item => item.ID == id);
+
+            if (admin != null)
+            {
+                admin.LastLogonTime = lastLogonTime;
+                admin.ErrorLogonTime = 0;
+                admin.ErrorLogonCount = 0;
+                admin.LockTime = 0;
+
+                upState = Context.SaveChanges() > 0;
+            }
+
+            return upState;
         }
 
         #endregion

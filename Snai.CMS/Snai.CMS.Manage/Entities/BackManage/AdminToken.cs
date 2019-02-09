@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace Snai.CMS.Manage.Entities.BackManage
 {
+    [Serializable]
     public class AdminToken
     {
         public string UserName { get; set; }

@@ -31,11 +31,20 @@ namespace Snai.CMS.Manage.DataAccess.Interface
         //更新状态
         bool UpdateStateByIDs(IEnumerable<int> ids, byte state, int updateTime);
 
+        //更新错误登录信息
+        bool UpdateErrorLogon(int id, int errorLogonTime,int errorLogonCount, int updateTime);
+
+        //锁定管理员
+        bool LockAdmin(int id, int lockTime, int updateTime);
+
         //解锁
-        bool UnlockByIDs(IEnumerable<int> ids, int lockTime, int updateTime);
+        bool UnlockAdminByIDs(IEnumerable<int> ids, int updateTime);
 
         //删除管理员
         bool DeleteAdminByIDs(IEnumerable<int> ids);
+
+        //更新管理员登录信息
+        bool UpdateAdminLogon(int id, int lastLogonTime);
 
         #endregion
     }
