@@ -54,6 +54,12 @@ namespace Snai.CMS.Manage.Business.Interface
         //登录
         Message AdminLogin(AdminLogin admin);
 
+        //登出
+        void AdminLogout();
+
+        //是否登录（true 登录在线，false 离线）
+        bool ValidateAdminLogin();
+
         #endregion
     }
 }

@@ -10,7 +10,14 @@ namespace Snai.CMS.Manage.Business.Interface
     {
         #region AdminCookie操作
 
+        //设置Cookie
         void SetAdiminCookie(AdminLogin admin);
+
+        //读取Cookie
+        AdminToken GetAdiminCookie();
+
+        //删除Cookie
+        void DelAdiminCookie();
 
         #endregion
     }

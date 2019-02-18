@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Snai.CMS.Manage.Common.Infrastructure.HttpContexts
 {
@@ -47,6 +48,12 @@ namespace Snai.CMS.Manage.Common.Infrastructure.HttpContexts
             {
                 return "";
             }
+        }
+
+        public T GetCookie<T>(string cookieKey)
+        {
+            string cookieValue = this.GetCookie(cookieKey);
+            return JsonConvert.DeserializeObject<T>(cookieValue);
         }
 
         public void DelCookie(string cookieKey)

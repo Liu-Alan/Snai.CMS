@@ -35,6 +35,7 @@ namespace Snai.CMS.Manage.Business.Implement
 
         #region AdminCookie操作
 
+        //设置Cookie
         public void SetAdiminCookie(AdminLogin admin)
         {
             AdminToken adminToken = new AdminToken
@@ -49,6 +50,20 @@ namespace Snai.CMS.Manage.Business.Implement
             string cipherTokrn = EncryptAES.Encrypt(WebSettings.Value.CipherKey,tokrn);
 
             HttpCookie.SetCookie(Consts.Cookie_AdminToken, cipherTokrn);
+        }
+
+        //读取Cookie
+        public AdminToken GetAdiminCookie()
+        {
+            var adminToken = HttpCookie.GetCookie<AdminToken>(Consts.Cookie_AdminToken);
+
+            return adminToken;
+        }
+
+        //删除Cookie
+        public void DelAdiminCookie()
+        {
+            HttpCookie.DelCookie(Consts.Cookie_AdminToken);
         }
 
         #endregion

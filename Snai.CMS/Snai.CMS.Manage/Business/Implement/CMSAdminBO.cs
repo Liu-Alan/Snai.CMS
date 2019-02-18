@@ -653,6 +653,27 @@ namespace Snai.CMS.Manage.Business.Implement
             return msg;
         }
 
+        //登出
+        public void AdminLogout()
+        {
+            CMSAdminCookie.DelAdiminCookie();
+        }
+
+        //是否登录（true 登录在线，false 离线）
+        public bool ValidateAdminLogin()
+        {
+            var adminToken = CMSAdminCookie.GetAdiminCookie();
+
+            if (adminToken == null || string.IsNullOrEmpty(adminToken.UserName))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         #endregion
     }
 }
