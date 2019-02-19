@@ -9,5 +9,8 @@ namespace Snai.CMS.Manage.Entities.Settings
     {
         //加密Key
         public string CipherKey { get; set; }
+
+        //网站标题
+        public string WebTitle { get; set; }
     }
 }
