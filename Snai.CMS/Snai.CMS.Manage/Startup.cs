@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Snai.CMS.Manage.Business.Implement;
 using Snai.CMS.Manage.Business.Interface;
+using Snai.CMS.Manage.Common.Infrastructure.Filters;
 using Snai.CMS.Manage.Common.Infrastructure.HttpContexts;
 using Snai.CMS.Manage.Common.Infrastructure.ValidateCodes;
 using Snai.CMS.Manage.DataAccess.Base;
@@ -66,6 +67,9 @@ namespace Snai.CMS.Manage
 
             //注册业务实现
             services.AddScoped<ICMSAdminBO, CMSAdminBO>();
+
+            //注册过滤器
+            services.AddScoped<AuthorizationFilter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

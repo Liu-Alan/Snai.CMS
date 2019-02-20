@@ -9,6 +9,7 @@ using Snai.CMS.Manage.Common;
 using Snai.CMS.Manage.Common.Infrastructure;
 using Snai.CMS.Manage.Common.Infrastructure.HttpContexts;
 using Snai.CMS.Manage.Common.Infrastructure.ValidateCodes;
+using Snai.CMS.Manage.Entities.BackManage;
 using Snai.CMS.Manage.Entities.Settings;
 using Snai.CMS.Manage.Models;
 
@@ -51,10 +52,36 @@ namespace Snai.CMS.Manage.Controllers
 
         public ActionResult<Message> DoLogin()
         {
-            string UserName
-            string code = Request.Form["validateCode"];
+            string userName = Request.Form["userName"];
+            string password = Request.Form["password"];
+            string validateCode = Request.Form["validateCode"];
 
-            var msg = CMSAdminBO.AdminLogin();
+            var admin = new AdminLogin
+            {
+                UserName = userName,
+                Password = password,
+                ValidateCode = validateCode
+            };
+
+            var msg = CMSAdminBO.AdminLogin(admin);
+
+            if (msg.Success)
+            {
+                msg.Msg = "/Home/Index";
+            }
+
+            return new JsonResult(msg);
+        }
+
+        #endregion
+
+        #region 登出
+
+        public ActionResult<Message> AdminLogout()
+        {
+            CMSAdminBO.AdminLogout();
+
+            var msg=new Message(0, "/Login/AdminLogin");
 
             return new JsonResult(msg);
         }

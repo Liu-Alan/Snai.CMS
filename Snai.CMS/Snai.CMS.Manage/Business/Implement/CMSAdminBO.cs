@@ -660,7 +660,7 @@ namespace Snai.CMS.Manage.Business.Implement
         }
 
         //是否登录（true 登录在线，false 离线）
-        public bool ValidateAdminLogin()
+        public bool VerifyAdminLogin()
         {
             var adminToken = CMSAdminCookie.GetAdiminCookie();
 

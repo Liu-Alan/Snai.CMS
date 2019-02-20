@@ -58,7 +58,7 @@ namespace Snai.CMS.Manage.Business.Interface
         void AdminLogout();
 
         //是否登录（true 登录在线，false 离线）
-        bool ValidateAdminLogin();
+        bool VerifyAdminLogin();
 
         #endregion
     }
