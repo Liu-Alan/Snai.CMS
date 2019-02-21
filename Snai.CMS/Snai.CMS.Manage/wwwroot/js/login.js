@@ -1,12 +1,4 @@
-﻿/**
- *	Login.js
- */
-
-var Logon = {};
-
-Logon.ErrorItem = {
-    verifyCode: 0
-};
+﻿var Logon = {};
 
 Logon.Const = {
     accounts: {

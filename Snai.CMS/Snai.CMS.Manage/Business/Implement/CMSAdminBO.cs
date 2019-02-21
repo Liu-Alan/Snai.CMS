@@ -119,6 +119,14 @@ namespace Snai.CMS.Manage.Business.Implement
                 return msg;
             }
 
+            if (admin.UserName.Length > 32)
+            {
+                msg.Code = 102;
+                msg.Msg = "用户名长度不能多于32个字符";
+
+                return msg;
+            }
+
             var uAdmin = CMSAdminDao.GetAdminByUserName(admin.UserName);
             if (uAdmin != null && uAdmin.ID > 0)
             {
@@ -217,6 +225,14 @@ namespace Snai.CMS.Manage.Business.Implement
             {
                 msg.Code = 101;
                 msg.Msg = "用户名不能为空";
+
+                return msg;
+            }
+
+            if (admin.UserName.Length>32)
+            {
+                msg.Code = 101;
+                msg.Msg = "用户名长度不能多于32个字符";
 
                 return msg;
             }
@@ -567,6 +583,14 @@ namespace Snai.CMS.Manage.Business.Implement
             {
                 msg.Code = 102;
                 msg.Msg = "验证码不能为空";
+
+                return msg;
+            }
+
+            if (adminLogin.ValidateCode.Length > 6)
+            {
+                msg.Code = 102;
+                msg.Msg = "验证码输入错误";
 
                 return msg;
             }
