@@ -90,7 +90,7 @@ namespace Snai.CMS.Manage.Controllers
 
         #region 验证码
 
-        public IActionResult VerifyCode(string identify = "")
+        public IActionResult VerifyCode()
         {
             string codeValue = "";
             var codeImg = ValidateCode.CreateImage(out codeValue, 6);
