@@ -1,4 +1,7 @@
-﻿
+﻿@using Snai.CMS.Manage.Models
+
+@model AdminLoginModel
+
 @{
     Layout = null;
 }
@@ -7,9 +10,24 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>AdminLogin</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@Model.WebTitle - Snai.CMS</title>
+
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/login.css" />
+    <link rel="stylesheet" href="~/lib/layui/css/layui.css" />
 </head>
 <body>
+
+    <script src="~/lib/layui/layui.js"></script>
+    <script src="~/js/login.js"></script>
+    <script>
+        layui.use('form', function () {
+            var form = layui.form;
+
+            //各种基于事件的操作
+        });
+    </script>
 </body>
 </html>
