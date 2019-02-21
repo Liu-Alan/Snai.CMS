@@ -8,7 +8,7 @@ using Snai.CMS.Manage.Business.Interface;
 
 namespace Snai.CMS.Manage.Common.Infrastructure.Filters
 {
-    public class AuthorizationFilter: IActionFilter
+    public class AuthorizationFilter: IAuthorizationFilter
     {
         #region 属性声明
 
@@ -25,18 +25,13 @@ namespace Snai.CMS.Manage.Common.Infrastructure.Filters
         
         #endregion
 
-        public void OnActionExecuting(ActionExecutingContext context)
+        public void OnAuthorization(AuthorizationFilterContext context)
         {
             var login = CMSAdminBO.VerifyAdminLogin();
             if (!login)
             {
                 context.Result = new RedirectResult("/Login/AdminLogin");
             }
-        }
-
-        public void OnActionExecuted(ActionExecutedContext context)
-        {
-
         }
     }
 }
