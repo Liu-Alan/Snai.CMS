@@ -555,6 +555,14 @@ namespace Snai.CMS.Manage.Business.Implement
                 return msg;
             }
 
+            if (adminLogin.UserName.Length > 32)
+            {
+                msg.Code = 101;
+                msg.Msg = "用户名或密码输入错误";
+
+                return msg;
+            }
+
             if (string.IsNullOrEmpty(adminLogin.ValidateCode))
             {
                 msg.Code = 102;
