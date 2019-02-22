@@ -579,7 +579,7 @@ namespace Snai.CMS.Manage.Business.Implement
                 return msg;
             }
 
-            if (string.IsNullOrEmpty(adminLogin.ValidateCode))
+            if (string.IsNullOrEmpty(adminLogin.VerifyCode))
             {
                 msg.Code = 102;
                 msg.Msg = "验证码不能为空";
@@ -587,7 +587,7 @@ namespace Snai.CMS.Manage.Business.Implement
                 return msg;
             }
 
-            if (adminLogin.ValidateCode.Length > 6)
+            if (adminLogin.VerifyCode.Length > 6)
             {
                 msg.Code = 102;
                 msg.Msg = "验证码输入错误";
@@ -595,7 +595,7 @@ namespace Snai.CMS.Manage.Business.Implement
                 return msg;
             }
 
-            var validate = HttpSession.EqualsSessionValue(Consts.Session_ValidateCode, adminLogin.ValidateCode);
+            var validate = HttpSession.EqualsSessionValue(Consts.Session_ValidateCode, adminLogin.VerifyCode);
             HttpSession.RemoveSession(Consts.Session_ValidateCode);
             if(!validate)
             {

@@ -1,193 +1,101 @@
 ﻿var Logon = {};
 
 Logon.Const = {
-    accounts: {
-        empty: "请输入您的游戏帐号",
-        error: "您输入的游戏帐号不正确，请重新输入",
-        defaultTips: "最近盗号猖獗，为了您的账号安全，请您先在最近一次登录的游戏大厅里设置保险箱密码！"
+    userName: {
+        empty: "请输入用户名"
     },
 
     password: {
-        empty: "请输入您的登录密码"
+        empty: "请输入密码"
     },
 
     verifyCode: {
         empty: "请输入图片中的字符",
         error: "验证码输入错误",
         loading: "正在检查验证码,请稍候...",
-        maxLen: 4
-    },
-
-    authCode: {
-        empty: "请输入爱玩宝令上显示的动态码",
-        error: "动态码输入错误",
-        length: "请输入8位长度的动态码",
-        loading: "正在检查动态码,请稍候...",
-        maxLen: 8
-    },
-    SMSCode: {
-        defaultTips: "最近盗号猖獗，为了您的账号安全，请验证您的密保手机！",
-        empty: "请输入您收到的短信验证码",
-        error: "短信验证码输入错误",
-        mobileError: "请输入正确的密保手机",
-        length: "请输入6位长度的动态码",
-        loading: "正在检查短信验证码,请稍候...",
         maxLen: 6
-    },
-
-    InsurePass: {
-        defaultTips: "最近盗号猖獗，为了您的账号安全，请验证您的保险箱密码！",
-        empty: "请输入您的保险箱密码",
-        error: "保险箱密码输入错误",
-        loading: "正在验证保险箱密码,请稍候..."
     },
 
     ajaxErr: "很抱歉，由于服务器繁忙，请您稍后再试",
 
     url: {
-        getservertime: "/handler/GetServerTime.cspx",
-        dologon: "/handler/dologin.cspx",
-        logonok: "/index.html",
-        jumpurl: "",
-        verifyCodeEquals: "/handler/validvcode.cspx",
-        authCodeEquals: "/handler/validauthcode.cspx",
-        doValidVerifyCode: "/handler/doValidSMSVerifyCode.cspx",
-        sendVerifyCode: "/handler/SendSMSVerifyCode.cspx",
-
-        doValidInsurePass: "/handler/doValidInsurePass.cspx"
-    }
-};
-
-Logon.Utils = {
-    urlEncodeBase64: function (str) {
-        return Mo.Base64.encode(Mo.urlencode(str));
+        dologon: "~/Login/DoLogin"
     }
 };
 
 Logon.Form = {
-    accounts: null,
+    userName: null,
     password: null,
-    autologin: null,
-    button: null,
-    gourl: null,
-
-    divVerifyCode: null,
     verifyCode: null,
-    picVerifyCode: null,
-    btnVerifyCode: null,
-
+    imgVerify: null,
+    loginBtn: null,
 
     inti: function () {
-        this.accounts = $("#accounts");
+        this.userName = $("#userName");
         this.password = $("#password");
-        this.autologin = $("#autologin");
-        this.button = $("#login");
-        this.gourl = $("#gourl");
-
-        this.divVerifyCode = $("#divVerifyCode")
         this.verifyCode = $("#verifyCode");
-        this.picVerifyCode = $("#picVerifyCode");
-        this.btnVerifyCode = $("#btnVerifyCode");
-    },
-
-    clear: function () {
-        this.accounts.val("");
-        this.password.val("");
+        this.imgVerify = $("#imgVerify");
+        this.loginBtn = $("#loginBtn");
     },
 
     focus: function (obj) {
         obj.select();
-        obj.addClass("text_box_focus");
     },
 
     blur: function (obj) {
-        obj.removeClass("text_box_focus");
-        obj.removeClass("text_box_error");
     },
 
     error: function (obj) {
-        obj.addClass("text_box_error");
-    },
-
-    icon: ["loginicon", "logincontext"],
-
-    toArray: function (objs) {
-        return new Array(objs[0], objs[1]);
+        obj.addClass("layui-form-danger");
     }
 };
 
-Logon.Accounts = {
-
-    _cookieName: "fr_su",
-
-    set: function () {
-        var autologin = Logon.Form.autologin.attr("checked");
-        var strAcc = Logon.Form.accounts.val();
-        if (!this.check()) {
-            if (autologin) {
-                $.cookie(this._cookieName, strAcc, {
-                    expires: 7
-                });
-            } else {
-                $.cookie(this._cookieName, strAcc);
-            }
-        }
-    },
-
-    get: function () {
-        var objAcc = $.cookie(this._cookieName);
-        if (objAcc && !Mo.String(objAcc).isNullOrEmptyTrim()) {
-            Logon.Form.accounts.val(objAcc);
-            Logon.Form.autologin.attr("checked", "checked");
-        }
+Logon.UserName = {
+    check: function () {
+        var strUserName = Logon.Form.userName.val();
+        return Utils.String(strUserName).isNullOrEmptyTrim();
     },
 
     clear: function () {
-        var autologin = Logon.Form.autologin.attr("checked");
-        if (!autologin) {
-            Logon.Form.accounts.val("");
-            $.cookie(this._cookieName, "", {
-                expires: -1
-            });
-        }
-    },
-
-    check: function () {
-        var strAcc = Logon.Form.accounts.val();
-        return Mo.String(strAcc).isNullOrEmptyTrim();
+        Logon.Form.userName.val("");
+        Logon.Form.userName.focus();
     },
 
     onfocus: function () {
-        Logon.Form.focus(Logon.Form.accounts);
+        Logon.Form.focus(Logon.Form.userName);
     },
     onblur: function (e) {
-        Logon.Form.blur(Logon.Form.accounts);
+        Logon.Form.blur(Logon.Form.userName);
     },
 
     onkeydown: function () {
         if (this.check()) {
-            Logon.Form.accounts.focus();
+            Logon.Form.userName.focus();
         } else {
             if (Logon.Password.check()) {
                 Logon.Form.password.focus();
             }
             else {
-                Logon.Form.button.trigger('click');
+                if (Logon.validateCode.check()) {
+                    Logon.Form.validateCode.focus();
+                }
+                else {
+                    Logon.Form.loginBtn.trigger('click');
+                }
             }
         }
     },
 
     bind: function () {
-        Logon.Form.accounts.bind("keydown", function (e) {
-            $.enterSubmit(e, function () { Logon.Accounts.onkeydown(); });
+        Logon.Form.userName.bind("keydown", function (e) {
+            $.enterSubmit(e, function () { Logon.UserName.onkeydown(); });
         });
 
-        Logon.Form.accounts.bind("focus", Logon.Accounts.onfocus);
-        Logon.Form.accounts.bind("blur", Logon.Accounts.onblur);
+        Logon.Form.userName.bind("focus", Logon.UserName.onfocus);
+        Logon.Form.userName.bind("blur", Logon.UserName.onblur);
 
-        this.get();
         if (this.check()) {
-            Logon.Form.accounts.focus();
+            Logon.Form.userName.focus();
         } else {
             Logon.Form.password.focus();
         }
@@ -197,7 +105,7 @@ Logon.Accounts = {
 Logon.Password = {
     check: function () {
         var passwd = Logon.Form.password.val();
-        return Mo.String(passwd).isNullOrEmptyTrim();
+        return Utils.String(passwd).isNullOrEmptyTrim();
     },
 
     clear: function () {
@@ -219,17 +127,17 @@ Logon.Password = {
 };
 
 Logon.VerifyCode = {
-    isLogonClick: false,
     check: function () {
-        if (Mo.Validator.EmptyTrim(Logon.Form.verifyCode.val())) {
-            Tips.show(Logon.Form.toArray(Logon.Form.icon), Tips.enumDate.error, Logon.Const.verifyCode.empty);
+        var verifyCode = Logon.Form.validateCode.val();
+
+        if (Utils.String(verifyCode).isNullOrEmptyTrim()) {
             return false;
         }
 
-        var len = Mo.String(Logon.Form.verifyCode.val()).byteLength();
+        var len = Utils.String(verifyCode).byteLength();
         if (len != Logon.Const.verifyCode.maxLen) {
             Logon.Form.error(Logon.Form.verifyCode);
-            Tips.show(Logon.Form.toArray(Logon.Form.icon), Tips.enumDate.error, Logon.Const.verifyCode.error);
+            layer.msg(Logon.Const.verifyCode.error, {icon: 2});   
             return false;
         }
 

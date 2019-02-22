@@ -54,13 +54,13 @@ namespace Snai.CMS.Manage.Controllers
         {
             string userName = Request.Form["userName"];
             string password = Request.Form["password"];
-            string validateCode = Request.Form["validateCode"];
+            string verifyCode = Request.Form["verifyCode"];
 
             var admin = new AdminLogin
             {
                 UserName = userName,
                 Password = password,
-                ValidateCode = validateCode
+                VerifyCode = verifyCode
             };
 
             var msg = CMSAdminBO.AdminLogin(admin);

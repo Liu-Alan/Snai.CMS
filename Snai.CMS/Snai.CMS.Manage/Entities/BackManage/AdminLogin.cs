@@ -12,6 +12,6 @@ namespace Snai.CMS.Manage.Entities.BackManage
         
         public string Password { get; set; }
 
-        public string ValidateCode { get; set; }
+        public string VerifyCode { get; set; }
     }
 }
