@@ -40,5 +40,18 @@ $.extend({
         catch (e) {
             _aFrameObj.src = _aUrl;
         }
+    },
+
+    /*
+	 * 禁用提交按钮
+	 */
+    disableButton: function (obj) {
+        obj.attr("disabled", true);
+        obj.addClass("disabled");
+    },
+
+    enableButton: function (obj) {
+        obj.attr("disabled", false);
+        obj.removeClass("disabled");
     }
 });
