@@ -30,7 +30,7 @@ namespace Snai.CMS.Manage.Common.Infrastructure.Filters
             var login = CMSAdminBO.VerifyAdminLogin();
             if (!login)
             {
-                context.Result = new RedirectResult("/Login/AdminLogin");
+                context.Result = new RedirectResult(Consts.Url_AdminLogin);
             }
         }
     }

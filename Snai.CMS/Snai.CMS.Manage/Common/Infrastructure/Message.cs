@@ -54,7 +54,6 @@ namespace Snai.CMS.Manage.Common.Infrastructure
         /// <summary>
         /// 成功标识，状态代码 Code=0 时，判断为 True.
         /// </summary>
-        [JsonIgnore]
         public bool Success => this.Code == 0;
 
 

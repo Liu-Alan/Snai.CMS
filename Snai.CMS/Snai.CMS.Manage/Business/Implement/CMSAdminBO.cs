@@ -28,10 +28,11 @@ namespace Snai.CMS.Manage.Business.Implement
 
         #region 构造函数
 
-        public CMSAdminBO(IOptions<LogonSettings> logonSettings, ICMSAdminDao cmsAdminDao, ICMSAdminCookie cmsAdminCookie)
+        public CMSAdminBO(IOptions<LogonSettings> logonSettings, ICMSAdminDao cmsAdminDao, IHttpSession httpSession, ICMSAdminCookie cmsAdminCookie)
         {
             LogonSettings = logonSettings;
             CMSAdminDao = cmsAdminDao;
+            HttpSession = httpSession;
             CMSAdminCookie = cmsAdminCookie;
         }
 

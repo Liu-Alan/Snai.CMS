@@ -13,8 +13,6 @@ namespace Snai.CMS.Manage.Common.Infrastructure.HttpContexts
 
         string GetCookie(string cookieKey);
 
-        T GetCookie<T>(string cookieKey);
-
         void DelCookie(string cookieKey);
 
         #endregion

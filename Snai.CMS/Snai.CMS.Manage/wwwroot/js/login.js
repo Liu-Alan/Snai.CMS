@@ -18,7 +18,7 @@ Logon.Const = {
     ajaxErr: "很抱歉，由于服务器繁忙，请您稍后再试",
 
     url: {
-        dologon: "~/Login/DoLogin",
+        dologon: "/Login/DoLogin",
         jumpurl: "/Home/Index"
     }
 };
@@ -81,8 +81,9 @@ Logon.UserName = {
                 Logon.Form.password.focus();
             }
             else {
-                if (Logon.validateCode.check()) {
-                    Logon.Form.validateCode.focus();
+                var verifyCodeCheck = Logon.VerifyCode.check();
+                if (verifyCodeCheck == 1 || verifyCodeCheck == 2) {
+                    Logon.Form.verifyCode.focus();
                 }
                 else {
                     Logon.Form.loginBtn.trigger('click');
@@ -101,7 +102,8 @@ Logon.UserName = {
 
         if (this.check()) {
             Logon.Form.userName.focus();
-        } else {
+        }
+        else {
             Logon.Form.password.focus();
         }
     }
@@ -129,8 +131,9 @@ Logon.Password = {
         if (this.check()) {
             Logon.Form.password.focus();
         } else {
-            if (!Logon.VerifyCode.check()) {
-                Logon.Form.password.focus();
+            var verifyCodeCheck = Logon.VerifyCode.check();
+            if (verifyCodeCheck == 1 || verifyCodeCheck == 2) {
+                Logon.Form.verifyCode.focus();
             }
             else {
                 Logon.Form.loginBtn.trigger('click');
@@ -141,35 +144,31 @@ Logon.Password = {
     bind: function () {
         Logon.Form.password.bind("focus", Logon.Password.onfocus);
         Logon.Form.password.bind("blur", Logon.Password.onblur);
-        Logon.Form.userName.bind("keydown", function (e) {
-            $.enterSubmit(e, function () { Logon.UserName.onkeydown(); });
+        Logon.Form.password.bind("keydown", function (e) {
+            $.enterSubmit(e, function () { Logon.Password.onkeydown(); });
         });
     }
 };
 
 Logon.VerifyCode = {
     check: function () {
-        var verifyCode = Logon.Form.validateCode.val();
+        var verifyCode = Logon.Form.verifyCode.val();
 
         if (Utils.String(verifyCode).isNullOrEmptyTrim()) {
-            Logon.Form.error(Logon.Form.verifyCode);
-            Logon.layui.layer.msg(Logon.Const.verifyCode.empty, { icon: 2 });   
-            return false;
+            return 1;
         }
 
         var len = Utils.String(verifyCode).byteLength();
         if (len != Logon.Const.verifyCode.maxLen) {
-            Logon.Form.error(Logon.Form.verifyCode);
-            Logon.layui.layer.msg(Logon.Const.verifyCode.error, {icon: 2});   
-            return false;
+            return 2;
         }
 
-        return true;
+        return 0;
     },
     //刷新图片
     onrefresh: function () {
         var src = Logon.Form.imgVerify.attr("src");
-        Logon.Form.imgVerify.attr("src", src + "&rnd=" + Math.random());
+        Logon.Form.imgVerify.attr("src", src + "?" + Math.random());
     },
 
     onfocus: function (e) {
@@ -182,10 +181,16 @@ Logon.VerifyCode = {
     bind: function () {
         Logon.Form.verifyCode.bind("focus", Logon.VerifyCode.onfocus);
         Logon.Form.verifyCode.bind("blur", Logon.VerifyCode.onblur);
-        Logon.Form.verifyCode.bind("keypress", function (e) {
+        Logon.Form.verifyCode.bind("keydown", function (e) {
             var event = e || window.event;
             if (event.keyCode == 13) {
-                Logon.onsubmit();
+                var verifyCodeCheck = Logon.VerifyCode.check();
+                if (verifyCodeCheck == 1 || verifyCodeCheck == 2) {
+                    Logon.Form.verifyCode.focus();
+                }
+                else {
+                    Logon.onsubmit();
+                }
             }
         });
     }
@@ -200,6 +205,19 @@ Logon.LoginBtn = {
         obj.text("登 录");
         $.enableButton(obj);
     },
+
+    bind: function () {
+        Logon.Form.loginBtn.bind("click", function () {
+            return Logon.onsubmit();
+        });
+
+        Logon.Form.loginBtn.bind("keypress", function (e) {
+            var event = e || window.event;
+            if (event.keyCode == 13) {
+                Logon.onsubmit();
+            }
+        });
+    }
 };
 
 Logon.checkInput = function () {
@@ -216,8 +234,17 @@ Logon.checkInput = function () {
         Logon.Form.password.focus();
         return false;
     }
-    
-    if (!Logon.VerifyCode.check()) {
+
+    var verifyCodeCheck = Logon.VerifyCode.check();
+    if (verifyCodeCheck == 1) {
+        Logon.Form.error(Logon.Form.verifyCode);
+        Logon.layui.layer.msg(Logon.Const.verifyCode.empty, { icon: 2 }); 
+        Logon.Form.verifyCode.focus();
+        return false;
+    }
+    if (verifyCodeCheck == 2) {
+        Logon.Form.error(Logon.Form.verifyCode);
+        Logon.layui.layer.msg(Logon.Const.verifyCode.error, { icon: 2 });   
         Logon.Form.verifyCode.focus();
         return false;
     }
@@ -250,13 +277,14 @@ Logon.onsubmit = function () {
         dataType: "json",
         data: params,
         success: function (data, textStatus) {
-            if (!data.Success) {
+            if (!data.success) {
                 Logon.LoginBtn.enable(Logon.Form.loginBtn);
                 Logon.Password.clear();
-                Logon.layui.layer.msg(data.Msg, { icon: 2, time: 4000 }); 
+                Logon.VerifyCode.onrefresh();
+                Logon.layui.layer.msg(data.msg, { icon: 2, time: 4000 }); 
             } else {
                 Logon.layui.layer.msg("登录成功", { icon: 1 }); 
-                Logon.Const.url.jumpurl = Utils.String(data.Msg).isNullOrEmptyTrim() ? Logon.Const.url.jumpurl : data.Msg;
+                Logon.Const.url.jumpurl = Utils.String(data.msg).isNullOrEmptyTrim() ? Logon.Const.url.jumpurl : data.msg;
                 $.jump(Logon.Const.url.jumpurl);
             }
         },
@@ -286,11 +314,9 @@ Logon.bind = function () {
     Logon.UserName.bind();
     Logon.Password.bind();
     Logon.VerifyCode.bind();
+    Logon.LoginBtn.bind();
 
-    Logon.Form.loginBtn.bind("click", function () {
-        return Logon.onsubmit();
-    });
-
+    /* 整页面监听回车键提交，跟上面每个框回车键重复
     $("body").keydown(function (event) {
         var e = event || window.event; //兼容ie
         //keyCode=13是回车键 且 按钮没有聚焦
@@ -298,6 +324,7 @@ Logon.bind = function () {
             Logon.Form.loginBtn.click();
         }
     });
+    */
 };
 
 /*

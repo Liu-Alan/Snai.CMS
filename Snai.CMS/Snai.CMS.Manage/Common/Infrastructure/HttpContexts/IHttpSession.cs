@@ -13,8 +13,6 @@ namespace Snai.CMS.Manage.Common.Infrastructure.HttpContexts
 
         string GetSession(string sessionKey);
 
-        T GetSession<T>(string sessionKey);
-
         void RemoveSession(string sessionKey);
 
         bool EqualsSessionValue(string sessionKey, string equalsValue);

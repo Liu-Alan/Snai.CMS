@@ -21,5 +21,13 @@ namespace Snai.CMS.Manage.Common
         public const string Cookie_AdminToken = "cookie_mgtoken";
 
         #endregion
+
+        #region 常用URL
+
+        public const string Url_AdminLogin = "/Login/AdminLogin";
+
+        public const string Url_ManageIndex = "/Home/Index";
+
+        #endregion
     }
 }

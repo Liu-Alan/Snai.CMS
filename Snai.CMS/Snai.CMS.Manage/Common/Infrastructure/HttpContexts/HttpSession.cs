@@ -37,12 +37,6 @@ namespace Snai.CMS.Manage.Common.Infrastructure.HttpContexts
             return Session.GetString(sessionKey);
         }
 
-        public T GetSession<T>(string sessionKey)
-        {
-            string sessionValue = Session.GetString(sessionKey);
-            return JsonConvert.DeserializeObject<T>(sessionValue);
-        }
-
         public void RemoveSession(string sessionKey)
         {
             Session.Remove(sessionKey);

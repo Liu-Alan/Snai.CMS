@@ -20,6 +20,10 @@
 </head>
 <body>
     <div class="center-content">
+        <div class="logon-title">
+            <div class="logon-title-logo"><img src="~/images/Snai64.jpg" alt="@Model.WebTitle" title="@Model.WebTitle" border="0" /></div>
+            <div class="logon-title-context">@Model.WebTitle</div>
+        </div>
         <form class="layui-form">
             <div class="layui-form-item">
                 <label class="layui-form-label">用户名</label>
@@ -39,7 +43,7 @@
                     <input type="text" id="verifyCode" name="verifyCode" placeholder="请输入验证码" autocomplete="off" class="layui-input" maxlength="6">
                 </div>
                 <div class="layui-form-mid layui-word-aux">
-                    <img id="imgVerify" src="~/Login/VerifyCode" alt="看不清？点击更换" onclick="this.src = this.src + '?'+Math.random()" style="vertical-align:middle;" />
+                    <img id="imgVerify" src="~/Login/VerifyCode" alt="看不清？点击更换" title="看不清？点击更换" onclick="this.src = this.src + '?'+Math.random()" style="vertical-align:middle; cursor:pointer;" />
                 </div>
             </div>
             <div class="layui-form-item">

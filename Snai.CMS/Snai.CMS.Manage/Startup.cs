@@ -48,6 +48,9 @@ namespace Snai.CMS.Manage
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            //注册HttpContext，用于在Controller之外的地方使用
+            services.AddHttpContextAccessor();
+
             //注册数据库连接
             services.AddDbContext<CMSContext>(options => options.UseMySQL(Configuration.GetConnectionString("SnaiCMSConnection")));
 

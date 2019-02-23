@@ -22,3 +22,7 @@ CREATE TABLE admin(
 -- alter table student add primary key pk_student (id)  	
 ALTER TABLE admin ADD UNIQUE INDEX ix_admin_user_name(user_name)  		-- UNIQUE INDEX 唯一索引
 ;
+
+-- password:snai2019
+INSERT into admin(user_name,`password`,role_id,state,create_time)
+VALUES('snai','55F6E397AB652A987D12914F1766DA58',1,1,1550937600)

@@ -47,7 +47,7 @@ namespace Snai.CMS.Manage.Controllers
                 WebTitle = WebSettings.Value.WebTitle
             };
 
-            return View();
+            return View(model);
         }
 
         public ActionResult<Message> DoLogin()
@@ -67,7 +67,7 @@ namespace Snai.CMS.Manage.Controllers
 
             if (msg.Success)
             {
-                msg.Msg = "/Home/Index";
+                msg.Msg = Consts.Url_ManageIndex;
             }
 
             return new JsonResult(msg);
@@ -81,7 +81,7 @@ namespace Snai.CMS.Manage.Controllers
         {
             CMSAdminBO.AdminLogout();
 
-            var msg=new Message(0, "/Login/AdminLogin");
+            var msg=new Message(0, Consts.Url_AdminLogin);
 
             return new JsonResult(msg);
         }

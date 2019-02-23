@@ -50,12 +50,6 @@ namespace Snai.CMS.Manage.Common.Infrastructure.HttpContexts
             }
         }
 
-        public T GetCookie<T>(string cookieKey)
-        {
-            string cookieValue = this.GetCookie(cookieKey);
-            return JsonConvert.DeserializeObject<T>(cookieValue);
-        }
-
         public void DelCookie(string cookieKey)
         {
             Response.Cookies.Delete(cookieKey);

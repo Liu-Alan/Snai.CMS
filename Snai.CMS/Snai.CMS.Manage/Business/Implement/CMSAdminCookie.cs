@@ -47,15 +47,19 @@ namespace Snai.CMS.Manage.Business.Implement
 
             string tokrn = JsonConvert.SerializeObject(adminToken);
 
-            string cipherTokrn = EncryptAES.Encrypt(WebSettings.Value.CipherKey,tokrn);
+            string cipherToken = EncryptAES.Encrypt(WebSettings.Value.CipherKey,tokrn);
 
-            HttpCookie.SetCookie(Consts.Cookie_AdminToken, cipherTokrn);
+            HttpCookie.SetCookie(Consts.Cookie_AdminToken, cipherToken);
         }
 
         //读取Cookie
         public AdminToken GetAdiminCookie()
         {
-            var adminToken = HttpCookie.GetCookie<AdminToken>(Consts.Cookie_AdminToken);
+            var token = HttpCookie.GetCookie(Consts.Cookie_AdminToken);
+
+            var plainerToken = EncryptAES.Decrypt(WebSettings.Value.CipherKey, token);
+
+            var adminToken = JsonConvert.DeserializeObject<AdminToken>(plainerToken);
 
             return adminToken;
         }
