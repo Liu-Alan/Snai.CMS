@@ -14,12 +14,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@Model.WebTitle - Snai.CMS</title>
 
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/login.css" />
     <link rel="stylesheet" href="~/lib/layui/css/layui.css" />
+    <link rel="stylesheet" href="~/css/login.css" />
 </head>
 <body>
-    <div class="center-content">
+    <div class="logon-content">
         <div class="logon-title">
             <div class="logon-title-logo"><img src="~/images/Snai64.jpg" alt="@Model.WebTitle" title="@Model.WebTitle" border="0" /></div>
             <div class="logon-title-context">@Model.WebTitle</div>
@@ -28,7 +27,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">用户名</label>
                 <div class="layui-input-block">
-                    <input type="text" id="userName" name="userName" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                    <input type="text" id="userName" name="userName" placeholder="请输入用户名" autocomplete="off" class="layui-input" maxlength="32">
                 </div>
             </div>
             <div class="layui-form-item">
