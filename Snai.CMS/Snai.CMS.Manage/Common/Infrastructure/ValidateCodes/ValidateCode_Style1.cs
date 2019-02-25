@@ -26,7 +26,7 @@ namespace Snai.CMS.Manage.Common.Infrastructure.ValidateCodes
             //字体集合
             string[] fonts = { "Verdana", "Microsoft Sans Serif", "Comic Sans MS", "Arial", "宋体" };
             //定义图像的大小，生成图像的实例  
-            Img = new Bitmap((int)code.Length * 18, 32);
+            Img = new Bitmap((int)code.Length * 17, 32);
             graphics = Graphics.FromImage(Img);//从Img对象生成新的Graphics对象    
             graphics.Clear(Color.White);//背景设为白色  
 
@@ -44,14 +44,15 @@ namespace Snai.CMS.Manage.Common.Infrastructure.ValidateCodes
             {
                 int colorIndex = random.Next(7);//随机颜色索引值  
                 int fontIndex = random.Next(4);//随机字体索引值  
-                Font font = new Font(fonts[fontIndex], 15, FontStyle.Bold);//字体  
+                int fontSize = random.Next(13, 18);
+                Font font = new Font(fonts[fontIndex], fontSize, FontStyle.Bold);//字体  
                 Brush brush = new SolidBrush(color[colorIndex]);//颜色  
                 int y = 4;
                 if ((i + 1) % 2 == 0)//控制验证码不在同一高度  
                 {
                     y = 2;
                 }
-                graphics.DrawString(code.Substring(i, 1), font, brush, 4 + (i * 13), y);//绘制一个验证字符  
+                graphics.DrawString(code.Substring(i, 1), font, brush, 3 + (i * 13), y);//绘制一个验证字符  
             }
             ms = new MemoryStream();//生成内存流对象  
             Img.Save(ms, ImageFormat.Png);//将此图像以Png图像文件的格式保存到流中  

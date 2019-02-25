@@ -281,7 +281,7 @@ Logon.onsubmit = function () {
                 Logon.LoginBtn.enable(Logon.Form.loginBtn);
                 Logon.Password.clear();
                 Logon.VerifyCode.onrefresh();
-                Logon.layui.layer.msg(data.msg, { icon: 2, time: 4000 }); 
+                Logon.layui.layer.msg(data.msg, { icon: 2 }); 
             } else {
                 Logon.layui.layer.msg("登录成功", { icon: 1 }); 
                 Logon.Const.url.jumpurl = Utils.String(data.msg).isNullOrEmptyTrim() ? Logon.Const.url.jumpurl : data.msg;
