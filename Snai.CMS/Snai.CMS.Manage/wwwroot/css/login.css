@@ -3,9 +3,37 @@
     color: #333;
     margin: 0;
     padding: 0;
-    text-align: center;
 }
 .logon-content {
     margin: auto;
     width:400px;
+}
+.logon-title {
+    margin: 30px 0px 10px 0px;
+    height:64px;
+}
+.logon-title-logo {
+    float: left;
+    margin-left: 40px;
+    width:64px;
+}
+.logon-title-context {
+    float: left;
+    margin-left: 20px;
+    width:250px;
+    font-size: 20px;
+    line-height: 64px;
+    vertical-align: middle;
+}
+.float-left{
+    float: left;
+}
+.width300{
+    width:300px;
+}
+.width150{
+    width:150px;
+}
+.layui-form-item .width150{
+    width:150px;
 }

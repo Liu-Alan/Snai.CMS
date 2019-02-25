@@ -51,7 +51,7 @@ namespace Snai.CMS.Manage.Common.Infrastructure.ValidateCodes
                 {
                     y = 2;
                 }
-                graphics.DrawString(code.Substring(i, 1), font, brush, 4 + (i * 12), y);//绘制一个验证字符  
+                graphics.DrawString(code.Substring(i, 1), font, brush, 4 + (i * 13), y);//绘制一个验证字符  
             }
             ms = new MemoryStream();//生成内存流对象  
             Img.Save(ms, ImageFormat.Png);//将此图像以Png图像文件的格式保存到流中  
