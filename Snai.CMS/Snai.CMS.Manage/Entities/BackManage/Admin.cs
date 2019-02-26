@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Snai.CMS.Manage.Entities.BackManage
 {
-    [Table("admin")]
+    [Table("admins")]
     public class Admin
     {
         [Key]
