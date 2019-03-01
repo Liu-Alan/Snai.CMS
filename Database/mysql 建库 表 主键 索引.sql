@@ -31,8 +31,8 @@ CREATE TABLE modules(
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	parent_id int not NULL DEFAULT 0,
 	title NVARCHAR(32) not NULL,
-	controller NVARCHAR(32) not NULL DEFAULT ''
-	action NVARCHAR(32) not NULL DEFAULT ''
+	controller NVARCHAR(32) not NULL DEFAULT '',
+	action NVARCHAR(32) not NULL DEFAULT '',
 	state TINYINT NOT NULL DEFAULT 1			-- 1 启用，2 禁用
 )
 ;
@@ -57,3 +57,4 @@ CREATE TABLE role_right(
 )
 
 alter table role_right add primary key pk_role_right (role_id,modules_id)  		-- 主键
+;

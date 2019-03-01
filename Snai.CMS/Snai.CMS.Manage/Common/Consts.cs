@@ -29,5 +29,11 @@ namespace Snai.CMS.Manage.Common
         public const string Url_ManageIndex = "/Home/Index";
 
         #endregion
+
+        #region 视图地址
+
+        public const string View_NoRoleRight = "NoRoleRight"; 
+
+        #endregion
     }
 }

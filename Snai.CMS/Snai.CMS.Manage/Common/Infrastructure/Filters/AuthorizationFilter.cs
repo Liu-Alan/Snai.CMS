@@ -27,10 +27,21 @@ namespace Snai.CMS.Manage.Common.Infrastructure.Filters
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
+            //判断是否登录
             var login = CMSAdminBO.VerifyAdminLogin();
             if (!login)
             {
                 context.Result = new RedirectResult(Consts.Url_AdminLogin);
+            }
+
+            //判断是否有权限
+            var controller =  context.RouteData.Values["Controller"].ToString();
+            var action = context.RouteData.Values["Action"].ToString();
+
+            bool roleRight = false;
+            if (!roleRight)
+            {
+                context.Result = new ViewResult() { ViewName = Consts.View_NoRoleRight };
             }
         }
     }
