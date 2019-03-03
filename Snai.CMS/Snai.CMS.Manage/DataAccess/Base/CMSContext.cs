@@ -14,5 +14,11 @@ namespace Snai.CMS.Manage.DataAccess.Base
         { }
 
         public DbSet<Admin> Admins { get; set; }
+
+        public DbSet<Module> Modules { get; set; }
+
+        public DbSet<Role> Roles { get; set; }
+
+        public DbSet<RoleRight> RoleRights{ get; set; }
     }
 }

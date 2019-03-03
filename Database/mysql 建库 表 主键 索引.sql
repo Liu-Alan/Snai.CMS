@@ -53,8 +53,8 @@ ALTER TABLE roles ADD UNIQUE INDEX ix_roles_title(title)
 
 CREATE TABLE role_right(
 	role_id int not NULL,
-	modules_id int not NULL
+	module_id int not NULL
 )
 
-alter table role_right add primary key pk_role_right (role_id,modules_id)  		-- 主键
+alter table role_right add primary key pk_role_right (role_id,module_id)  		-- 主键
 ;
