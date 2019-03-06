@@ -632,6 +632,16 @@ namespace Snai.CMS.Manage.Business.Implement
                 return msg;
             }
 
+            //角色是否禁用
+            var role = this.GetRoleByID(admin.RoleID);
+            if (role == null || role.ID <= 0 || role.State == 2)
+            {
+                msg.Code = 12;
+                msg.Msg = "用户角色禁用，请联系管理员处理";
+
+                return msg;
+            }
+
             adminLogin.Password = EncryptMd5.EncryptByte(adminLogin.Password);
             if (!admin.Password.Equals(adminLogin.Password))
             {
@@ -692,19 +702,130 @@ namespace Snai.CMS.Manage.Business.Implement
             CMSAdminCookie.DelAdiminCookie();
         }
 
-        //是否登录（true 登录在线，false 离线）
-        public bool VerifyAdminLogin()
+        //是否登录（Message.Success true 登录在线，false 离线）
+        public Message VerifyAdminLogin()
         {
+            var msg = new Message(10, "");
             var adminToken = CMSAdminCookie.GetAdiminCookie();
-
             if (adminToken == null || string.IsNullOrEmpty(adminToken.UserName))
             {
-                return false;
+                msg.Code = 11;
+                msg.Msg = "用户没有登录";
+
+                return msg;
             }
             else
             {
-                return true;
+                msg.Code = 0;
+                msg.Msg = "用户登录在线";
+                msg.Result = adminToken;
+
+                return msg;
             }
+        }
+
+        #endregion
+
+        #region 菜单
+
+        //取菜单
+        public Module GetModule(string controller, string action)
+        {
+            var module = CMSAdminDao.GetModule(controller, action);
+            if (module != null)
+            {
+                return module;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        #endregion
+
+        #region 角色
+
+        //取角色
+        public Role GetRoleByID(int id)
+        {
+            var role = CMSAdminDao.GetRoleByID(id);
+            if (role != null)
+            {
+                return role;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        #endregion
+
+        #region 权限
+
+        //取权限
+        public RoleRight GetRoleRight(int roleID, int moduleID)
+        {
+            var roleRight = CMSAdminDao.GetRoleRight(roleID,moduleID);
+            if (roleRight != null)
+            {
+                return roleRight;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        #endregion
+
+        #region 权限判断
+
+        //验证权限（Message.Success true 权限成功，false 权限失败）
+        public Message VerifyUserRole(string UserName, string controller, string action)
+        {
+            var msg = new Message(10, "");
+
+            var admin = this.GetAdminByUserName(UserName);
+            if (admin == null || admin.ID <= 0 || admin.State == 2)
+            {
+                msg.Code = 11;
+                msg.Msg = "用户已禁用";
+
+                return msg;
+            }
+
+            var role = this.GetRoleByID(admin.RoleID);
+            if (role == null || role.ID <= 0 || role.State == 2)
+            {
+                msg.Code = 12;
+                msg.Msg = "用户角色禁用";
+
+                return msg;
+            }
+
+            var module = this.GetModule(controller, action);
+            if (module == null || module.ID <= 0 || module.State == 2)
+            {
+                msg.Code = 13;
+                msg.Msg = "菜单禁用";
+
+                return msg;
+            }
+
+            var roleRight = this.GetRoleRight(role.ID, module.ID);
+            if (roleRight == null || roleRight.RoleID <= 0)
+            {
+                msg.Code = 14;
+                msg.Msg = "用户没有权限";
+
+                return msg;
+            }
+
+            msg.Code = 0;
+            msg.Msg = "验证权限成功";
+            return msg;
         }
 
         #endregion

@@ -200,5 +200,35 @@ namespace Snai.CMS.Manage.DataAccess.Implement
         }
 
         #endregion
+
+        #region 菜单
+
+        //取菜单
+        public Module GetModule(string controller, string action)
+        {
+            return Context.Modules.SingleOrDefault(s => s.Controller == controller && s.Action == action);
+        }
+
+        #endregion
+
+        #region 角色
+
+        //取角色
+        public Role GetRoleByID(int id)
+        {
+            return Context.Roles.SingleOrDefault(s => s.ID == id);
+        }
+
+        #endregion
+
+        #region 权限
+
+        //取权限
+        public RoleRight GetRoleRight(int roleID, int moduleID)
+        {
+            return Context.RoleRights.SingleOrDefault(s => s.RoleID == roleID && s.ModuleID == moduleID);
+        }
+
+        #endregion
     }
 }

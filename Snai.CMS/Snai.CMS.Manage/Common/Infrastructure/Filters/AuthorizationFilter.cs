@@ -28,8 +28,8 @@ namespace Snai.CMS.Manage.Common.Infrastructure.Filters
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             //判断是否登录
-            var login = CMSAdminBO.VerifyAdminLogin();
-            if (!login)
+            var loginMsg = CMSAdminBO.VerifyAdminLogin();
+            if (!loginMsg.Success)
             {
                 context.Result = new RedirectResult(Consts.Url_AdminLogin);
             }
@@ -38,8 +38,8 @@ namespace Snai.CMS.Manage.Common.Infrastructure.Filters
             var controller =  context.RouteData.Values["Controller"].ToString();
             var action = context.RouteData.Values["Action"].ToString();
 
-            bool roleRight = false;
-            if (!roleRight)
+            var roleMsg = CMSAdminBO.VerifyUserRole(loginMsg.Result.UserName, controller, action);
+            if (!roleMsg.Success)
             {
                 context.Result = new ViewResult() { ViewName = Consts.View_NoRoleRight };
             }

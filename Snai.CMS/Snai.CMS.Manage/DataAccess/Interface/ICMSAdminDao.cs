@@ -55,6 +55,18 @@ namespace Snai.CMS.Manage.DataAccess.Interface
 
         #endregion
 
+        #region 角色
 
+        //取角色
+        Role GetRoleByID(int id);
+
+        #endregion
+
+        #region 权限
+
+        //取权限
+        RoleRight GetRoleRight(int roleID, int moduleID);
+
+        #endregion
     }
 }

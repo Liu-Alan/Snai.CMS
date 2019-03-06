@@ -57,8 +57,36 @@ namespace Snai.CMS.Manage.Business.Interface
         //登出
         void AdminLogout();
 
-        //是否登录（true 登录在线，false 离线）
-        bool VerifyAdminLogin();
+        //是否登录（Message.Success true 登录在线，false 离线）
+        Message VerifyAdminLogin();
+
+        #endregion
+
+        #region 菜单
+
+        //取菜单
+        Module GetModule(string controller, string action);
+
+        #endregion
+
+        #region 角色
+
+        //取角色
+        Role GetRoleByID(int id);
+
+        #endregion
+
+        #region 权限
+
+        //取权限
+        RoleRight GetRoleRight(int roleID, int moduleID);
+
+        #endregion
+
+        #region 权限判断
+
+        //验证权限（Message.Success true 权限成功，false 权限失败）
+        Message VerifyUserRole(string UserName, string controller, string action);
 
         #endregion
     }
