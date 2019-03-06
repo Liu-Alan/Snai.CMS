@@ -41,6 +41,11 @@ ALTER TABLE modules ADD UNIQUE INDEX ix_modules_parent_id_title(parent_id,title)
 ALTER TABLE modules ADD INDEX ix_modules_controller_action(controller,action)  			
 ;
 
+INSERT into admins(parent_id,title,controller,action,state)
+select 0,'首页','','',1
+UNION ALL select 1,'首页','','',1
+UNION ALL select 2,'登录信息','Home','Index',1
+
 CREATE TABLE roles(
 	id int AUTO_INCREMENT PRIMARY KEY,
 	title NVARCHAR(32) not NULL,
@@ -51,6 +56,9 @@ CREATE TABLE roles(
 ALTER TABLE roles ADD UNIQUE INDEX ix_roles_title(title)  		
 ;
 
+INSERT into roles(title,state)
+select '超级管理员',1
+
 CREATE TABLE role_right(
 	role_id int not NULL,
 	module_id int not NULL
@@ -58,3 +66,8 @@ CREATE TABLE role_right(
 
 alter table role_right add primary key pk_role_right (role_id,module_id)  		-- 主键
 ;
+
+INSERT into role_right(role_id,module_id)
+select 1,1
+UNION ALL select 1,2
+UNION ALL select 1,3
