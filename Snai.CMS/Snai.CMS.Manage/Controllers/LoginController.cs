@@ -11,7 +11,7 @@ using Snai.CMS.Manage.Common.Infrastructure.HttpContexts;
 using Snai.CMS.Manage.Common.Infrastructure.ValidateCodes;
 using Snai.CMS.Manage.Entities.BackManage;
 using Snai.CMS.Manage.Entities.Settings;
-using Snai.CMS.Manage.Models;
+using Snai.CMS.Manage.Models.Login;
 
 namespace Snai.CMS.Manage.Controllers
 {

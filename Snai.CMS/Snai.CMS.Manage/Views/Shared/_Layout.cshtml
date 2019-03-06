@@ -1,9 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@model LayoutModel
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Snai.CMS.Manage</title>
+    <title>@Model.PageTitle - @Model.WebTitle - Snai.CMS</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />

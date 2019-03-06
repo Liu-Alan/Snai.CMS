@@ -38,6 +38,9 @@ namespace Snai.CMS.Manage.Entities.BackManage
         [Column("last_logon_time")]
         public int LastLogonTime { get; set; }
 
+        [Column("last_logon_ip")]
+        public string LastLogonIP { get; set; }
+
         [Column("error_logon_time")]
         public int ErrorLogonTime { get; set; }
 
