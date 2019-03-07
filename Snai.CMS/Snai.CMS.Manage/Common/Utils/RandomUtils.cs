@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Snai.CMS.Manage.Common.Utils
 {
-    public class RandomUtil
+    public class RandomUtils
     {
         //随机数串
         private static string randomChars = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";

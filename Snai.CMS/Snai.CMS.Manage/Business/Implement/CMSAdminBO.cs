@@ -3,7 +3,6 @@ using Snai.CMS.Manage.Business.Interface;
 using Snai.CMS.Manage.Common;
 using Snai.CMS.Manage.Common.Encrypt;
 using Snai.CMS.Manage.Common.Infrastructure;
-using Snai.CMS.Manage.Common.Infrastructure.HttpContexts;
 using Snai.CMS.Manage.Common.Utils;
 using Snai.CMS.Manage.DataAccess.Interface;
 using Snai.CMS.Manage.Entities.BackManage;
@@ -20,19 +19,19 @@ namespace Snai.CMS.Manage.Business.Implement
         #region 属性声明
 
         IOptions<LogonSettings> LogonSettings;
-        public ICMSAdminDao CMSAdminDao;
-        public IHttpSession HttpSession;
-        public ICMSAdminCookie CMSAdminCookie;
+        ICMSAdminDao CMSAdminDao;
+        HttpContextExtension HttpExtension;
+        ICMSAdminCookie CMSAdminCookie;
 
         #endregion
 
         #region 构造函数
 
-        public CMSAdminBO(IOptions<LogonSettings> logonSettings, ICMSAdminDao cmsAdminDao, IHttpSession httpSession, ICMSAdminCookie cmsAdminCookie)
+        public CMSAdminBO(IOptions<LogonSettings> logonSettings, ICMSAdminDao cmsAdminDao, HttpContextExtension httpExtension, ICMSAdminCookie cmsAdminCookie)
         {
             LogonSettings = logonSettings;
             CMSAdminDao = cmsAdminDao;
-            HttpSession = httpSession;
+            HttpExtension = httpExtension;
             CMSAdminCookie = cmsAdminCookie;
         }
 
@@ -160,8 +159,8 @@ namespace Snai.CMS.Manage.Business.Implement
             }
 
             admin.Password = EncryptMd5.EncryptByte(admin.Password.Trim());
-            admin.CreateTime = (int)DateTimeUtil.DateTimeToUnixTimeStamp(DateTime.Now);
-            admin.UpdateTime = (int)DateTimeUtil.DateTimeToUnixTimeStamp(DateTime.Now);
+            admin.CreateTime = (int)DateTimeUtils.DateTimeToUnixTimeStamp(DateTime.Now);
+            admin.UpdateTime = (int)DateTimeUtils.DateTimeToUnixTimeStamp(DateTime.Now);
 
             var addState = CMSAdminDao.CreateAdmin(admin);
 
@@ -275,7 +274,7 @@ namespace Snai.CMS.Manage.Business.Implement
                 admin.Password = EncryptMd5.EncryptByte(admin.Password.Trim());
             }
 
-            admin.UpdateTime = (int)DateTimeUtil.DateTimeToUnixTimeStamp(DateTime.Now);
+            admin.UpdateTime = (int)DateTimeUtils.DateTimeToUnixTimeStamp(DateTime.Now);
 
             var upState = CMSAdminDao.UpdateAdminByID(admin.ID, admin.UserName, admin.Password, admin.State, admin.RoleID, admin.UpdateTime);
 
@@ -340,7 +339,7 @@ namespace Snai.CMS.Manage.Business.Implement
             }
 
             password = EncryptMd5.EncryptByte(password.Trim());
-            var updateTime = (int)DateTimeUtil.DateTimeToUnixTimeStamp(DateTime.Now);
+            var updateTime = (int)DateTimeUtils.DateTimeToUnixTimeStamp(DateTime.Now);
 
             var upState = CMSAdminDao.UpdatePasswordByID(id, password, updateTime);
 
@@ -381,7 +380,7 @@ namespace Snai.CMS.Manage.Business.Implement
                 return msg;
             }
 
-            var updateTime = (int)DateTimeUtil.DateTimeToUnixTimeStamp(DateTime.Now);
+            var updateTime = (int)DateTimeUtils.DateTimeToUnixTimeStamp(DateTime.Now);
 
             var upState = CMSAdminDao.UpdateStateByIDs(ids, state, updateTime);
 
@@ -413,7 +412,7 @@ namespace Snai.CMS.Manage.Business.Implement
                 return msg;
             }
 
-            var updateTime = (int)DateTimeUtil.DateTimeToUnixTimeStamp(DateTime.Now);
+            var updateTime = (int)DateTimeUtils.DateTimeToUnixTimeStamp(DateTime.Now);
 
             var upState = CMSAdminDao.UpdateErrorLogon(id, errorLogonTime, errorLogonCount, updateTime);
 
@@ -445,7 +444,7 @@ namespace Snai.CMS.Manage.Business.Implement
                 return msg;
             }
 
-            var updateTime = (int)DateTimeUtil.DateTimeToUnixTimeStamp(DateTime.Now);
+            var updateTime = (int)DateTimeUtils.DateTimeToUnixTimeStamp(DateTime.Now);
 
             var upState = CMSAdminDao.LockAdmin(id, lockTime, updateTime);
 
@@ -476,7 +475,7 @@ namespace Snai.CMS.Manage.Business.Implement
                 return msg;
             }
 
-            var updateTime = (int)DateTimeUtil.DateTimeToUnixTimeStamp(DateTime.Now);
+            var updateTime = (int)DateTimeUtils.DateTimeToUnixTimeStamp(DateTime.Now);
 
             var upState = CMSAdminDao.UnlockAdminByIDs(ids, updateTime);
 
@@ -524,7 +523,7 @@ namespace Snai.CMS.Manage.Business.Implement
         }
 
         //更新管理员登录信息
-        public Message UpdateAdminLogon(int id, int lastLogonTime)
+        public Message UpdateAdminLogon(int id, int lastLogonTime,string lastLogonIP)
         {
             var msg = new Message(10, "");
 
@@ -537,9 +536,9 @@ namespace Snai.CMS.Manage.Business.Implement
                 return msg;
             }
 
-            var updateTime = (int)DateTimeUtil.DateTimeToUnixTimeStamp(DateTime.Now);
+            var updateTime = (int)DateTimeUtils.DateTimeToUnixTimeStamp(DateTime.Now);
 
-            var upState = CMSAdminDao.UpdateAdminLogon(id, lastLogonTime);
+            var upState = CMSAdminDao.UpdateAdminLogon(id, lastLogonTime, lastLogonIP);
 
             if (upState)
             {
@@ -596,8 +595,8 @@ namespace Snai.CMS.Manage.Business.Implement
                 return msg;
             }
 
-            var validate = HttpSession.EqualsSessionValue(Consts.Session_ValidateCode, adminLogin.VerifyCode);
-            HttpSession.RemoveSession(Consts.Session_ValidateCode);
+            var validate = HttpExtension.EqualsSessionValue(Consts.Session_ValidateCode, adminLogin.VerifyCode);
+            HttpExtension.RemoveSession(Consts.Session_ValidateCode);
             if(!validate)
             {
                 msg.Code = 103;
@@ -623,7 +622,7 @@ namespace Snai.CMS.Manage.Business.Implement
                 return msg;
             }
 
-            var timeStamp = (int)DateTimeUtil.DateTimeToUnixTimeStamp(DateTime.Now);
+            var timeStamp = (int)DateTimeUtils.DateTimeToUnixTimeStamp(DateTime.Now);
             if (admin.LockTime > timeStamp)
             {
                 msg.Code = 13;
@@ -685,9 +684,10 @@ namespace Snai.CMS.Manage.Business.Implement
             admin.ErrorLogonTime = 0;
             admin.ErrorLogonCount = 0;
             admin.LockTime = 0;
+            admin.LastLogonIP = HttpExtension.GetUserIP();
 
             //更新管理员登录信息
-            this.UpdateAdminLogon(admin.ID, admin.LastLogonTime);
+            this.UpdateAdminLogon(admin.ID, admin.LastLogonTime, admin.LastLogonIP);
 
             CMSAdminCookie.SetAdiminCookie(adminLogin);
 

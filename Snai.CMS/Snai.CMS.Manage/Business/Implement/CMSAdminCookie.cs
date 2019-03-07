@@ -9,8 +9,8 @@ using Snai.CMS.Manage.Common.Encrypt;
 using Snai.CMS.Manage.Business.Interface;
 using Snai.CMS.Manage.Entities.Settings;
 using Microsoft.Extensions.Options;
-using Snai.CMS.Manage.Common.Infrastructure.HttpContexts;
 using Snai.CMS.Manage.Common;
+using Snai.CMS.Manage.Common.Infrastructure;
 
 namespace Snai.CMS.Manage.Business.Implement
 {
@@ -19,16 +19,16 @@ namespace Snai.CMS.Manage.Business.Implement
         #region 属性声明
 
         IOptions<WebSettings> WebSettings;
-        public IHttpCookie HttpCookie;
+        HttpContextExtension HttpExtension;
 
         #endregion
 
         #region 构造函数
 
-        public CMSAdminCookie(IOptions<WebSettings> webSettings, IHttpCookie httpCookie)
+        public CMSAdminCookie(IOptions<WebSettings> webSettings, HttpContextExtension httpExtension)
         {
             WebSettings = webSettings;
-            HttpCookie = httpCookie;
+            HttpExtension = httpExtension;
         }
 
         #endregion
@@ -42,20 +42,20 @@ namespace Snai.CMS.Manage.Business.Implement
             {
                 UserName = admin.UserName,
                 Password = admin.Password,
-                RandomCode = RandomUtil.CreateRandom(16)
+                RandomCode = RandomUtils.CreateRandom(16)
             };
 
             string tokrn = JsonConvert.SerializeObject(adminToken);
 
             string cipherToken = EncryptAES.Encrypt(WebSettings.Value.CipherKey,tokrn);
 
-            HttpCookie.SetCookie(Consts.Cookie_AdminToken, cipherToken);
+            HttpExtension.SetCookie(Consts.Cookie_AdminToken, cipherToken);
         }
 
         //读取Cookie
         public AdminToken GetAdiminCookie()
         {
-            var token = HttpCookie.GetCookie(Consts.Cookie_AdminToken);
+            var token = HttpExtension.GetCookie(Consts.Cookie_AdminToken);
 
             var plainerToken = EncryptAES.Decrypt(WebSettings.Value.CipherKey, token);
 
@@ -67,7 +67,7 @@ namespace Snai.CMS.Manage.Business.Implement
         //删除Cookie
         public void DelAdiminCookie()
         {
-            HttpCookie.DelCookie(Consts.Cookie_AdminToken);
+            HttpExtension.DelCookie(Consts.Cookie_AdminToken);
         }
 
         #endregion

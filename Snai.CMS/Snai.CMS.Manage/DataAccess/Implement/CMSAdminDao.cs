@@ -180,7 +180,7 @@ namespace Snai.CMS.Manage.DataAccess.Implement
 
 
         //更新管理员登录信息
-        public bool UpdateAdminLogon(int id, int lastLogonTime)
+        public bool UpdateAdminLogon(int id, int lastLogonTime, string lastLogonIP)
         {
             var upState = false;
 
@@ -192,6 +192,7 @@ namespace Snai.CMS.Manage.DataAccess.Implement
                 admin.ErrorLogonTime = 0;
                 admin.ErrorLogonCount = 0;
                 admin.LockTime = 0;
+                admin.LastLogonIP = lastLogonIP;
 
                 upState = Context.SaveChanges() > 0;
             }

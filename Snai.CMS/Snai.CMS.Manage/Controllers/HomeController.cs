@@ -55,7 +55,7 @@ namespace Snai.CMS.Manage.Controllers
                 if (admin != null && !string.IsNullOrEmpty(admin.UserName))
                 {
                     model.LastLogonIP = admin.LastLogonIP;
-                    model.LastLogonTime = DateTimeUtil.UnixTimeStampToDateTime(admin.LastLogonTime);
+                    model.LastLogonTime = DateTimeUtils.UnixTimeStampToDateTime(admin.LastLogonTime);
                 }
             }
 

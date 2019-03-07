@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Snai.CMS.Manage.Common.Utils
 {
-    public class DateTimeUtil
+    public class DateTimeUtils
     {
         /// <summary>
         /// 将时间转换成unix时间戳

@@ -7,7 +7,6 @@ using Microsoft.Extensions.Options;
 using Snai.CMS.Manage.Business.Interface;
 using Snai.CMS.Manage.Common;
 using Snai.CMS.Manage.Common.Infrastructure;
-using Snai.CMS.Manage.Common.Infrastructure.HttpContexts;
 using Snai.CMS.Manage.Common.Infrastructure.ValidateCodes;
 using Snai.CMS.Manage.Entities.BackManage;
 using Snai.CMS.Manage.Entities.Settings;
@@ -21,18 +20,18 @@ namespace Snai.CMS.Manage.Controllers
 
         IOptions<WebSettings> WebSettings;
         IValidateCode ValidateCode;
-        IHttpSession HttpSession;
+        HttpContextExtension HttpExtension;
         ICMSAdminBO CMSAdminBO;
 
         #endregion
 
         #region 构造函数
 
-        public LoginController(IOptions<WebSettings> webSettings, IValidateCode validateCode, IHttpSession httpSession, ICMSAdminBO cmsAdminBO)
+        public LoginController(IOptions<WebSettings> webSettings, IValidateCode validateCode, HttpContextExtension httpExtension, ICMSAdminBO cmsAdminBO)
         {
             WebSettings = webSettings;
             ValidateCode = validateCode;
-            HttpSession = httpSession;
+            HttpExtension = httpExtension;
             CMSAdminBO = cmsAdminBO;
         }
 
@@ -44,6 +43,7 @@ namespace Snai.CMS.Manage.Controllers
         {
             var model = new AdminLoginModel()
             {
+                PageTitle = "登录",
                 WebTitle = WebSettings.Value.WebTitle
             };
 
@@ -96,7 +96,7 @@ namespace Snai.CMS.Manage.Controllers
             var codeImg = ValidateCode.CreateImage(out codeValue, 6);
             codeValue = codeValue.ToUpper();//验证码不分大小写  
 
-            HttpSession.SetSession(Consts.Session_ValidateCode, codeValue);
+            HttpExtension.SetSession(Consts.Session_ValidateCode, codeValue);
 
             Response.Body.Dispose();
             return File(codeImg, @"image/png");

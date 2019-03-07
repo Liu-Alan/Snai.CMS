@@ -16,7 +16,7 @@ namespace Snai.CMS.Manage.Common.Infrastructure.ValidateCodes
     {
         public byte[] CreateImage(out string code, int length = 4)
         {
-            code = RandomUtil.CreateRandom(length);
+            code = RandomUtils.CreateRandom(length);
             Bitmap Img = null;
             Graphics graphics = null;
             MemoryStream ms = null;

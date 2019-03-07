@@ -112,7 +112,7 @@ namespace Snai.CMS.Manage.Common.Utils
             }
 
             //是否单个字符重复出现
-            if (TextUtil.EqualsSameChar(strVal, strVal[0]))
+            if (TextUtils.EqualsSameChar(strVal, strVal[0]))
             {
                 return 5;
             }

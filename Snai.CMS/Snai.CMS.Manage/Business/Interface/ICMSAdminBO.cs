@@ -45,7 +45,7 @@ namespace Snai.CMS.Manage.Business.Interface
         Message DeleteAdminByIDs(IEnumerable<int> ids);
 
         //更新管理员登录信息
-        Message UpdateAdminLogon(int id, int lastLogonTime);
+        Message UpdateAdminLogon(int id, int lastLogonTime, string lastLogonIP);
 
         #endregion
 

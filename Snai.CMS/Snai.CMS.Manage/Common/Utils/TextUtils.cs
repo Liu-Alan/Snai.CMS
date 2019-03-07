@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Snai.CMS.Manage.Common.Utils
 {
-    public class TextUtil
+    public class TextUtils
     {
         #region 字符串比较
 

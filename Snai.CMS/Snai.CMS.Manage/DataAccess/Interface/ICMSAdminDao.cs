@@ -44,7 +44,7 @@ namespace Snai.CMS.Manage.DataAccess.Interface
         bool DeleteAdminByIDs(IEnumerable<int> ids);
 
         //更新管理员登录信息
-        bool UpdateAdminLogon(int id, int lastLogonTime);
+        bool UpdateAdminLogon(int id, int lastLogonTime, string lastLogonIP);
 
         #endregion
 
