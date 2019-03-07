@@ -32,7 +32,7 @@ namespace Snai.CMS.Manage.Common
 
         #region 视图地址
 
-        public const string View_NoRoleRight = "NoRoleRight"; 
+        public const string View_NoUserRole = "NoUserRole"; 
 
         #endregion
     }

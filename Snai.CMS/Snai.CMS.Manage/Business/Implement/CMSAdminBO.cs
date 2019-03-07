@@ -729,9 +729,9 @@ namespace Snai.CMS.Manage.Business.Implement
         #region 菜单
 
         //取菜单
-        public Module GetModule(string controller, string action)
+        public Module GetModule(string controller, string action, int id = 0)
         {
-            var module = CMSAdminDao.GetModule(controller, action);
+            var module = CMSAdminDao.GetModule(controller, action, id);
             if (module != null)
             {
                 return module;

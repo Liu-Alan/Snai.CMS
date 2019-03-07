@@ -41,7 +41,7 @@ namespace Snai.CMS.Manage.Common.Infrastructure.Filters
             var roleMsg = CMSAdminBO.VerifyUserRole(loginMsg.Result.UserName, controller, action);
             if (!roleMsg.Success)
             {
-                context.Result = new ViewResult() { ViewName = Consts.View_NoRoleRight };
+                context.Result = new ViewResult() { ViewName = Consts.View_NoUserRole };
             }
         }
     }
