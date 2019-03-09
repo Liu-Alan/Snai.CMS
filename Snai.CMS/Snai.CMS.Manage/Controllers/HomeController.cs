@@ -38,6 +38,7 @@ namespace Snai.CMS.Manage.Controllers
         [ServiceFilter(typeof(AuthorizationFilter))]
         public IActionResult Index()
         {
+            Console.WriteLine("Action页面开始");
             var module = CMSAdminBO.GetModule(ControllerContext.ActionDescriptor.ControllerName, ControllerContext.ActionDescriptor.ActionName);
 
             var model = new IndexModel
@@ -58,6 +59,8 @@ namespace Snai.CMS.Manage.Controllers
                     model.LastLogonTime = DateTimeUtils.UnixTimeStampToDateTime(admin.LastLogonTime);
                 }
             }
+
+            Console.WriteLine("Action页面结束");
 
             return View(model);
         }

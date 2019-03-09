@@ -51,7 +51,7 @@ namespace Snai.CMS.Manage.DataAccess.Interface
         #region 菜单
 
         //取菜单
-        Module GetModule(string controller, string action, int id);
+        Module GetModule(string controller, string action);
 
         #endregion
 

@@ -13,7 +13,7 @@ namespace Snai.CMS.Manage.DataAccess.Implement
         #region 属性声明
 
         public CMSContext Context;
-        
+
         #endregion
 
         #region 构造函数
@@ -205,17 +205,10 @@ namespace Snai.CMS.Manage.DataAccess.Implement
         #region 菜单
 
         //取菜单
-        public Module GetModule(string controller, string action, int id)
+        public Module GetModule(string controller, string action)
         {
-            if (id > 0)
-            {
-                return Context.Modules.FirstOrDefault(s => s.Controller == controller && s.Action == action);
-            }
-            else
-            {
-                return Context.Modules.FirstOrDefault(s => s.Controller == controller && s.Action == action && s.ID == id);
-            }
-            
+
+            return Context.Modules.SingleOrDefault(s => s.Controller == controller && s.Action == action);
         }
 
         #endregion
