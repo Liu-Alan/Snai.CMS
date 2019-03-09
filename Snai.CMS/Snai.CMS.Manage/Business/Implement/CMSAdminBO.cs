@@ -742,6 +742,17 @@ namespace Snai.CMS.Manage.Business.Implement
             }
         }
 
+        //取菜单
+        public IEnumerable<Module> GetModulesByIDs(IEnumerable<int> ids)
+        {
+            if (ids == null || ids.Count() < 0)
+            {
+                return null;
+            }
+
+            return CMSAdminDao.GetModulesByIDs(ids);
+        }
+
         #endregion
 
         #region 角色
@@ -778,11 +789,17 @@ namespace Snai.CMS.Manage.Business.Implement
             }
         }
 
+        //取权限
+        public IEnumerable<RoleRight> GetRoleRights(int roleID)
+        {
+            return CMSAdminDao.GetRoleRights(roleID);
+        }
+
         #endregion
 
-        #region 权限判断
+        #region 用户权限
 
-        //验证权限（Message.Success true 权限成功，false 权限失败）
+        //权限判断（Message.Success true 权限成功，false 权限失败）
         public Message VerifyUserRole(string UserName, string controller, string action)
         {
             var msg = new Message(10, "");
@@ -826,6 +843,21 @@ namespace Snai.CMS.Manage.Business.Implement
             msg.Code = 0;
             msg.Msg = "验证权限成功";
             return msg;
+        }
+
+        //取角色下菜单
+        public IEnumerable<Module> GetModulesByRoleID(int roleID)
+        {
+            var roleRights = this.GetRoleRights(roleID);
+
+            if (roleRights == null || roleRights.Count() < 0)
+            {
+                return null;
+            }
+
+            var ids = roleRights.Select(s => s.ModuleID);
+
+            return this.GetModulesByIDs(ids);
         }
 
         #endregion

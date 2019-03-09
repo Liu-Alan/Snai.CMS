@@ -53,6 +53,9 @@ namespace Snai.CMS.Manage.DataAccess.Interface
         //取菜单
         Module GetModule(string controller, string action);
 
+        //取菜单
+        IEnumerable<Module> GetModulesByIDs(IEnumerable<int> ids);
+
         #endregion
 
         #region 角色
@@ -66,6 +69,9 @@ namespace Snai.CMS.Manage.DataAccess.Interface
 
         //取权限
         RoleRight GetRoleRight(int roleID, int moduleID);
+
+        //取权限
+        IEnumerable<RoleRight> GetRoleRights(int roleID);
 
         #endregion
     }

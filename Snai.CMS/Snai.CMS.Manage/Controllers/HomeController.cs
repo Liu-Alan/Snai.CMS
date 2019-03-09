@@ -57,6 +57,10 @@ namespace Snai.CMS.Manage.Controllers
                 {
                     model.LastLogonIP = admin.LastLogonIP;
                     model.LastLogonTime = DateTimeUtils.UnixTimeStampToDateTime(admin.LastLogonTime);
+                    model.UserName = admin.UserName;
+
+                    var role = CMSAdminBO.GetRoleByID(admin.RoleID);
+                    model.RoleTitle = role != null ? role.Title : "";
                 }
             }
 

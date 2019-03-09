@@ -96,7 +96,7 @@ namespace Snai.CMS.Manage.DataAccess.Implement
         public bool UpdateStateByIDs(IEnumerable<int> ids, byte state, int updateTime)
         {
             var upState = false;
-            var admins = Context.Admins.Where(item => ids.Contains(item.ID));
+            var admins = Context.Admins.Where(s => ids.Contains(s.ID));
             if (admins != null && admins.Count() > 0)
             {
                 foreach (var admin in admins)
@@ -115,7 +115,7 @@ namespace Snai.CMS.Manage.DataAccess.Implement
         public bool UpdateErrorLogon(int id, int errorLogonTime, int errorLogonCount, int updateTime)
         {
             var upState = false;
-            var admin = Context.Admins.SingleOrDefault(item => item.ID == id);
+            var admin = Context.Admins.SingleOrDefault(s => s.ID == id);
 
             if (admin != null)
             {
@@ -134,7 +134,7 @@ namespace Snai.CMS.Manage.DataAccess.Implement
         {
             var upState = false;
 
-            var admin = Context.Admins.SingleOrDefault(item => item.ID == id);
+            var admin = Context.Admins.SingleOrDefault(s => s.ID == id);
 
             if (admin != null)
             {
@@ -153,7 +153,7 @@ namespace Snai.CMS.Manage.DataAccess.Implement
         public bool UnlockAdminByIDs(IEnumerable<int> ids, int updateTime)
         {
             var upState = false;
-            var admins = Context.Admins.Where(item => ids.Contains(item.ID));
+            var admins = Context.Admins.Where(s => ids.Contains(s.ID));
             if (admins != null && admins.Count() > 0)
             {
                 foreach (var admin in admins)
@@ -173,7 +173,7 @@ namespace Snai.CMS.Manage.DataAccess.Implement
         //删除管理员
         public bool DeleteAdminByIDs(IEnumerable<int> ids)
         {
-            var admins = Context.Admins.Where(item => ids.Contains(item.ID));
+            var admins = Context.Admins.Where(s => ids.Contains(s.ID));
             Context.Admins.RemoveRange(admins);
             return Context.SaveChanges() > 0;
         }
@@ -184,7 +184,7 @@ namespace Snai.CMS.Manage.DataAccess.Implement
         {
             var upState = false;
 
-            var admin = Context.Admins.SingleOrDefault(item => item.ID == id);
+            var admin = Context.Admins.SingleOrDefault(s => s.ID == id);
 
             if (admin != null)
             {
@@ -211,6 +211,13 @@ namespace Snai.CMS.Manage.DataAccess.Implement
             return Context.Modules.SingleOrDefault(s => s.Controller == controller && s.Action == action);
         }
 
+        //取菜单
+        public IEnumerable<Module> GetModulesByIDs(IEnumerable<int> ids)
+        {
+
+            return Context.Modules.Where(s => ids.Contains(s.ID));
+        }
+
         #endregion
 
         #region 角色
@@ -229,6 +236,12 @@ namespace Snai.CMS.Manage.DataAccess.Implement
         public RoleRight GetRoleRight(int roleID, int moduleID)
         {
             return Context.RoleRights.SingleOrDefault(s => s.RoleID == roleID && s.ModuleID == moduleID);
+        }
+
+        //取权限
+        public IEnumerable<RoleRight> GetRoleRights(int roleID)
+        {
+            return Context.RoleRights.Where(s => s.RoleID == roleID);
         }
 
         #endregion

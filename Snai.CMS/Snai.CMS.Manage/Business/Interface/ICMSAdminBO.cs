@@ -67,6 +67,9 @@ namespace Snai.CMS.Manage.Business.Interface
         //取菜单
         Module GetModule(string controller, string action);
 
+        //取菜单
+        IEnumerable<Module> GetModulesByIDs(IEnumerable<int> ids);
+
         #endregion
 
         #region 角色
@@ -81,12 +84,18 @@ namespace Snai.CMS.Manage.Business.Interface
         //取权限
         RoleRight GetRoleRight(int roleID, int moduleID);
 
+        //取权限
+        IEnumerable<RoleRight> GetRoleRights(int roleID);
+
         #endregion
 
-        #region 权限判断
+        #region 用户权限
 
-        //验证权限（Message.Success true 权限成功，false 权限失败）
+        //权限判断（Message.Success true 权限成功，false 权限失败）
         Message VerifyUserRole(string UserName, string controller, string action);
+
+        //取角色下菜单
+        IEnumerable<Module> GetModulesByRoleID(int roleID);
 
         #endregion
     }
