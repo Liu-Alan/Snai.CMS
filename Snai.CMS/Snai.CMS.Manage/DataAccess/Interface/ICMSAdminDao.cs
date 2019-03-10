@@ -54,7 +54,7 @@ namespace Snai.CMS.Manage.DataAccess.Interface
         Module GetModule(string controller, string action);
 
         //取菜单
-        IEnumerable<Module> GetModulesByIDs(IEnumerable<int> ids);
+        IEnumerable<Module> GetModulesByIDs(IEnumerable<int> ids, int state);
 
         #endregion
 

@@ -743,14 +743,14 @@ namespace Snai.CMS.Manage.Business.Implement
         }
 
         //取菜单
-        public IEnumerable<Module> GetModulesByIDs(IEnumerable<int> ids)
+        public IEnumerable<Module> GetModulesByIDs(IEnumerable<int> ids, int state)
         {
-            if (ids == null || ids.Count() < 0)
+            if (ids == null || ids.Count() <= 0)
             {
                 return null;
             }
 
-            return CMSAdminDao.GetModulesByIDs(ids);
+            return CMSAdminDao.GetModulesByIDs(ids, state);
         }
 
         #endregion
@@ -850,14 +850,49 @@ namespace Snai.CMS.Manage.Business.Implement
         {
             var roleRights = this.GetRoleRights(roleID);
 
-            if (roleRights == null || roleRights.Count() < 0)
+            if (roleRights == null || roleRights.Count() <= 0)
             {
                 return null;
             }
 
             var ids = roleRights.Select(s => s.ModuleID);
 
-            return this.GetModulesByIDs(ids);
+            return this.GetModulesByIDs(ids, 0);
+        }
+
+        //取当前菜单
+        public IEnumerable<int> GetThisModuleIDs(IEnumerable<Module> modules, int moduleID)
+        {
+            if (moduleID <= 0 || modules == null || modules.Count() <= 0)
+            {
+                return null;
+            }
+
+            IEnumerable<int> ids = new List<int>();
+
+            for (int i = 0; i < 4; i++)
+            {
+                var module = modules.FirstOrDefault(s => s.ID == moduleID);
+                if (module == null || module.ID == 0)
+                {
+                    break;
+                }
+
+                ids.Append(module.ID);
+                moduleID = module.ParentID;
+
+                if (moduleID == 0)
+                {
+                    break;
+                }
+            }
+
+            if (ids == null || ids.Count() <= 0)
+            {
+                return null;
+            }
+
+            return ids.Reverse();
         }
 
         #endregion

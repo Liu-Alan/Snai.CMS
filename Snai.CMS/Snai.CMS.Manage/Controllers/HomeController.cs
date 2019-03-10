@@ -39,6 +39,7 @@ namespace Snai.CMS.Manage.Controllers
         public IActionResult Index()
         {
             Console.WriteLine("Action页面开始");
+
             var module = CMSAdminBO.GetModule(ControllerContext.ActionDescriptor.ControllerName, ControllerContext.ActionDescriptor.ActionName);
 
             var model = new IndexModel
@@ -60,7 +61,15 @@ namespace Snai.CMS.Manage.Controllers
                     model.UserName = admin.UserName;
 
                     var role = CMSAdminBO.GetRoleByID(admin.RoleID);
-                    model.RoleTitle = role != null ? role.Title : "";
+                    if (role != null && role.ID > 0)
+                    {
+                        model.RoleTitle = role.Title;
+                        model.RoleModules = CMSAdminBO.GetModulesByRoleID(role.ID);
+                        if (module != null && module.ID > 0)
+                        {
+                            model.ThisModules = CMSAdminBO.GetThisModuleIDs(model.RoleModules, module.ID);
+                        }
+                    }
                 }
             }
 

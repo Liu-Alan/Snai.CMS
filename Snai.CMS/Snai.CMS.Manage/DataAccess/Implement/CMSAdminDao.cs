@@ -212,10 +212,16 @@ namespace Snai.CMS.Manage.DataAccess.Implement
         }
 
         //取菜单
-        public IEnumerable<Module> GetModulesByIDs(IEnumerable<int> ids)
+        public IEnumerable<Module> GetModulesByIDs(IEnumerable<int> ids, int state)
         {
-
-            return Context.Modules.Where(s => ids.Contains(s.ID));
+            if (state == 0)
+            {
+                return Context.Modules.Where(s => ids.Contains(s.ID));
+            }
+            else
+            {
+                return Context.Modules.Where(s => ids.Contains(s.ID) && s.State == state);
+            }
         }
 
         #endregion

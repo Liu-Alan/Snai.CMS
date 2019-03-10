@@ -68,7 +68,7 @@ namespace Snai.CMS.Manage.Business.Interface
         Module GetModule(string controller, string action);
 
         //取菜单
-        IEnumerable<Module> GetModulesByIDs(IEnumerable<int> ids);
+        IEnumerable<Module> GetModulesByIDs(IEnumerable<int> ids, int state);
 
         #endregion
 
@@ -96,6 +96,9 @@ namespace Snai.CMS.Manage.Business.Interface
 
         //取角色下菜单
         IEnumerable<Module> GetModulesByRoleID(int roleID);
+
+        //取当前菜单
+        IEnumerable<int> GetThisModuleIDs(IEnumerable<Module> modules,int moduleID);
 
         #endregion
     }
