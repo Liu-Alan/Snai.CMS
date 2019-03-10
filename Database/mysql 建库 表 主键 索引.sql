@@ -34,6 +34,7 @@ CREATE TABLE modules(
 	title NVARCHAR(32) not NULL,
 	controller NVARCHAR(32) not NULL DEFAULT '',
 	action NVARCHAR(32) not NULL DEFAULT '',
+	sort int not NULL DEFAULT 1,     			-- 小排在前
 	state TINYINT NOT NULL DEFAULT 1			-- 1 启用，2 禁用
 )
 ;
@@ -42,10 +43,10 @@ ALTER TABLE modules ADD UNIQUE INDEX ix_modules_parent_id_title(parent_id,title)
 ALTER TABLE modules ADD INDEX ix_modules_controller_action(controller,action)  			
 ;
 
-INSERT into admins(parent_id,title,controller,action,state)
-select 0,'首页','','',1
-UNION ALL select 1,'首页','','',1
-UNION ALL select 2,'登录信息','Home','Index',1
+INSERT into modules(parent_id,title,controller,action,sort,state)
+select 0,'首页','','',1,1
+UNION ALL select 1,'首页','','',10,1
+UNION ALL select 2,'登录信息','Home','Index',11,1
 ;
 
 CREATE TABLE roles(

@@ -26,6 +26,9 @@ namespace Snai.CMS.Manage.Entities.BackManage
         [Column("action")]
         public string Action { get; set; }
 
+        [Column("sort")]
+        public int Sort { get; set; }
+
         [Column("state")]
         public byte State { get; set; }
     }
