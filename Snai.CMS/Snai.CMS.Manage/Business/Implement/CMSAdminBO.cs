@@ -718,7 +718,7 @@ namespace Snai.CMS.Manage.Business.Implement
             {
                 msg.Code = 0;
                 msg.Msg = "用户登录在线";
-                msg.Result = adminToken;
+                msg.Result.AdminToken = adminToken;
 
                 return msg;
             }

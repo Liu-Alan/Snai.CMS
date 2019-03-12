@@ -32,13 +32,14 @@ namespace Snai.CMS.Manage.Common.Infrastructure.Filters
             if (!loginMsg.Success)
             {
                 context.Result = new RedirectResult(Consts.Url_AdminLogin);
+                return;
             }
 
             //判断是否有权限
             var controller =  context.RouteData.Values["Controller"].ToString();
             var action = context.RouteData.Values["Action"].ToString();
 
-            var roleMsg = CMSAdminBO.VerifyUserRole(loginMsg.Result.UserName, controller, action);
+            var roleMsg = CMSAdminBO.VerifyUserRole(loginMsg.Result.AdminToken.UserName, controller, action);
             if (!roleMsg.Success)
             {
                 context.Result = new ViewResult() { ViewName = Consts.View_NoUserRole };

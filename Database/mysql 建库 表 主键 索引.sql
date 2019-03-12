@@ -1,3 +1,7 @@
+/*
+DROP DATABASE snai_cms
+;
+*/
 CREATE DATABASE snai_cms CHARACTER SET utf8 COLLATE utf8_general_ci
 ;
 
@@ -67,6 +71,7 @@ CREATE TABLE role_right(
 	role_id int not NULL,
 	module_id int not NULL
 )
+;
 
 alter table role_right add primary key pk_role_right (role_id,module_id)  		-- 主键
 ;
