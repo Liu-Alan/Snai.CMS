@@ -750,7 +750,7 @@ namespace Snai.CMS.Manage.Business.Implement
                 return null;
             }
 
-            return CMSAdminDao.GetModulesByIDs(ids, state);
+            return CMSAdminDao.GetModulesByIDs(ids, state).OrderBy(s => s.Sort);
         }
 
         #endregion
@@ -857,7 +857,7 @@ namespace Snai.CMS.Manage.Business.Implement
 
             var ids = roleRights.Select(s => s.ModuleID);
 
-            return this.GetModulesByIDs(ids, 0);
+            return this.GetModulesByIDs(ids, 1);
         }
 
         //取当前菜单
