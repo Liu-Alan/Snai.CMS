@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace Snai.CMS.Manage.Common.Infrastructure
+namespace Snai.CMS.Manage.Common.Infrastructure.Extension
 {
-    public class HttpContextExtension
+    public class HttpContextExtension: IHttpContextExtension
     {
         #region 属性声明
 

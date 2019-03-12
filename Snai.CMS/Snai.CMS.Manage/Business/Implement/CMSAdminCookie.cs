@@ -10,7 +10,7 @@ using Snai.CMS.Manage.Business.Interface;
 using Snai.CMS.Manage.Entities.Settings;
 using Microsoft.Extensions.Options;
 using Snai.CMS.Manage.Common;
-using Snai.CMS.Manage.Common.Infrastructure;
+using Snai.CMS.Manage.Common.Infrastructure.Extension;
 
 namespace Snai.CMS.Manage.Business.Implement
 {
@@ -19,13 +19,13 @@ namespace Snai.CMS.Manage.Business.Implement
         #region 属性声明
 
         IOptions<WebSettings> WebSettings;
-        HttpContextExtension HttpExtension;
+        IHttpContextExtension HttpExtension;
 
         #endregion
 
         #region 构造函数
 
-        public CMSAdminCookie(IOptions<WebSettings> webSettings, HttpContextExtension httpExtension)
+        public CMSAdminCookie(IOptions<WebSettings> webSettings, IHttpContextExtension httpExtension)
         {
             WebSettings = webSettings;
             HttpExtension = httpExtension;

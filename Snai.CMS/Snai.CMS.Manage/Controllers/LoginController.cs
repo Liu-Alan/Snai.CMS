@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Snai.CMS.Manage.Business.Interface;
 using Snai.CMS.Manage.Common;
 using Snai.CMS.Manage.Common.Infrastructure;
+using Snai.CMS.Manage.Common.Infrastructure.Extension;
 using Snai.CMS.Manage.Common.Infrastructure.ValidateCodes;
 using Snai.CMS.Manage.Entities.BackManage;
 using Snai.CMS.Manage.Entities.Settings;
@@ -20,14 +21,14 @@ namespace Snai.CMS.Manage.Controllers
 
         IOptions<WebSettings> WebSettings;
         IValidateCode ValidateCode;
-        HttpContextExtension HttpExtension;
+        IHttpContextExtension HttpExtension;
         ICMSAdminBO CMSAdminBO;
 
         #endregion
 
         #region 构造函数
 
-        public LoginController(IOptions<WebSettings> webSettings, IValidateCode validateCode, HttpContextExtension httpExtension, ICMSAdminBO cmsAdminBO)
+        public LoginController(IOptions<WebSettings> webSettings, IValidateCode validateCode, IHttpContextExtension httpExtension, ICMSAdminBO cmsAdminBO)
         {
             WebSettings = webSettings;
             ValidateCode = validateCode;

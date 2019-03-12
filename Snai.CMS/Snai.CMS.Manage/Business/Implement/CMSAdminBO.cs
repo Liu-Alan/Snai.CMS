@@ -3,6 +3,7 @@ using Snai.CMS.Manage.Business.Interface;
 using Snai.CMS.Manage.Common;
 using Snai.CMS.Manage.Common.Encrypt;
 using Snai.CMS.Manage.Common.Infrastructure;
+using Snai.CMS.Manage.Common.Infrastructure.Extension;
 using Snai.CMS.Manage.Common.Utils;
 using Snai.CMS.Manage.DataAccess.Interface;
 using Snai.CMS.Manage.Entities.BackManage;
@@ -20,14 +21,14 @@ namespace Snai.CMS.Manage.Business.Implement
 
         IOptions<LogonSettings> LogonSettings;
         ICMSAdminDao CMSAdminDao;
-        HttpContextExtension HttpExtension;
+        IHttpContextExtension HttpExtension;
         ICMSAdminCookie CMSAdminCookie;
 
         #endregion
 
         #region 构造函数
 
-        public CMSAdminBO(IOptions<LogonSettings> logonSettings, ICMSAdminDao cmsAdminDao, HttpContextExtension httpExtension, ICMSAdminCookie cmsAdminCookie)
+        public CMSAdminBO(IOptions<LogonSettings> logonSettings, ICMSAdminDao cmsAdminDao, IHttpContextExtension httpExtension, ICMSAdminCookie cmsAdminCookie)
         {
             LogonSettings = logonSettings;
             CMSAdminDao = cmsAdminDao;

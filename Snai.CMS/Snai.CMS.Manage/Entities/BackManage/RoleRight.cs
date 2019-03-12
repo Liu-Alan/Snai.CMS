@@ -11,10 +11,12 @@ namespace Snai.CMS.Manage.Entities.BackManage
     public class RoleRight
     {
         [Key]
+        [Column("id")]
+        public int ID { get; set; }
+
         [Column("role_id")]
         public int RoleID { get; set; }
 
-        [Key]
         [Column("module_id")]
         public int ModuleID { get; set; }
     }

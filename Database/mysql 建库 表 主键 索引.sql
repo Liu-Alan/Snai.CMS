@@ -23,7 +23,8 @@ CREATE TABLE admins(
 	lock_time INT NOT NULL DEFAULT 0 			-- 锁定结束时间
 )
 ;
-						
+
+-- alter table admins add primary key pk_admins (id)  						-- 主键			
 ALTER TABLE admins ADD UNIQUE INDEX ix_admins_user_name(user_name)  		-- UNIQUE INDEX 唯一索引
 ;
 
@@ -68,12 +69,13 @@ select '超级管理员',1
 ;
 
 CREATE TABLE role_right(
+	id int AUTO_INCREMENT PRIMARY KEY,
 	role_id int not NULL,
 	module_id int not NULL
 )
 ;
 
-alter table role_right add primary key pk_role_right (role_id,module_id)  		-- 主键
+ALTER TABLE role_right ADD UNIQUE INDEX ix_role_right_role_id_module_id(role_id,module_id) 
 ;
 
 INSERT into role_right(role_id,module_id)

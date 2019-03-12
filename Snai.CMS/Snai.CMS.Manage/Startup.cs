@@ -11,7 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Snai.CMS.Manage.Business.Implement;
 using Snai.CMS.Manage.Business.Interface;
-using Snai.CMS.Manage.Common.Infrastructure;
+using Snai.CMS.Manage.Common.Infrastructure.Extension;
 using Snai.CMS.Manage.Common.Infrastructure.Filters;
 using Snai.CMS.Manage.Common.Infrastructure.ValidateCodes;
 using Snai.CMS.Manage.DataAccess.Base;
@@ -60,7 +60,7 @@ namespace Snai.CMS.Manage
             services.Configure<WebSettings>(Configuration.GetSection(nameof(WebSettings)));
 
             //注册基础工具
-            services.AddTransient<HttpContextExtension>();
+            services.AddScoped<IHttpContextExtension, HttpContextExtension>();
             services.AddTransient<IValidateCode, ValidateCode_Style1>();
             services.AddTransient<ICMSAdminCookie, CMSAdminCookie>();
 
