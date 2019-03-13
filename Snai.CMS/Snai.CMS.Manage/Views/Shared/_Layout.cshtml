@@ -16,7 +16,7 @@
             <ul class="layui-nav layui-layout-left">
                 @foreach (var module in Model.RoleModules.Where(s => s.ParentID == 0))
                 {
-                    if (Model.ThisModules != null && Model.ThisModules.Contains(module.ID))
+                    if (Model.ThisModules.Contains(module.ID))
                     {
                         <li class="layui-nav-item layui-this"><a href="/@module.Controller/@module.Action">@module.Title</a></li>
                     }
@@ -42,40 +42,37 @@
             <div class="layui-side-scroll">
                 <!-- 左侧导航区域 -->
                 <ul class="layui-nav layui-nav-tree">
-                    @if (Model.ThisModules != null && Model.ThisModules.Count() > 0)
+                    @{ var i = 0; }
+                    @foreach (var module in Model.RoleModules.Where(s => s.ParentID == Model.ThisModules.First()))
                     {
-                        var i = 0;
-                        foreach (var module in Model.RoleModules.Where(s => s.ParentID == Model.ThisModules.First()))
+                        if (i == 0 && Model.ThisModules.Count() < 2)
                         {
-                            if (i == 0 && Model.ThisModules.Count() < 2)
-                            {
-                                <li class="layui-nav-item layui-nav-itemed">
-                            }
-                            else if(Model.ThisModules.Contains(module.ID))
-                            {
-                                <li class="layui-nav-item layui-nav-itemed">
-                            }
-                            else
-                            {
-                                <li class="layui-nav-item">
-                            }
-                                    <a class="" href="javascript:;">@module.Title</a>
-                                    <dl class="layui-nav-child">
-                                        foreach (var child in Model.RoleModules.Where(s => s.ParentID == module.ID))
-                                        {
-                                            if(Model.ThisModules.Contains(child.ID))
-                                            {
-                                            <dd class="layui-this"><a href="/@child.Controller/@child.Action">@child.Title</a></dd>
-                                            }
-                                            else
-                                            {
-                                            <dd><a href="/@child.Controller/@child.Action">@child.Title</a></dd>
-                                            }
-                                        }
-                                    </dl>
-                                </li>
-                                i = i + 1;
+                            <li class="layui-nav-item layui-nav-itemed">
                         }
+                        else if(Model.ThisModules.Contains(module.ID))
+                        {
+                            <li class="layui-nav-item layui-nav-itemed">
+                        }
+                        else
+                        {
+                            <li class="layui-nav-item">
+                        }
+                                <a class="" href="javascript:;">@module.Title</a>
+                                <dl class="layui-nav-child">
+                                    foreach (var child in Model.RoleModules.Where(s => s.ParentID == module.ID))
+                                    {
+                                        if(Model.ThisModules.Contains(child.ID))
+                                        {
+                                        <dd class="layui-this"><a href="/@child.Controller/@child.Action">@child.Title</a></dd>
+                                        }
+                                        else
+                                        {
+                                        <dd><a href="/@child.Controller/@child.Action">@child.Title</a></dd>
+                                        }
+                                    }
+                                </dl>
+                            </li>
+                            i = i + 1;
                     }
                 </ul>
             </div>

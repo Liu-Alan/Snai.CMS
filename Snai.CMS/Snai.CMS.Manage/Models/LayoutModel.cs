@@ -8,6 +8,11 @@ namespace Snai.CMS.Manage.Models
 {
     public class LayoutModel
     {
+        public LayoutModel()
+        {
+            RoleModules = new List<Module>();
+            ThisModules = new List<int>();
+        }
         //页面标题
         public string PageTitle { get; set; }
 

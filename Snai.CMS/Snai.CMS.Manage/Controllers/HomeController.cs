@@ -63,10 +63,19 @@ namespace Snai.CMS.Manage.Controllers
                     if (role != null && role.ID > 0)
                     {
                         model.RoleTitle = role.Title;
-                        model.RoleModules = CMSAdminBO.GetModulesByRoleID(role.ID).ToList();
+                        var roleModules = CMSAdminBO.GetModulesByRoleID(role.ID);
+                        if (roleModules != null)
+                        {
+                            model.RoleModules = roleModules.ToList();
+                        }
+
                         if (module != null && module.ID > 0)
                         {
-                            model.ThisModules = CMSAdminBO.GetThisModuleIDs(model.RoleModules, module.ID).ToList();
+                            var thisModules = CMSAdminBO.GetThisModuleIDs(model.RoleModules, module.ID);
+                            if (thisModules != null)
+                            {
+                                model.ThisModules = thisModules.ToList();
+                            }
                         }
                     }
                 }

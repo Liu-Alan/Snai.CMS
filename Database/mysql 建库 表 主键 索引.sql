@@ -44,7 +44,8 @@ CREATE TABLE modules(
 )
 ;
 
-ALTER TABLE modules ADD UNIQUE INDEX ix_modules_parent_id_title(parent_id,title)  		
+ALTER TABLE modules ADD UNIQUE INDEX ix_modules_parent_id_title(parent_id,title)  
+;		
 ALTER TABLE modules ADD INDEX ix_modules_controller_action(controller,action)  			
 ;
 
