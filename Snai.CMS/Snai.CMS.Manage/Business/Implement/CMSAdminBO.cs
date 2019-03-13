@@ -21,14 +21,14 @@ namespace Snai.CMS.Manage.Business.Implement
 
         IOptions<LogonSettings> LogonSettings;
         ICMSAdminDao CMSAdminDao;
-        IHttpContextExtension HttpExtension;
+        HttpContextExtension HttpExtension;
         ICMSAdminCookie CMSAdminCookie;
 
         #endregion
 
         #region 构造函数
 
-        public CMSAdminBO(IOptions<LogonSettings> logonSettings, ICMSAdminDao cmsAdminDao, IHttpContextExtension httpExtension, ICMSAdminCookie cmsAdminCookie)
+        public CMSAdminBO(IOptions<LogonSettings> logonSettings, ICMSAdminDao cmsAdminDao, HttpContextExtension httpExtension, ICMSAdminCookie cmsAdminCookie)
         {
             LogonSettings = logonSettings;
             CMSAdminDao = cmsAdminDao;
@@ -864,12 +864,12 @@ namespace Snai.CMS.Manage.Business.Implement
         //取当前菜单
         public IEnumerable<int> GetThisModuleIDs(IEnumerable<Module> modules, int moduleID)
         {
-            if (moduleID <= 0 || modules == null || modules.Count() <= 0)
+            if (moduleID <= 0 || modules == null || !modules.Any())
             {
                 return null;
             }
 
-            IEnumerable<int> ids = new List<int>();
+            IList<int> ids = new List<int>();
 
             for (int i = 0; i < 4; i++)
             {
@@ -879,7 +879,7 @@ namespace Snai.CMS.Manage.Business.Implement
                     break;
                 }
 
-                ids.Append(module.ID);
+                ids.Add(module.ID);
                 moduleID = module.ParentID;
 
                 if (moduleID == 0)

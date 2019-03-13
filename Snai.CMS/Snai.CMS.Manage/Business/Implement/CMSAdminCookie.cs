@@ -19,13 +19,13 @@ namespace Snai.CMS.Manage.Business.Implement
         #region 属性声明
 
         IOptions<WebSettings> WebSettings;
-        IHttpContextExtension HttpExtension;
+        HttpContextExtension HttpExtension;
 
         #endregion
 
         #region 构造函数
 
-        public CMSAdminCookie(IOptions<WebSettings> webSettings, IHttpContextExtension httpExtension)
+        public CMSAdminCookie(IOptions<WebSettings> webSettings, HttpContextExtension httpExtension)
         {
             WebSettings = webSettings;
             HttpExtension = httpExtension;

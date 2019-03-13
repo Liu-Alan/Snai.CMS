@@ -21,14 +21,14 @@ namespace Snai.CMS.Manage.Controllers
 
         IOptions<WebSettings> WebSettings;
         IValidateCode ValidateCode;
-        IHttpContextExtension HttpExtension;
+        HttpContextExtension HttpExtension;
         ICMSAdminBO CMSAdminBO;
 
         #endregion
 
         #region 构造函数
 
-        public LoginController(IOptions<WebSettings> webSettings, IValidateCode validateCode, IHttpContextExtension httpExtension, ICMSAdminBO cmsAdminBO)
+        public LoginController(IOptions<WebSettings> webSettings, IValidateCode validateCode, HttpContextExtension httpExtension, ICMSAdminBO cmsAdminBO)
         {
             WebSettings = webSettings;
             ValidateCode = validateCode;

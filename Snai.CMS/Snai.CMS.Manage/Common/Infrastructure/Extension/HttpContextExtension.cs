@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Snai.CMS.Manage.Common.Infrastructure.Extension
 {
-    public class HttpContextExtension: IHttpContextExtension
+    public class HttpContextExtension
     {
         #region 属性声明
 

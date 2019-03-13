@@ -220,7 +220,8 @@ namespace Snai.CMS.Manage.DataAccess.Implement
             }
             else
             {
-                return Context.Modules.Where(s => ids.Contains(s.ID) && s.State == state);
+                var modules = Context.Modules.Where(s => ids.Contains(s.ID) && s.State == state);
+                return modules;
             }
         }
 

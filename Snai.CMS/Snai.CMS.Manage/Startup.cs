@@ -60,7 +60,7 @@ namespace Snai.CMS.Manage
             services.Configure<WebSettings>(Configuration.GetSection(nameof(WebSettings)));
 
             //注册基础工具
-            services.AddScoped<IHttpContextExtension, HttpContextExtension>();
+            services.AddScoped<HttpContextExtension>();
             services.AddTransient<IValidateCode, ValidateCode_Style1>();
             services.AddTransient<ICMSAdminCookie, CMSAdminCookie>();
 
