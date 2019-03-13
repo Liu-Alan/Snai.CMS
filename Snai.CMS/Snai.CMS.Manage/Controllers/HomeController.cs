@@ -38,7 +38,6 @@ namespace Snai.CMS.Manage.Controllers
         [ServiceFilter(typeof(AuthorizationFilter))]
         public IActionResult Index()
         {
-            Console.WriteLine("Action页面开始");
 
             var module = CMSAdminBO.GetModule(ControllerContext.ActionDescriptor.ControllerName, ControllerContext.ActionDescriptor.ActionName);
 
@@ -64,16 +63,14 @@ namespace Snai.CMS.Manage.Controllers
                     if (role != null && role.ID > 0)
                     {
                         model.RoleTitle = role.Title;
-                        model.RoleModules = CMSAdminBO.GetModulesByRoleID(role.ID);
+                        model.RoleModules = CMSAdminBO.GetModulesByRoleID(role.ID).ToList();
                         if (module != null && module.ID > 0)
                         {
-                            model.ThisModules = CMSAdminBO.GetThisModuleIDs(model.RoleModules, module.ID);
+                            model.ThisModules = CMSAdminBO.GetThisModuleIDs(model.RoleModules, module.ID).ToList();
                         }
                     }
                 }
             }
-
-            Console.WriteLine("Action页面结束");
 
             return View(model);
         }

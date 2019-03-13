@@ -21,10 +21,10 @@ namespace Snai.CMS.Manage.Models
         public string RoleTitle { get; set; }
 
         //菜单
-        public IEnumerable<Module> RoleModules { get; set; }
+        public IList<Module> RoleModules { get; set; }
 
         //当前菜单
-        public IEnumerable<int> ThisModules { get; set; }
+        public IList<int> ThisModules { get; set; }
         
     }
 }
