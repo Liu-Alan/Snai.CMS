@@ -864,7 +864,14 @@ namespace Snai.CMS.Manage.Business.Implement
         //取当前菜单
         public IEnumerable<int> GetThisModuleIDs(IEnumerable<Module> modules, int moduleID)
         {
-            if (moduleID <= 0 || modules == null || !modules.Any())
+            
+            if (moduleID <= 0 || modules == null)
+            {
+                return null;
+            }
+
+            var moduleList = modules.ToList();
+            if(!moduleList.Any())
             {
                 return null;
             }
@@ -873,7 +880,7 @@ namespace Snai.CMS.Manage.Business.Implement
 
             for (int i = 0; i < 4; i++)
             {
-                var module = modules.FirstOrDefault(s => s.ID == moduleID);
+                var module = moduleList.FirstOrDefault(s => s.ID == moduleID);
                 if (module == null || module.ID == 0)
                 {
                     break;
