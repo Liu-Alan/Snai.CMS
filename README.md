@@ -14,7 +14,7 @@
             WebTitle = "CMS管理后台"
         };
     }  
-    5. Razor里的代码块 html标签跨了代码段时，视图会报错
+    5. Razor里的代码块html标签跨了代码段时，视图会报错
     如：下面这种写法就会报错 
         @if(...){
             <li class='layui-nav-item'>
