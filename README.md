@@ -13,7 +13,23 @@
             PageTitle = "没有权限访问",
             WebTitle = "CMS管理后台"
         };
-    }
+    }  
+    5. Razor里的代码块 html标签跨了代码段时，视图会报错
+    如：下面这种写法就会报错 
+        @if(...){
+            <li class='layui-nav-item'>
+        }
+            </li>
+        正确写法
+        @if(...){
+            <li class='layui-nav-item'></li>
+        }
+        或
+        @if(...){
+            @Html.Raw("<li class='layui-nav-item'>")
+        }
+            @Html.Raw("</li>")
+    
 
 
 ### 菜单层级
