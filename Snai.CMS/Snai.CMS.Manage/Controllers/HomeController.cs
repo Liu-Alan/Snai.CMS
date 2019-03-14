@@ -35,10 +35,10 @@ namespace Snai.CMS.Manage.Controllers
 
         #endregion
 
+        // 首页
         [ServiceFilter(typeof(AuthorizationFilter))]
         public IActionResult Index()
         {
-
             var module = CMSAdminBO.GetModule(ControllerContext.ActionDescriptor.ControllerName, ControllerContext.ActionDescriptor.ActionName);
 
             var model = new IndexModel
@@ -82,6 +82,55 @@ namespace Snai.CMS.Manage.Controllers
             }
 
             return View(model);
+        }
+
+        // 登录信息
+        [ServiceFilter(typeof(AuthorizationFilter))]
+        public IActionResult LoginInfo()
+        {
+            var module = CMSAdminBO.GetModule(ControllerContext.ActionDescriptor.ControllerName, ControllerContext.ActionDescriptor.ActionName);
+
+            var model = new IndexModel
+            {
+                PageTitle = module == null ? "" : module.Title,
+                LastLogonIP = "本机IP",
+                LastLogonTime = DateTime.Now,
+                WebTitle = WebSettings.Value.WebTitle
+            };
+
+            var adminToken = CMSAdminCookie.GetAdiminCookie();
+            if (adminToken != null && !string.IsNullOrEmpty(adminToken.UserName))
+            {
+                var admin = CMSAdminBO.GetAdminByUserName(adminToken.UserName);
+                if (admin != null && !string.IsNullOrEmpty(admin.UserName))
+                {
+                    model.LastLogonIP = admin.LastLogonIP;
+                    model.LastLogonTime = DateTimeUtils.UnixTimeStampToDateTime(admin.LastLogonTime);
+                    model.UserName = admin.UserName;
+
+                    var role = CMSAdminBO.GetRoleByID(admin.RoleID);
+                    if (role != null && role.ID > 0)
+                    {
+                        model.RoleTitle = role.Title;
+                        var roleModules = CMSAdminBO.GetModulesByRoleID(role.ID);
+                        if (roleModules != null)
+                        {
+                            model.RoleModules = roleModules.ToList();
+                        }
+
+                        if (module != null && module.ID > 0)
+                        {
+                            var thisModules = CMSAdminBO.GetThisModuleIDs(model.RoleModules, module.ID);
+                            if (thisModules != null)
+                            {
+                                model.ThisModules = thisModules.ToList();
+                            }
+                        }
+                    }
+                }
+            }
+
+            return View("./Index", model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

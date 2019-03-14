@@ -24,14 +24,17 @@ namespace Snai.CMS.Manage.Common
 
         #region 常用URL
 
+        // 登录
         public const string Url_AdminLogin = "/Login/AdminLogin";
 
+        // 首页
         public const string Url_ManageIndex = "/Home/Index";
 
         #endregion
 
         #region 视图地址
 
+        // 无权限视图
         public const string View_NoUserRole = "NoUserRole"; 
 
         #endregion

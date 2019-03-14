@@ -50,9 +50,9 @@ ALTER TABLE modules ADD INDEX ix_modules_controller_action(controller,action)
 ;
 
 INSERT into modules(parent_id,title,controller,action,sort,state)
-select 0,'首页','','',1,1
+select 0,'首页','Home','Index',1,1
 UNION ALL select 1,'首页','','',10,1
-UNION ALL select 2,'登录信息','Home','Index',11,1
+UNION ALL select 2,'登录信息','Home','LoginInfo',11,1
 ;
 
 CREATE TABLE roles(

@@ -207,8 +207,7 @@ namespace Snai.CMS.Manage.DataAccess.Implement
         //取菜单
         public Module GetModule(string controller, string action)
         {
-
-            return Context.Modules.SingleOrDefault(s => s.Controller == controller && s.Action == action);
+            return Context.Modules.FirstOrDefault(s => s.Controller == controller && s.Action == action);
         }
 
         //取菜单
