@@ -78,13 +78,11 @@ namespace Snai.CMS.Manage.Controllers
 
         #region 登出
 
-        public ActionResult<Message> AdminLogout()
+        public IActionResult AdminLogout()
         {
             CMSAdminBO.AdminLogout();
 
-            var msg=new Message(0, Consts.Url_AdminLogin);
-
-            return new JsonResult(msg);
+            return Redirect(Consts.Url_AdminLogin);
         }
 
         #endregion

@@ -29,7 +29,7 @@
             <ul class="layui-nav layui-layout-right">
                 <li class="layui-nav-item">
                     <a href="javascript:;">
-                        @Model.UserName &lt; @Model.RoleTitle &gt;
+                        @Model.UserName &lt;@Model.RoleTitle&gt;
                     </a>
                     <dl class="layui-nav-child">
                         <dd><a href="/Login/AdminLogout">退出</a></dd>
@@ -47,18 +47,18 @@
                     {
                         if (i == 0 && Model.ThisModules.Count() < 2)
                         {
-                            <li class="layui-nav-item layui-nav-itemed">
+                            @Html.Raw("<li class='layui-nav-item layui-nav-itemed'>")
                         }
                         else if(Model.ThisModules.Contains(module.ID))
                         {
-                            <li class="layui-nav-item layui-nav-itemed">
+                            @Html.Raw("<li class='layui-nav-item layui-nav-itemed'>")
                         }
                         else
                         {
-                            <li class="layui-nav-item">
+                            @Html.Raw("<li class='layui-nav-item'>")
                         }
                                 <a class="" href="javascript:;">@module.Title</a>
-                                <dl class="layui-nav-child">
+                                @Html.Raw("<dl class='layui-nav-child'>")
                                     foreach (var child in Model.RoleModules.Where(s => s.ParentID == module.ID))
                                     {
                                         if(Model.ThisModules.Contains(child.ID))
@@ -70,8 +70,8 @@
                                         <dd><a href="/@child.Controller/@child.Action">@child.Title</a></dd>
                                         }
                                     }
-                                </dl>
-                            </li>
+                                @Html.Raw("</dl>")
+                            @Html.Raw("</li>")
                             i = i + 1;
                     }
                 </ul>
