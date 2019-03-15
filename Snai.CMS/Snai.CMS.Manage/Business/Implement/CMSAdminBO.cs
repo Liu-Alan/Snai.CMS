@@ -10,6 +10,7 @@ using Snai.CMS.Manage.Entities.BackManage;
 using Snai.CMS.Manage.Entities.Settings;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -901,6 +902,22 @@ namespace Snai.CMS.Manage.Business.Implement
             }
 
             return ids.Reverse();
+        }
+
+        //权限跟随
+        public dynamic ModuleFollow(string controller, string action)
+        {
+            dynamic module = new ExpandoObject();
+
+            module = new { Controller = "", Action = "" };
+
+            if (controller.Equals("Home", StringComparison.OrdinalIgnoreCase) && action.Equals("DoUpdatePassword", StringComparison.OrdinalIgnoreCase))
+            {
+                module.Controller = "Home";
+                module.Action = "UpdatePassword";
+            }
+
+            return module;
         }
 
         #endregion

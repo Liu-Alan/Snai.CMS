@@ -53,6 +53,7 @@ INSERT into modules(parent_id,title,controller,action,sort,state)
 select 0,'首页','Home','Index',1,1
 UNION ALL select 1,'首页','','',10,1
 UNION ALL select 2,'登录信息','Home','LoginInfo',11,1
+UNION ALL select 2,'修改密码','Home','UpdatePassword',12,1
 ;
 
 CREATE TABLE roles(

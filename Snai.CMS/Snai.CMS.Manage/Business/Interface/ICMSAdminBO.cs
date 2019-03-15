@@ -100,6 +100,9 @@ namespace Snai.CMS.Manage.Business.Interface
         //取当前菜单
         IEnumerable<int> GetThisModuleIDs(IEnumerable<Module> modules,int moduleID);
 
+        //权限跟随
+        dynamic ModuleFollow(string controller, string action);
+
         #endregion
     }
 }
