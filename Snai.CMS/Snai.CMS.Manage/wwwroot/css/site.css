@@ -10,3 +10,43 @@
     line-height: 30px;
     vertical-align: middle;
 }
+
+.width290 {
+    width: 290px;
+}
+
+/*登录 Begin*/
+.logon-content {
+    margin: auto;
+    width: 400px;
+}
+
+.logon-title {
+    margin: 30px 0px 10px 0px;
+    height: 64px;
+}
+
+.logon-title-logo {
+    float: left;
+    margin-left: 50px;
+    width: 64px;
+}
+
+.logon-title-context {
+    float: left;
+    margin-left: 20px;
+    width: 250px;
+    font-size: 20px;
+    line-height: 64px;
+    vertical-align: middle;
+}
+
+/*重写layui样式*/
+.layui-form-item .width150 {
+    width: 150px;
+}
+
+.logon-content .layui-form-mid {
+    padding: 0 !important;
+}
+/*登录 End*/

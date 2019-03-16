@@ -82,7 +82,7 @@ Logon.UserName = {
             }
             else {
                 var verifyCodeCheck = Logon.VerifyCode.check();
-                if (verifyCodeCheck == 1 || verifyCodeCheck == 2) {
+                if (verifyCodeCheck > 0) {
                     Logon.Form.verifyCode.focus();
                 }
                 else {
@@ -132,7 +132,7 @@ Logon.Password = {
             Logon.Form.password.focus();
         } else {
             var verifyCodeCheck = Logon.VerifyCode.check();
-            if (verifyCodeCheck == 1 || verifyCodeCheck == 2) {
+            if (verifyCodeCheck > 0) {
                 Logon.Form.verifyCode.focus();
             }
             else {
@@ -185,7 +185,7 @@ Logon.VerifyCode = {
             var event = e || window.event;
             if (event.keyCode == 13) {
                 var verifyCodeCheck = Logon.VerifyCode.check();
-                if (verifyCodeCheck == 1 || verifyCodeCheck == 2) {
+                if (verifyCodeCheck > 0) {
                     Logon.Form.verifyCode.focus();
                 }
                 else {
