@@ -909,7 +909,8 @@ namespace Snai.CMS.Manage.Business.Implement
         {
             dynamic module = new ExpandoObject();
 
-            module = new { Controller = "", Action = "" };
+            module.Controller = "";
+            module.Action = "";
 
             if (controller.Equals("Home", StringComparison.OrdinalIgnoreCase) && action.Equals("DoUpdatePassword", StringComparison.OrdinalIgnoreCase))
             {

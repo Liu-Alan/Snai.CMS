@@ -84,4 +84,5 @@ INSERT into role_right(role_id,module_id)
 select 1,1
 UNION ALL select 1,2
 UNION ALL select 1,3
+UNION ALL select 1,4
 ;

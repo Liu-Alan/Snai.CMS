@@ -50,3 +50,9 @@
     padding: 0 !important;
 }
 /*登录 End*/
+
+/*修改密码 Begin*/
+.layui-form-item .width290 {
+    width: 290px;
+}
+/*修改密码 End*/

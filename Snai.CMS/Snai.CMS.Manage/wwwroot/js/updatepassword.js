@@ -7,7 +7,7 @@ UpPwd.Const = {
 
     password: {
         empty: "请输入新密码",
-        error: "密码至少6位，且必须是字母与(数字或特殊符号)组合"
+        error: "新密码至少6位，且必须是字母与(数字或特殊符号)组合"
     },
 
     rePassword: {
@@ -195,7 +195,7 @@ UpPwd.RePassword = {
         UpPwd.Form.rePassword.bind("focus", UpPwd.RePassword.onfocus);
         UpPwd.Form.rePassword.bind("blur", UpPwd.RePassword.onblur);
         UpPwd.Form.rePassword.bind("keydown", function (e) {
-            $.enterSubmit(e, function () { UpPwd.rePassword.onkeydown(); });
+            $.enterSubmit(e, function () { UpPwd.RePassword.onkeydown(); });
         });
     }
 };
@@ -209,11 +209,11 @@ UpPwd.BtnSubmit = {
     },
 
     bind: function () {
-        UpPwd.Form.BtnSubmit.bind("click", function () {
+        UpPwd.Form.btnSubmit.bind("click", function () {
             return UpPwd.onsubmit();
         });
 
-        UpPwd.Form.BtnSubmit.bind("keypress", function (e) {
+        UpPwd.Form.btnSubmit.bind("keypress", function (e) {
             var event = e || window.event;
             if (event.keyCode == 13) {
                 UpPwd.onsubmit();
@@ -251,7 +251,7 @@ UpPwd.checkInput = function () {
         UpPwd.Form.rePassword.focus();
         return false;
     }
-    if (verifyCodeCheck == 2) {
+    if (rePasswordCheck == 2) {
         UpPwd.Form.error(UpPwd.Form.rePassword);
         UpPwd.layui.layer.msg(UpPwd.Const.rePassword.error, { icon: 2 });
         UpPwd.Form.rePassword.focus();
