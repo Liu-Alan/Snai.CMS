@@ -904,6 +904,10 @@ namespace Snai.CMS.Manage.Business.Implement
             return ids.Reverse();
         }
 
+        #endregion
+
+        #region 权限跟随
+
         //权限跟随
         public dynamic ModuleFollow(string controller, string action)
         {
