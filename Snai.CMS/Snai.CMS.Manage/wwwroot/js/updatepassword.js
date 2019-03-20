@@ -18,7 +18,7 @@ UpPwd.Const = {
     ajaxErr: "很抱歉，由于服务器繁忙，请您稍后再试",
 
     url: {
-        doUpPwd: "/Home/DoUpdatePassword"
+        doUpPwd: "/Home/UpdatePassword"
     }
 };
 
@@ -270,6 +270,7 @@ UpPwd.onsubmit = function () {
 
     //请求参数
     var params = {
+        isSubmit: "true",
         oldPassword: UpPwd.Form.oldPassword.val(),
         password: UpPwd.Form.password.val(),
         rePassword: UpPwd.Form.rePassword.val()

@@ -39,14 +39,6 @@ namespace Snai.CMS.Manage.Common.Infrastructure.Filters
             var controller =  context.RouteData.Values["Controller"].ToString();
             var action = context.RouteData.Values["Action"].ToString();
 
-            //权限跟随
-            var module = CMSAdminBO.ModuleFollow(controller, action);
-            if (!string.IsNullOrEmpty(module.Controller) && !string.IsNullOrEmpty(module.Action))
-            {
-                controller = module.Controller;
-                action = module.Action;
-            }
-
             var roleMsg = CMSAdminBO.VerifyUserRole(loginMsg.Result.AdminToken.UserName, controller, action);
             if (!roleMsg.Success)
             {

@@ -22,6 +22,14 @@ namespace Snai.CMS.Manage.Models.BackManage
 
         //过滤条件
         public string UserNameFilter { get; set; }
-        public string RoleIDFilter { get; set; }
+        public int RoleIDFilter { get; set; }
+
+        //分页信息
+        //每页显示数
+        public int PageLimit { get; set; }
+        //数据总行数
+        public int TotCount { get; set; }
+        //当前页码
+        public int PageIndex { get; set; }
     }
 }

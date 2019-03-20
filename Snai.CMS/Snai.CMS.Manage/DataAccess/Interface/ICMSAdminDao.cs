@@ -22,6 +22,12 @@ namespace Snai.CMS.Manage.DataAccess.Interface
         //取管理员
         Admin GetAdminByUserName(string userName);
 
+        //取管理员
+        IEnumerable<Admin> GetAdminsLikeUserName(string userName);
+
+        //取管理员
+        IEnumerable<Admin> GetAdminsByRoleID(int roleID);
+
         //更新管理员
         bool UpdateAdminByID(int id, string userName, string password, byte state, int roleID, int updateTime);
 

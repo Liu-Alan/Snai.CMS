@@ -23,6 +23,9 @@ namespace Snai.CMS.Manage.Business.Interface
         //取管理员
         Admin GetAdminByUserName(string userName);
 
+        //取管理员
+        IEnumerable<Admin> GetAdmins(string userName,int roleID);
+
         //更新管理员
         Message UpdateAdminByID(Admin admin);
 
@@ -99,9 +102,6 @@ namespace Snai.CMS.Manage.Business.Interface
 
         //取当前菜单
         IEnumerable<int> GetThisModuleIDs(IEnumerable<Module> modules,int moduleID);
-
-        //权限跟随
-        dynamic ModuleFollow(string controller, string action);
 
         #endregion
     }

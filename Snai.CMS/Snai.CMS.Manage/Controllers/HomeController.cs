@@ -40,6 +40,7 @@ namespace Snai.CMS.Manage.Controllers
         [ServiceFilter(typeof(AuthorizationFilter))]
         public IActionResult Index()
         {
+            // 权限和菜单
             var module = CMSAdminBO.GetModule(ControllerContext.ActionDescriptor.ControllerName, ControllerContext.ActionDescriptor.ActionName);
 
             var model = new IndexModel
@@ -89,6 +90,7 @@ namespace Snai.CMS.Manage.Controllers
         [ServiceFilter(typeof(AuthorizationFilter))]
         public IActionResult LoginInfo()
         {
+            // 权限和菜单
             var module = CMSAdminBO.GetModule(ControllerContext.ActionDescriptor.ControllerName, ControllerContext.ActionDescriptor.ActionName);
 
             var model = new IndexModel
@@ -98,8 +100,7 @@ namespace Snai.CMS.Manage.Controllers
                 LastLogonTime = DateTime.Now,
                 WebTitle = WebSettings.Value.WebTitle
             };
-
-            // 取菜单和登录信息
+            
             var adminToken = CMSAdminCookie.GetAdiminCookie();
             if (adminToken != null && !string.IsNullOrEmpty(adminToken.UserName))
             {
@@ -139,65 +140,69 @@ namespace Snai.CMS.Manage.Controllers
         [ServiceFilter(typeof(AuthorizationFilter))]
         public IActionResult UpdatePassword()
         {
-            var module = CMSAdminBO.GetModule(ControllerContext.ActionDescriptor.ControllerName, ControllerContext.ActionDescriptor.ActionName);
-
-            var model = new UpdatePasswordModel
+            string isSubmit = Request.Form["isSubmit"];
+            //展示页面
+            if (!isSubmit.Equals("true", StringComparison.OrdinalIgnoreCase))
             {
-                PageTitle = module == null ? "" : module.Title,
-                WebTitle = WebSettings.Value.WebTitle
-            };
+                // 权限和菜单
+                var module = CMSAdminBO.GetModule(ControllerContext.ActionDescriptor.ControllerName, ControllerContext.ActionDescriptor.ActionName);
 
-            // 取菜单和用户名
-            var adminToken = CMSAdminCookie.GetAdiminCookie();
-            if (adminToken != null && !string.IsNullOrEmpty(adminToken.UserName))
-            {
-                var admin = CMSAdminBO.GetAdminByUserName(adminToken.UserName);
-                if (admin != null && !string.IsNullOrEmpty(admin.UserName))
+                var model = new UpdatePasswordModel
                 {
-                    model.UserName = admin.UserName;
+                    PageTitle = module == null ? "" : module.Title,
+                    WebTitle = WebSettings.Value.WebTitle
+                };
 
-                    var role = CMSAdminBO.GetRoleByID(admin.RoleID);
-                    if (role != null && role.ID > 0)
+                var adminToken = CMSAdminCookie.GetAdiminCookie();
+                if (adminToken != null && !string.IsNullOrEmpty(adminToken.UserName))
+                {
+                    var admin = CMSAdminBO.GetAdminByUserName(adminToken.UserName);
+                    if (admin != null && !string.IsNullOrEmpty(admin.UserName))
                     {
-                        model.RoleTitle = role.Title;
-                        var roleModules = CMSAdminBO.GetModulesByRoleID(role.ID);
-                        if (roleModules != null)
-                        {
-                            model.RoleModules = roleModules.ToList();
-                        }
+                        model.UserName = admin.UserName;
 
-                        if (module != null && module.ID > 0)
+                        var role = CMSAdminBO.GetRoleByID(admin.RoleID);
+                        if (role != null && role.ID > 0)
                         {
-                            var thisModules = CMSAdminBO.GetThisModuleIDs(model.RoleModules, module.ID);
-                            if (thisModules != null)
+                            model.RoleTitle = role.Title;
+                            var roleModules = CMSAdminBO.GetModulesByRoleID(role.ID);
+                            if (roleModules != null)
                             {
-                                model.ThisModules = thisModules.ToList();
+                                model.RoleModules = roleModules.ToList();
+                            }
+
+                            if (module != null && module.ID > 0)
+                            {
+                                var thisModules = CMSAdminBO.GetThisModuleIDs(model.RoleModules, module.ID);
+                                if (thisModules != null)
+                                {
+                                    model.ThisModules = thisModules.ToList();
+                                }
                             }
                         }
                     }
                 }
+
+                return View(model);
             }
-
-            return View(model);
-        }
-
-        [ServiceFilter(typeof(AuthorizationFilter))]
-        public ActionResult<Message> DoUpdatePassword()
-        {
-            var msg = new Message(10, "修改密码失败！");
-
-            string oldPassword = Request.Form["oldPassword"];
-            string password = Request.Form["password"];
-            string rePassword = Request.Form["rePassword"];
-
-            var adminToken = CMSAdminCookie.GetAdiminCookie();
-            var admin = CMSAdminBO.GetAdminByUserName(adminToken.UserName);
-            if (admin != null || admin.ID > 0)
+            else
             {
-                msg = CMSAdminBO.UpdatePasswordByID(admin.ID, oldPassword, password, rePassword);
-            }
+                //修改密码
+                var msg = new Message(10, "修改密码失败！");
 
-            return new JsonResult(msg);
+                string oldPassword = Request.Form["oldPassword"];
+                string password = Request.Form["password"];
+                string rePassword = Request.Form["rePassword"];
+
+                var adminToken = CMSAdminCookie.GetAdiminCookie();
+                var admin = CMSAdminBO.GetAdminByUserName(adminToken.UserName);
+                if (admin != null || admin.ID > 0)
+                {
+                    msg = CMSAdminBO.UpdatePasswordByID(admin.ID, oldPassword, password, rePassword);
+                }
+
+                return new JsonResult(msg);
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

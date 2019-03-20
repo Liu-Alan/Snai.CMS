@@ -52,6 +52,18 @@ namespace Snai.CMS.Manage.DataAccess.Implement
             return Context.Admins.SingleOrDefault(s => s.UserName == userName);
         }
 
+        //取管理员
+        public IEnumerable<Admin> GetAdminsLikeUserName(string userName)
+        {
+            return Context.Admins.Where(s => s.UserName.Contains(userName));
+        }
+
+        //取管理员
+        public IEnumerable<Admin> GetAdminsByRoleID(int roleID)
+        {
+            return Context.Admins.Where(s => s.RoleID == roleID);
+        }
+
         //更新管理员
         public bool UpdateAdminByID(int id, string userName, string password, byte state, int roleID, int updateTime)
         {

@@ -35,7 +35,14 @@ namespace Snai.CMS.Manage.Common
         #region 视图地址
 
         // 无权限视图
-        public const string View_NoUserRole = "NoUserRole"; 
+        public const string View_NoUserRole = "NoUserRole";
+
+        #endregion
+
+        #region 分页信息
+
+        //每页显示数
+        public const int Page_Limit = 20;
 
         #endregion
     }

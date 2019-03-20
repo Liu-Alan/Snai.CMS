@@ -218,6 +218,36 @@ namespace Snai.CMS.Manage.Business.Implement
             }
         }
 
+        //取管理员
+        public IEnumerable<Admin> GetAdmins(string userName, int roleID)
+        {
+            if (roleID <= 0)
+            {
+                var admin = CMSAdminDao.GetAdminsLikeUserName(userName);
+
+                return admin;
+            }
+            else
+            {
+                var admins = CMSAdminDao.GetAdminsByRoleID(roleID);
+                if (string.IsNullOrEmpty(userName))
+                {
+                    return admins;
+                }
+                else
+                {
+                    if (admins != null)
+                    {
+                        var adminList = admins.ToList();
+
+                        return adminList.Where(s => s.UserName.Contains(userName));
+                    }
+
+                    return admins;
+                }
+            }
+        }
+
         //更新管理员
         public Message UpdateAdminByID(Admin admin)
         {
@@ -902,27 +932,6 @@ namespace Snai.CMS.Manage.Business.Implement
             }
 
             return ids.Reverse();
-        }
-
-        #endregion
-
-        #region 权限跟随
-
-        //权限跟随
-        public dynamic ModuleFollow(string controller, string action)
-        {
-            dynamic module = new ExpandoObject();
-
-            module.Controller = "";
-            module.Action = "";
-
-            if (controller.Equals("Home", StringComparison.OrdinalIgnoreCase) && action.Equals("DoUpdatePassword", StringComparison.OrdinalIgnoreCase))
-            {
-                module.Controller = "Home";
-                module.Action = "UpdatePassword";
-            }
-
-            return module;
         }
 
         #endregion
