@@ -37,7 +37,7 @@ namespace Snai.CMS.Manage.Controllers
         {
             var module = CMSAdminBO.GetModule(ControllerContext.ActionDescriptor.ControllerName, ControllerContext.ActionDescriptor.ActionName);
 
-            var model = new AdminListModel
+            var model = new IndexModel
             {
                 PageTitle = module == null ? "" : module.Title,
                 WebTitle = WebSettings.Value.WebTitle
