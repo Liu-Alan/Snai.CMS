@@ -29,6 +29,8 @@ namespace Snai.CMS.Manage.Models.BackManage
         public int PageLimit { get; set; }
         //数据总行数
         public int TotCount { get; set; }
+        //数据总页数
+        public int PageCount { get; set; }
         //当前页码
         public int PageIndex { get; set; }
     }

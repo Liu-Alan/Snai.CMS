@@ -24,7 +24,10 @@ namespace Snai.CMS.Manage.Business.Interface
         Admin GetAdminByUserName(string userName);
 
         //取管理员
-        IEnumerable<Admin> GetAdmins(string userName,int roleID);
+        IEnumerable<Admin> GetAdmins(string userName, int roleID, int pageLimit, int pageIndex);
+
+        //取管理员数
+        int GetAdminCount(string userName, int roleID);
 
         //更新管理员
         Message UpdateAdminByID(Admin admin);
@@ -79,6 +82,9 @@ namespace Snai.CMS.Manage.Business.Interface
 
         //取角色
         Role GetRoleByID(int id);
+
+        //取全部角色
+        IEnumerable<Role> GetRoles(byte state);
 
         #endregion
 

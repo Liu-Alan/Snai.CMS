@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Snai.CMS.Manage.Business.Implement
 {
-    public class CMSAdminBO: ICMSAdminBO
+    public class CMSAdminBO : ICMSAdminBO
     {
         #region 属性声明
 
@@ -104,7 +104,7 @@ namespace Snai.CMS.Manage.Business.Implement
         //添加管理员
         public Message CreateAdmin(Admin admin)
         {
-            var msg = new Message(10,"");
+            var msg = new Message(10, "");
             if (admin == null)
             {
                 msg.Code = 101;
@@ -219,32 +219,75 @@ namespace Snai.CMS.Manage.Business.Implement
         }
 
         //取管理员
-        public IEnumerable<Admin> GetAdmins(string userName, int roleID)
+        public IEnumerable<Admin> GetAdmins(string userName, int roleID,int pageLimit,int pageIndex)
         {
+            IEnumerable<Admin> adminIE = new List<Admin>();
+            IList<Admin> admins = new List<Admin>();
             if (roleID <= 0)
             {
-                var admin = CMSAdminDao.GetAdminsLikeUserName(userName);
-
-                return admin;
+                adminIE = CMSAdminDao.GetAdminsLikeUserName(userName);
             }
             else
             {
-                var admins = CMSAdminDao.GetAdminsByRoleID(roleID);
-                if (string.IsNullOrEmpty(userName))
+                adminIE = CMSAdminDao.GetAdminsByRoleID(roleID);
+                if (!string.IsNullOrEmpty(userName))
                 {
-                    return admins;
-                }
-                else
-                {
-                    if (admins != null)
+                    if (adminIE != null)
                     {
-                        var adminList = admins.ToList();
-
-                        return adminList.Where(s => s.UserName.Contains(userName));
+                        var adminList = adminIE.ToList();
+                        adminIE = adminList.Where(s => s.UserName.Contains(userName));
                     }
-
-                    return admins;
                 }
+            }
+
+            if (adminIE != null)
+            {
+                admins = adminIE.ToList();
+            }
+
+            if (admins == null || admins.Count() < 0)
+            {
+                return null;
+            }
+
+            pageIndex = pageIndex < 1 ? 1 : pageIndex;
+
+            if (admins.Count() <= (pageIndex - 1) * pageLimit)
+            {
+                return null;
+            }
+
+            return admins.Skip((pageIndex - 1) * pageLimit).Take(pageLimit);
+        }
+
+        //取管理员数
+        public int GetAdminCount(string userName, int roleID)
+        {
+            IEnumerable<Admin> adminIE = new List<Admin>();
+            if (roleID <= 0)
+            {
+                adminIE = CMSAdminDao.GetAdminsLikeUserName(userName);
+            }
+            else
+            {
+                adminIE = CMSAdminDao.GetAdminsByRoleID(roleID);
+                if (!string.IsNullOrEmpty(userName))
+                {
+                    if (adminIE != null)
+                    {
+                        var adminList = adminIE.ToList();
+                        adminIE = adminList.Where(s => s.UserName.Contains(userName));
+                    }
+                }
+            }
+
+            if (adminIE != null)
+            {
+                return adminIE.ToList().Count();
+            }
+            else
+            {
+                return 0;
             }
         }
 
@@ -261,7 +304,7 @@ namespace Snai.CMS.Manage.Business.Implement
                 return msg;
             }
 
-            if (admin.UserName.Length>32)
+            if (admin.UserName.Length > 32)
             {
                 msg.Code = 101;
                 msg.Msg = "用户名长度不能多于32个字符";
@@ -555,7 +598,7 @@ namespace Snai.CMS.Manage.Business.Implement
         }
 
         //更新管理员登录信息
-        public Message UpdateAdminLogon(int id, int lastLogonTime,string lastLogonIP)
+        public Message UpdateAdminLogon(int id, int lastLogonTime, string lastLogonIP)
         {
             var msg = new Message(10, "");
 
@@ -629,7 +672,7 @@ namespace Snai.CMS.Manage.Business.Implement
 
             var validate = HttpExtension.EqualsSessionValue(Consts.Session_ValidateCode, adminLogin.VerifyCode);
             HttpExtension.RemoveSession(Consts.Session_ValidateCode);
-            if(!validate)
+            if (!validate)
             {
                 msg.Code = 103;
                 msg.Msg = "验证码错误";
@@ -801,6 +844,12 @@ namespace Snai.CMS.Manage.Business.Implement
             {
                 return null;
             }
+        }
+
+        //取全部角色
+        public IEnumerable<Role> GetRoles(byte state)
+        {
+            return CMSAdminDao.GetRoles(state);
         }
 
         #endregion

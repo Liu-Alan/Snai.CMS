@@ -30,6 +30,24 @@ namespace Snai.CMS.Manage.Models
 
         //当前菜单
         public IList<int> ThisModules { get; set; }
-        
+
+        #region 公有方法
+
+        //父类转子类
+        public T ToT<T>() where T: LayoutModel
+        {
+            T t = default(T);
+
+            t.PageTitle = this.PageTitle;
+            t.WebTitle = this.WebTitle;
+            t.UserName = this.UserName;
+            t.RoleTitle = this.RoleTitle;
+            t.RoleModules = this.RoleModules;
+            t.ThisModules = this.ThisModules;
+
+            return t;
+        }
+
+        #endregion
     }
 }

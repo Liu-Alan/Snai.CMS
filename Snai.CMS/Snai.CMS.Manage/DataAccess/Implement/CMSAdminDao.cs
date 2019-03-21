@@ -37,7 +37,7 @@ namespace Snai.CMS.Manage.DataAccess.Implement
         //取全部管理员
         public IEnumerable<Admin> GetAdmins()
         {
-            return Context.Admins.ToList();
+            return Context.Admins;
         }
 
         //取管理员
@@ -251,6 +251,19 @@ namespace Snai.CMS.Manage.DataAccess.Implement
         public Role GetRoleByID(int id)
         {
             return Context.Roles.SingleOrDefault(s => s.ID == id);
+        }
+
+        //取全部角色
+        public IEnumerable<Role> GetRoles(byte state)
+        {
+            if (state > 0)
+            {
+                return Context.Roles.Where(s => s.State == state);
+            }
+            else
+            {
+                return Context.Roles;
+            }
         }
 
         #endregion

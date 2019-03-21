@@ -15,23 +15,13 @@ using Snai.CMS.Manage.Models.Home;
 
 namespace Snai.CMS.Manage.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : ControllerBase
     {
-        #region 属性声明
-
-        IOptions<WebSettings> WebSettings;
-        ICMSAdminBO CMSAdminBO;
-        ICMSAdminCookie CMSAdminCookie;
-
-        #endregion
-
         #region 构造函数
 
         public HomeController(IOptions<WebSettings> webSettings, ICMSAdminBO cmsAdminBO, ICMSAdminCookie cmsAdminCookie)
+            : base(webSettings, cmsAdminBO, cmsAdminCookie)
         {
-            WebSettings = webSettings;
-            CMSAdminBO = cmsAdminBO;
-            CMSAdminCookie = cmsAdminCookie;
         }
 
         #endregion
@@ -41,46 +31,23 @@ namespace Snai.CMS.Manage.Controllers
         public IActionResult Index()
         {
             // 权限和菜单
-            var module = CMSAdminBO.GetModule(ControllerContext.ActionDescriptor.ControllerName, ControllerContext.ActionDescriptor.ActionName);
-
-            var model = new IndexModel
+            IndexModel model = new IndexModel();
+            var layoutModel = this.GetLayoutModel();
+            if (layoutModel != null)
             {
-                PageTitle = module == null ? "" : module.Title,
-                LastLogonIP = "本机IP",
-                LastLogonTime = DateTime.Now,
-                WebTitle = WebSettings.Value.WebTitle
-            };
+                model = this.GetLayoutModel().ToT<IndexModel>();
+            }
 
-            var adminToken = CMSAdminCookie.GetAdiminCookie();
-            if (adminToken != null && !string.IsNullOrEmpty(adminToken.UserName))
+            var admin = CMSAdminBO.GetAdminByUserName(model.UserName);
+            if (admin != null && !string.IsNullOrEmpty(admin.UserName))
             {
-                var admin = CMSAdminBO.GetAdminByUserName(adminToken.UserName);
-                if (admin != null && !string.IsNullOrEmpty(admin.UserName))
-                {
-                    model.LastLogonIP = admin.LastLogonIP;
-                    model.LastLogonTime = DateTimeUtils.UnixTimeStampToDateTime(admin.LastLogonTime);
-                    model.UserName = admin.UserName;
-
-                    var role = CMSAdminBO.GetRoleByID(admin.RoleID);
-                    if (role != null && role.ID > 0)
-                    {
-                        model.RoleTitle = role.Title;
-                        var roleModules = CMSAdminBO.GetModulesByRoleID(role.ID);
-                        if (roleModules != null)
-                        {
-                            model.RoleModules = roleModules.ToList();
-                        }
-
-                        if (module != null && module.ID > 0)
-                        {
-                            var thisModules = CMSAdminBO.GetThisModuleIDs(model.RoleModules, module.ID);
-                            if (thisModules != null)
-                            {
-                                model.ThisModules = thisModules.ToList();
-                            }
-                        }
-                    }
-                }
+                model.LastLogonIP = admin.LastLogonIP;
+                model.LastLogonTime = DateTimeUtils.UnixTimeStampToDateTime(admin.LastLogonTime);
+            }
+            else
+            {
+                model.LastLogonIP = "本机IP";
+                model.LastLogonTime = DateTime.Now;
             }
 
             return View(model);
@@ -91,46 +58,23 @@ namespace Snai.CMS.Manage.Controllers
         public IActionResult LoginInfo()
         {
             // 权限和菜单
-            var module = CMSAdminBO.GetModule(ControllerContext.ActionDescriptor.ControllerName, ControllerContext.ActionDescriptor.ActionName);
-
-            var model = new IndexModel
+            IndexModel model = new IndexModel();
+            var layoutModel = this.GetLayoutModel();
+            if (layoutModel != null)
             {
-                PageTitle = module == null ? "" : module.Title,
-                LastLogonIP = "本机IP",
-                LastLogonTime = DateTime.Now,
-                WebTitle = WebSettings.Value.WebTitle
-            };
-            
-            var adminToken = CMSAdminCookie.GetAdiminCookie();
-            if (adminToken != null && !string.IsNullOrEmpty(adminToken.UserName))
+                model = this.GetLayoutModel().ToT<IndexModel>();
+            }
+
+            var admin = CMSAdminBO.GetAdminByUserName(model.UserName);
+            if (admin != null && !string.IsNullOrEmpty(admin.UserName))
             {
-                var admin = CMSAdminBO.GetAdminByUserName(adminToken.UserName);
-                if (admin != null && !string.IsNullOrEmpty(admin.UserName))
-                {
-                    model.LastLogonIP = admin.LastLogonIP;
-                    model.LastLogonTime = DateTimeUtils.UnixTimeStampToDateTime(admin.LastLogonTime);
-                    model.UserName = admin.UserName;
-
-                    var role = CMSAdminBO.GetRoleByID(admin.RoleID);
-                    if (role != null && role.ID > 0)
-                    {
-                        model.RoleTitle = role.Title;
-                        var roleModules = CMSAdminBO.GetModulesByRoleID(role.ID);
-                        if (roleModules != null)
-                        {
-                            model.RoleModules = roleModules.ToList();
-                        }
-
-                        if (module != null && module.ID > 0)
-                        {
-                            var thisModules = CMSAdminBO.GetThisModuleIDs(model.RoleModules, module.ID);
-                            if (thisModules != null)
-                            {
-                                model.ThisModules = thisModules.ToList();
-                            }
-                        }
-                    }
-                }
+                model.LastLogonIP = admin.LastLogonIP;
+                model.LastLogonTime = DateTimeUtils.UnixTimeStampToDateTime(admin.LastLogonTime);
+            }
+            else
+            {
+                model.LastLogonIP = "本机IP";
+                model.LastLogonTime = DateTime.Now;
             }
 
             return View("./Index", model);
@@ -145,42 +89,11 @@ namespace Snai.CMS.Manage.Controllers
             if (!isSubmit.Equals("true", StringComparison.OrdinalIgnoreCase))
             {
                 // 权限和菜单
-                var module = CMSAdminBO.GetModule(ControllerContext.ActionDescriptor.ControllerName, ControllerContext.ActionDescriptor.ActionName);
-
-                var model = new UpdatePasswordModel
+                UpdatePasswordModel model = new UpdatePasswordModel();
+                var layoutModel = this.GetLayoutModel();
+                if (layoutModel != null)
                 {
-                    PageTitle = module == null ? "" : module.Title,
-                    WebTitle = WebSettings.Value.WebTitle
-                };
-
-                var adminToken = CMSAdminCookie.GetAdiminCookie();
-                if (adminToken != null && !string.IsNullOrEmpty(adminToken.UserName))
-                {
-                    var admin = CMSAdminBO.GetAdminByUserName(adminToken.UserName);
-                    if (admin != null && !string.IsNullOrEmpty(admin.UserName))
-                    {
-                        model.UserName = admin.UserName;
-
-                        var role = CMSAdminBO.GetRoleByID(admin.RoleID);
-                        if (role != null && role.ID > 0)
-                        {
-                            model.RoleTitle = role.Title;
-                            var roleModules = CMSAdminBO.GetModulesByRoleID(role.ID);
-                            if (roleModules != null)
-                            {
-                                model.RoleModules = roleModules.ToList();
-                            }
-
-                            if (module != null && module.ID > 0)
-                            {
-                                var thisModules = CMSAdminBO.GetThisModuleIDs(model.RoleModules, module.ID);
-                                if (thisModules != null)
-                                {
-                                    model.ThisModules = thisModules.ToList();
-                                }
-                            }
-                        }
-                    }
+                    model = this.GetLayoutModel().ToT<UpdatePasswordModel>();
                 }
 
                 return View(model);

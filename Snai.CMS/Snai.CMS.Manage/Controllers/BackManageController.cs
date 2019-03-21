@@ -13,23 +13,13 @@ using Snai.CMS.Manage.Models.BackManage;
 namespace Snai.CMS.Manage.Controllers
 {
     [ServiceFilter(typeof(AuthorizationFilter))]
-    public class BackManageController : Controller
+    public class BackManageController : ControllerBase
     {
-        #region 属性声明
-
-        IOptions<WebSettings> WebSettings;
-        ICMSAdminBO CMSAdminBO;
-        ICMSAdminCookie CMSAdminCookie;
-
-        #endregion
-
         #region 构造函数
 
         public BackManageController(IOptions<WebSettings> webSettings, ICMSAdminBO cmsAdminBO, ICMSAdminCookie cmsAdminCookie)
+            :base(webSettings, cmsAdminBO, cmsAdminCookie)
         {
-            WebSettings = webSettings;
-            CMSAdminBO = cmsAdminBO;
-            CMSAdminCookie = cmsAdminCookie;
         }
 
         #endregion
@@ -37,42 +27,11 @@ namespace Snai.CMS.Manage.Controllers
         public IActionResult Index()
         {
             // 权限和菜单
-            var module = CMSAdminBO.GetModule(ControllerContext.ActionDescriptor.ControllerName, ControllerContext.ActionDescriptor.ActionName);
-
-            var model = new IndexModel
+            IndexModel model = new IndexModel();
+            var layoutModel = this.GetLayoutModel();
+            if (layoutModel != null)
             {
-                PageTitle = module == null ? "" : module.Title,
-                WebTitle = WebSettings.Value.WebTitle
-            };
-
-            var adminToken = CMSAdminCookie.GetAdiminCookie();
-            if (adminToken != null && !string.IsNullOrEmpty(adminToken.UserName))
-            {
-                var admin = CMSAdminBO.GetAdminByUserName(adminToken.UserName);
-                if (admin != null && !string.IsNullOrEmpty(admin.UserName))
-                {
-                    model.UserName = admin.UserName;
-
-                    var role = CMSAdminBO.GetRoleByID(admin.RoleID);
-                    if (role != null && role.ID > 0)
-                    {
-                        model.RoleTitle = role.Title;
-                        var roleModules = CMSAdminBO.GetModulesByRoleID(role.ID);
-                        if (roleModules != null)
-                        {
-                            model.RoleModules = roleModules.ToList();
-                        }
-
-                        if (module != null && module.ID > 0)
-                        {
-                            var thisModules = CMSAdminBO.GetThisModuleIDs(model.RoleModules, module.ID);
-                            if (thisModules != null)
-                            {
-                                model.ThisModules = thisModules.ToList();
-                            }
-                        }
-                    }
-                }
+                model = this.GetLayoutModel().ToT<IndexModel>();
             }
 
             return View(model);
@@ -81,57 +40,42 @@ namespace Snai.CMS.Manage.Controllers
         public IActionResult AdminList()
         {
             // 权限和菜单
-            var module = CMSAdminBO.GetModule(ControllerContext.ActionDescriptor.ControllerName, ControllerContext.ActionDescriptor.ActionName);
-
-            var model = new AdminListModel
+            AdminListModel model = new AdminListModel();
+            var layoutModel = this.GetLayoutModel();
+            if (layoutModel != null)
             {
-                PageTitle = module == null ? "" : module.Title,
-                WebTitle = WebSettings.Value.WebTitle
-            };
-
-            var adminToken = CMSAdminCookie.GetAdiminCookie();
-            if (adminToken != null && !string.IsNullOrEmpty(adminToken.UserName))
-            {
-                var admin = CMSAdminBO.GetAdminByUserName(adminToken.UserName);
-                if (admin != null && !string.IsNullOrEmpty(admin.UserName))
-                {
-                    model.UserName = admin.UserName;
-
-                    var role = CMSAdminBO.GetRoleByID(admin.RoleID);
-                    if (role != null && role.ID > 0)
-                    {
-                        model.RoleTitle = role.Title;
-                        var roleModules = CMSAdminBO.GetModulesByRoleID(role.ID);
-                        if (roleModules != null)
-                        {
-                            model.RoleModules = roleModules.ToList();
-                        }
-
-                        if (module != null && module.ID > 0)
-                        {
-                            var thisModules = CMSAdminBO.GetThisModuleIDs(model.RoleModules, module.ID);
-                            if (thisModules != null)
-                            {
-                                model.ThisModules = thisModules.ToList();
-                            }
-                        }
-                    }
-                }
+                model = this.GetLayoutModel().ToT<AdminListModel>();
             }
 
             //取管理员列表分布
             model.UserNameFilter = Request.Query["userName"];
+
             var roleID = 0;
             int.TryParse( Request.Query["roleID"], out roleID);
             model.RoleIDFilter = roleID;
 
+            var pageIndex = 0;
+            int.TryParse(Request.Query["pageIndex"], out pageIndex);
+            model.PageIndex = pageIndex;
+
             model.PageLimit = Consts.Page_Limit;
-            var admins = CMSAdminBO.GetAdmins(model.UserNameFilter, model.RoleIDFilter);
-            if (admins != null)
+            model.TotCount = CMSAdminBO.GetAdminCount(model.UserNameFilter, model.RoleIDFilter);
+            model.PageCount = (int)Math.Ceiling(model.TotCount / (float)model.PageLimit);
+
+            if (model.TotCount > 0)
             {
-                model.Admins= admins.ToList();
+                var admins = CMSAdminBO.GetAdmins(model.UserNameFilter, model.RoleIDFilter, model.PageLimit, model.PageIndex);
+                if (admins != null)
+                {
+                    model.Admins = admins.ToList();
+                }
             }
-            
+
+            var roles = CMSAdminBO.GetRoles(1);
+            if (roles != null)
+            {
+                model.Roles = roles.ToList();
+            }
 
             return View(model);
         }

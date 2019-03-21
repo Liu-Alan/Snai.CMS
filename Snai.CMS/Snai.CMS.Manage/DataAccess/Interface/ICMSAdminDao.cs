@@ -69,6 +69,9 @@ namespace Snai.CMS.Manage.DataAccess.Interface
         //取角色
         Role GetRoleByID(int id);
 
+        //取全部角色
+        IEnumerable<Role> GetRoles(byte state);
+
         #endregion
 
         #region 权限

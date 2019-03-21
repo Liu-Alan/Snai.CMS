@@ -29,7 +29,7 @@
             @Html.Raw("<li class='layui-nav-item'>")
         }
             @Html.Raw("</li>")
-    
+    6. 加基类控制器 ControllerBase : Controller，抽出GetLayoutModel()，通过泛型 T ToT<T>() 方法，得到子类页面Model，简化控制器取 LayoutModel Model值
 
 
 ### 菜单层级
