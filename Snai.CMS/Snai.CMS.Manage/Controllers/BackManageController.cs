@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Snai.CMS.Manage.Business.Interface;
 using Snai.CMS.Manage.Common;
+using Snai.CMS.Manage.Common.Infrastructure.Extension;
 using Snai.CMS.Manage.Common.Infrastructure.Filters;
+using Snai.CMS.Manage.Common.Infrastructure.ValidateCodes;
 using Snai.CMS.Manage.Entities.Settings;
 using Snai.CMS.Manage.Models.BackManage;
 
@@ -17,8 +19,8 @@ namespace Snai.CMS.Manage.Controllers
     {
         #region 构造函数
 
-        public BackManageController(IOptions<WebSettings> webSettings, ICMSAdminBO cmsAdminBO, ICMSAdminCookie cmsAdminCookie)
-            :base(webSettings, cmsAdminBO, cmsAdminCookie)
+        public BackManageController(IOptions<WebSettings> webSettings, IValidateCode validateCode, HttpContextExtension httpExtension, ICMSAdminBO cmsAdminBO, ICMSAdminCookie cmsAdminCookie)
+            : base(webSettings, validateCode, httpExtension, cmsAdminBO, cmsAdminCookie)
         {
         }
 
@@ -31,7 +33,7 @@ namespace Snai.CMS.Manage.Controllers
             var layoutModel = this.GetLayoutModel();
             if (layoutModel != null)
             {
-                model = this.GetLayoutModel().ToT<IndexModel>();
+                layoutModel.ToT(ref model);
             }
 
             return View(model);
@@ -44,7 +46,7 @@ namespace Snai.CMS.Manage.Controllers
             var layoutModel = this.GetLayoutModel();
             if (layoutModel != null)
             {
-                model = this.GetLayoutModel().ToT<AdminListModel>();
+                layoutModel.ToT(ref model);
             }
 
             //取管理员列表分布

@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Snai.CMS.Manage.Business.Interface;
+using Snai.CMS.Manage.Common.Infrastructure.Extension;
+using Snai.CMS.Manage.Common.Infrastructure.ValidateCodes;
 using Snai.CMS.Manage.Entities.Settings;
 using Snai.CMS.Manage.Models;
 
@@ -15,6 +17,8 @@ namespace Snai.CMS.Manage.Controllers
         #region 属性声明
 
         protected IOptions<WebSettings> WebSettings;
+        protected IValidateCode ValidateCode;
+        protected HttpContextExtension HttpExtension;
         protected ICMSAdminBO CMSAdminBO;
         protected ICMSAdminCookie CMSAdminCookie;
 
@@ -22,9 +26,11 @@ namespace Snai.CMS.Manage.Controllers
 
         #region 构造函数
 
-        public ControllerBase(IOptions<WebSettings> webSettings, ICMSAdminBO cmsAdminBO, ICMSAdminCookie cmsAdminCookie)
+        public ControllerBase(IOptions<WebSettings> webSettings, IValidateCode validateCode, HttpContextExtension httpExtension, ICMSAdminBO cmsAdminBO, ICMSAdminCookie cmsAdminCookie)
         {
             WebSettings = webSettings;
+            ValidateCode = validateCode;
+            HttpExtension = httpExtension;
             CMSAdminBO = cmsAdminBO;
             CMSAdminCookie = cmsAdminCookie;
         }

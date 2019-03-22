@@ -2,7 +2,7 @@ using System;
 
 namespace Snai.CMS.Manage.Models
 {
-    public class ErrorViewModel
+    public class ErrorViewModel: LayoutModel
     {
         public string RequestId { get; set; }
 

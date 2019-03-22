@@ -270,7 +270,6 @@ UpPwd.onsubmit = function () {
 
     //请求参数
     var params = {
-        isSubmit: "true",
         oldPassword: UpPwd.Form.oldPassword.val(),
         password: UpPwd.Form.password.val(),
         rePassword: UpPwd.Form.rePassword.val()

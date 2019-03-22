@@ -15,25 +15,13 @@ using Snai.CMS.Manage.Models.Login;
 
 namespace Snai.CMS.Manage.Controllers
 {
-    public class LoginController : Controller
+    public class LoginController : ControllerBase
     {
-        #region 属性声明
-
-        IOptions<WebSettings> WebSettings;
-        IValidateCode ValidateCode;
-        HttpContextExtension HttpExtension;
-        ICMSAdminBO CMSAdminBO;
-
-        #endregion
-
         #region 构造函数
 
-        public LoginController(IOptions<WebSettings> webSettings, IValidateCode validateCode, HttpContextExtension httpExtension, ICMSAdminBO cmsAdminBO)
+        public LoginController(IOptions<WebSettings> webSettings, IValidateCode validateCode, HttpContextExtension httpExtension, ICMSAdminBO cmsAdminBO, ICMSAdminCookie cmsAdminCookie)
+            : base(webSettings, validateCode, httpExtension, cmsAdminBO, cmsAdminCookie)
         {
-            WebSettings = webSettings;
-            ValidateCode = validateCode;
-            HttpExtension = httpExtension;
-            CMSAdminBO = cmsAdminBO;
         }
 
         #endregion

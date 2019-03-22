@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Snai.CMS.Manage.Business.Interface;
 using Snai.CMS.Manage.Common.Infrastructure;
+using Snai.CMS.Manage.Common.Infrastructure.Extension;
 using Snai.CMS.Manage.Common.Infrastructure.Filters;
+using Snai.CMS.Manage.Common.Infrastructure.ValidateCodes;
 using Snai.CMS.Manage.Common.Utils;
 using Snai.CMS.Manage.Entities.Settings;
 using Snai.CMS.Manage.Models;
@@ -19,8 +21,8 @@ namespace Snai.CMS.Manage.Controllers
     {
         #region 构造函数
 
-        public HomeController(IOptions<WebSettings> webSettings, ICMSAdminBO cmsAdminBO, ICMSAdminCookie cmsAdminCookie)
-            : base(webSettings, cmsAdminBO, cmsAdminCookie)
+        public HomeController(IOptions<WebSettings> webSettings, IValidateCode validateCode, HttpContextExtension httpExtension, ICMSAdminBO cmsAdminBO, ICMSAdminCookie cmsAdminCookie)
+            : base(webSettings, validateCode, httpExtension, cmsAdminBO, cmsAdminCookie)
         {
         }
 
@@ -35,7 +37,7 @@ namespace Snai.CMS.Manage.Controllers
             var layoutModel = this.GetLayoutModel();
             if (layoutModel != null)
             {
-                model = this.GetLayoutModel().ToT<IndexModel>();
+                layoutModel.ToT(ref model);
             }
 
             var admin = CMSAdminBO.GetAdminByUserName(model.UserName);
@@ -62,7 +64,7 @@ namespace Snai.CMS.Manage.Controllers
             var layoutModel = this.GetLayoutModel();
             if (layoutModel != null)
             {
-                model = this.GetLayoutModel().ToT<IndexModel>();
+                layoutModel.ToT(ref model);
             }
 
             var admin = CMSAdminBO.GetAdminByUserName(model.UserName);
@@ -84,16 +86,15 @@ namespace Snai.CMS.Manage.Controllers
         [ServiceFilter(typeof(AuthorizationFilter))]
         public IActionResult UpdatePassword()
         {
-            string isSubmit = Request.Form["isSubmit"];
             //展示页面
-            if (!isSubmit.Equals("true", StringComparison.OrdinalIgnoreCase))
+            if (!Request.Method.ToUpper().Equals("POST", StringComparison.OrdinalIgnoreCase) || !Request.HasFormContentType)
             {
                 // 权限和菜单
                 UpdatePasswordModel model = new UpdatePasswordModel();
                 var layoutModel = this.GetLayoutModel();
                 if (layoutModel != null)
                 {
-                    model = this.GetLayoutModel().ToT<UpdatePasswordModel>();
+                    layoutModel.ToT(ref model);
                 }
 
                 return View(model);
