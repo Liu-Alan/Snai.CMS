@@ -39,6 +39,8 @@ namespace Snai.CMS.Manage.Controllers
             return View(model);
         }
 
+        #region 管理员管理
+
         public IActionResult AdminList()
         {
             // 权限和菜单
@@ -81,5 +83,7 @@ namespace Snai.CMS.Manage.Controllers
 
             return View(model);
         }
+
+        #endregion
     }
 }
