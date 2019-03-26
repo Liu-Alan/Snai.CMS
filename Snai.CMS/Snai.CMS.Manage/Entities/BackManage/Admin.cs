@@ -29,6 +29,9 @@ namespace Snai.CMS.Manage.Entities.BackManage
         [Column("role_id")]
         public int RoleID { get; set; }
 
+        [NotMapped]
+        public string RoleTitle { get; set; }
+
         [Column("create_time")]
         public int CreateTime { get; set; }
 
@@ -49,5 +52,8 @@ namespace Snai.CMS.Manage.Entities.BackManage
 
         [Column("lock_time")]
         public int LockTime { get; set; }
+
+        [NotMapped]
+        public string LockDes { get; set; }
     }
 }

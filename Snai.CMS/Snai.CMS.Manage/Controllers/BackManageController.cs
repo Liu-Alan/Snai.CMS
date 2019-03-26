@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,8 @@ using Snai.CMS.Manage.Common;
 using Snai.CMS.Manage.Common.Infrastructure.Extension;
 using Snai.CMS.Manage.Common.Infrastructure.Filters;
 using Snai.CMS.Manage.Common.Infrastructure.ValidateCodes;
+using Snai.CMS.Manage.Common.Utils;
+using Snai.CMS.Manage.Entities.BackManage;
 using Snai.CMS.Manage.Entities.Settings;
 using Snai.CMS.Manage.Models.BackManage;
 
@@ -41,47 +44,60 @@ namespace Snai.CMS.Manage.Controllers
 
         #region 管理员管理
 
-        public IActionResult AdminList()
+        public IActionResult AdminList(string id)
         {
-            // 权限和菜单
-            AdminListModel model = new AdminListModel();
-            var layoutModel = this.GetLayoutModel();
-            if (layoutModel != null)
+            if (!Request.Method.ToUpper().Equals("DATA", StringComparison.OrdinalIgnoreCase))
             {
-                layoutModel.ToT(ref model);
-            }
-
-            //取管理员列表分布
-            model.UserNameFilter = Request.Query["userName"];
-
-            var roleID = 0;
-            int.TryParse( Request.Query["roleID"], out roleID);
-            model.RoleIDFilter = roleID;
-
-            var pageIndex = 0;
-            int.TryParse(Request.Query["pageIndex"], out pageIndex);
-            model.PageIndex = pageIndex;
-
-            model.PageLimit = Consts.Page_Limit;
-            model.TotCount = CMSAdminBO.GetAdminCount(model.UserNameFilter, model.RoleIDFilter);
-            model.PageCount = (int)Math.Ceiling(model.TotCount / (float)model.PageLimit);
-
-            if (model.TotCount > 0)
-            {
-                var admins = CMSAdminBO.GetAdmins(model.UserNameFilter, model.RoleIDFilter, model.PageLimit, model.PageIndex);
-                if (admins != null)
+                // 权限和菜单
+                AdminListModel model = new AdminListModel();
+                var layoutModel = this.GetLayoutModel();
+                if (layoutModel != null)
                 {
-                    model.Admins = admins.ToList();
+                    layoutModel.ToT(ref model);
                 }
-            }
 
-            var roles = CMSAdminBO.GetRoles(1);
-            if (roles != null)
+                return View(model);
+            }
+            else
             {
-                model.Roles = roles.ToList();
+                //取管理员列表分布
+                string userNameFilter = Request.Query["userName"];
+
+                int roleIDFilter = 0;
+
+                int pageIndex = 0;
+                int.TryParse(Request.Query["pageIndex"], out pageIndex);
+
+                int pageLimit = Consts.Page_Limit;
+                int totCount = CMSAdminBO.GetAdminCount(userNameFilter, roleIDFilter);
+                int pageCount = (int)Math.Ceiling(totCount / (float)pageLimit);
+                var admins = new List<Admin>();
+                if (totCount > 0)
+                {
+                    IEnumerable<Admin> adminIE = CMSAdminBO.GetAdmins(userNameFilter, roleIDFilter, pageLimit, pageIndex);
+                    if (adminIE != null)
+                    {
+                        admins = adminIE.ToList();
+                    }
+                }
+
+                dynamic model = new ExpandoObject();
+
+                model.Code = 0;
+                model.Msg = "";
+                model.Count = totCount;
+                model.Data = admins.Select(s => new
+                {
+                    ID = s.ID,
+                    UserName = s.UserName,
+                    RoleTitle = s.RoleTitle,
+                    State = s.State == 1 ? "启用" : "禁用",
+                    LockDes = s.LockDes
+                });
+
+                return new JsonResult(model);
             }
 
-            return View(model);
         }
 
         #endregion

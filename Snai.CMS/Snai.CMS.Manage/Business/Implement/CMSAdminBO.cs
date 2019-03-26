@@ -257,7 +257,28 @@ namespace Snai.CMS.Manage.Business.Implement
                 return null;
             }
 
-            return admins.Skip((pageIndex - 1) * pageLimit).Take(pageLimit);
+            admins = admins.Skip((pageIndex - 1) * pageLimit).Take(pageLimit).ToList();
+
+            foreach (var admin in admins)
+            {
+                var role = this.GetRoleByID(admin.RoleID);
+                if (role != null)
+                {
+                    admin.RoleTitle = role.Title;
+                }
+
+                var timeStamp = (int)DateTimeUtils.DateTimeToUnixTimeStamp(DateTime.Now);
+                if (admin.LockTime > timeStamp)
+                {
+                    admin.LockDes = "锁定";
+                }
+                else
+                {
+                    admin.LockDes = "正常";
+                }
+            }
+
+            return admins;
         }
 
         //取管理员数
