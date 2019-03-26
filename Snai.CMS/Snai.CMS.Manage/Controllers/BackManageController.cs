@@ -66,7 +66,7 @@ namespace Snai.CMS.Manage.Controllers
                 int roleIDFilter = 0;
 
                 int pageIndex = 0;
-                int.TryParse(Request.Query["pageIndex"], out pageIndex);
+                int.TryParse(Request.Query["page"], out pageIndex);
 
                 int pageLimit = Consts.Page_Limit;
                 int totCount = CMSAdminBO.GetAdminCount(userNameFilter, roleIDFilter);
@@ -83,16 +83,16 @@ namespace Snai.CMS.Manage.Controllers
 
                 dynamic model = new ExpandoObject();
 
-                model.Code = 0;
-                model.Msg = "";
-                model.Count = totCount;
-                model.Data = admins.Select(s => new
+                model.code = 0;
+                model.msg = "";
+                model.count = totCount;
+                model.data = admins.Select(s => new
                 {
-                    ID = s.ID,
-                    UserName = s.UserName,
-                    RoleTitle = s.RoleTitle,
-                    State = s.State == 1 ? "启用" : "禁用",
-                    LockDes = s.LockDes
+                    id = s.ID,
+                    userName = s.UserName,
+                    roleTitle = s.RoleTitle,
+                    state = s.State == 1 ? "启用" : "禁用",
+                    lockDes = s.LockDes
                 });
 
                 return new JsonResult(model);
