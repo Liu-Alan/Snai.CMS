@@ -55,6 +55,8 @@ UNION ALL select 1,'首页','','',10,1
 UNION ALL select 2,'登录信息','Home','LoginInfo',11,1
 UNION ALL select 2,'修改密码','Home','UpdatePassword',12,1
 UNION ALL select 0,'后台设置','BackManage','Index',2,1
+UNION ALL select 5,'管理员管理','','',20,1
+UNION ALL select 6,'账号管理','BackManage','AdminList',21,1
 ;
 
 CREATE TABLE roles(
@@ -87,4 +89,6 @@ UNION ALL select 1,2
 UNION ALL select 1,3
 UNION ALL select 1,4
 UNION ALL select 1,5
+UNION ALL select 1,6
+UNION ALL select 1,7
 ;

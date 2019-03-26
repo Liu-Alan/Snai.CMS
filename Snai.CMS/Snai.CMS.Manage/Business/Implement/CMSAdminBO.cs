@@ -223,7 +223,11 @@ namespace Snai.CMS.Manage.Business.Implement
         {
             IEnumerable<Admin> adminIE = new List<Admin>();
             IList<Admin> admins = new List<Admin>();
-            if (roleID <= 0)
+            if (roleID <= 0 && string.IsNullOrEmpty(userName))
+            {
+                adminIE = CMSAdminDao.GetAdmins();
+            }
+            else if (roleID <= 0 && !string.IsNullOrEmpty(userName))
             {
                 adminIE = CMSAdminDao.GetAdminsLikeUserName(userName);
             }

@@ -46,7 +46,7 @@ namespace Snai.CMS.Manage.Controllers
 
         public IActionResult AdminList(string id)
         {
-            if (!Request.Method.ToUpper().Equals("DATA", StringComparison.OrdinalIgnoreCase))
+            if (id == null || !id.ToUpper().Equals("DATA", StringComparison.OrdinalIgnoreCase))
             {
                 // 权限和菜单
                 AdminListModel model = new AdminListModel();
