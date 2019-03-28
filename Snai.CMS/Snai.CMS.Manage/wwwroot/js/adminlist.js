@@ -18,6 +18,7 @@
             , { field: 'lockDes', title: '登录状态', width: 120, sort: true }
             , { toolbar: '#adminBar', title: '操作', fixed: 'right', width: 80, align: 'center' } //这里的toolbar值是模板元素的选择器
         ]]
+        , id: 'adminList'
         , toolbar: '#adminToolbar'
         , defaultToolbar: []
     });
