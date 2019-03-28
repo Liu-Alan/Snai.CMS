@@ -1,4 +1,7 @@
-﻿layui.use(['table', 'layer'], function () {
+﻿//当前页码
+var curPage = 1;
+
+layui.use(['table', 'layer'], function () {
     var table = layui.table;
     var layer = layui.layer;
 
@@ -21,6 +24,9 @@
         , id: 'adminList'
         , toolbar: '#adminToolbar'
         , defaultToolbar: []
+        , done: function (res, curr, count) {
+            curPage = curr;
+        }
     });
 
     //头工具栏事件
@@ -58,7 +64,15 @@
                             layer.msg(data.msg, { icon: 2 });
                         } else {
                             layer.msg(data.msg, { icon: 1 });
-                            //刷新数据
+                            //数据重载
+                            table.reload('adminList', {
+                                where: { 
+                                    userName: 'xxx'
+                                }
+                                , page: {
+                                    curr: curPage //重载页
+                                }
+                            });
                         }
                     },
                     error: function (result, status) {
