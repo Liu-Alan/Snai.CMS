@@ -1,5 +1,6 @@
-﻿layui.use('table', function () {
+﻿layui.use(['table', 'layer'], function () {
     var table = layui.table;
+    var layer = layui.layer;
 
     table.render({
         elem: '#adminList'
@@ -40,7 +41,7 @@
                     ids: ids
                 };
 
-                var ajaxUrl = UpPwd.Const.url.doUpPwd;
+                var ajaxUrl = '/BackManage/EnableAdmin';
 
                 //发送请求
                 $.ajax({
@@ -53,24 +54,15 @@
                     data: params,
                     success: function (data, textStatus) {
                         if (!data.success) {
-                            UpPwd.BtnSubmit.enable(UpPwd.Form.btnSubmit);
-                            UpPwd.RePassword.clear();
-                            UpPwd.Password.clear();
-                            UpPwd.OldPassword.clear();
-                            UpPwd.layui.layer.msg(data.msg, { icon: 2 });
+                            layer.msg(data.msg, { icon: 2 });
                         } else {
-                            UpPwd.BtnSubmit.enable(UpPwd.Form.btnSubmit);
-                            UpPwd.RePassword.clear();
-                            UpPwd.Password.clear();
-                            UpPwd.OldPassword.clear();
-                            UpPwd.layui.layer.msg(data.msg, { icon: 1 });
+                            layer.msg(data.msg, { icon: 1 });
+                            //刷新数据
                         }
                     },
                     error: function (result, status) {
-                        UpPwd.BtnSubmit.enable(UpPwd.Form.btnSubmit);
-
                         if (status == 'timeout') {
-                            alert(UpPwd.Const.ajaxErr);
+                            alert('很抱歉，由于服务器繁忙，请您稍后再试');
                         } else if (result.responseText != "") {
                             eval("exception = " + result.responseText);
                             alert(exception.Message);
