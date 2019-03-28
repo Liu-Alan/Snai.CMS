@@ -30,7 +30,53 @@
                 break;
             case 'enable':
                 var data = checkStatus.data;
-                layer.msg('选中了：' + data.length + ' 个');
+                var ids=[]
+                for(var i=0;i<data.length;i++)
+                {
+                    ids.push(data[i].id);
+                }
+                //请求参数
+                var params = {
+                    ids: ids
+                };
+
+                var ajaxUrl = UpPwd.Const.url.doUpPwd;
+
+                //发送请求
+                $.ajax({
+                    url: ajaxUrl,
+                    type: "POST",
+                    cache: false,
+                    async: true,
+                    dataType: "json",
+                    traditional: true,
+                    data: params,
+                    success: function (data, textStatus) {
+                        if (!data.success) {
+                            UpPwd.BtnSubmit.enable(UpPwd.Form.btnSubmit);
+                            UpPwd.RePassword.clear();
+                            UpPwd.Password.clear();
+                            UpPwd.OldPassword.clear();
+                            UpPwd.layui.layer.msg(data.msg, { icon: 2 });
+                        } else {
+                            UpPwd.BtnSubmit.enable(UpPwd.Form.btnSubmit);
+                            UpPwd.RePassword.clear();
+                            UpPwd.Password.clear();
+                            UpPwd.OldPassword.clear();
+                            UpPwd.layui.layer.msg(data.msg, { icon: 1 });
+                        }
+                    },
+                    error: function (result, status) {
+                        UpPwd.BtnSubmit.enable(UpPwd.Form.btnSubmit);
+
+                        if (status == 'timeout') {
+                            alert(UpPwd.Const.ajaxErr);
+                        } else if (result.responseText != "") {
+                            eval("exception = " + result.responseText);
+                            alert(exception.Message);
+                        }
+                    }
+                });
                 break;
             case 'disable':
                 layer.msg(checkStatus.isAll ? '全选' : '未全选');
