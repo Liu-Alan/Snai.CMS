@@ -60,10 +60,11 @@ layui.use(['table', 'layer'], function () {
                 }
                 //请求参数
                 var params = {
-                    ids: ids
+                    ids: ids,
+                    state: 1
                 };
 
-                var ajaxUrl = '/BackManage/EnableAdmin';
+                var ajaxUrl = '/BackManage/UpdateAdminState';
 
                 //发送请求
                 $.ajax({

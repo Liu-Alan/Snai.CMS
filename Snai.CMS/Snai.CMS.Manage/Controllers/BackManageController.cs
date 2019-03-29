@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Snai.CMS.Manage.Business.Interface;
 using Snai.CMS.Manage.Common;
+using Snai.CMS.Manage.Common.Infrastructure;
 using Snai.CMS.Manage.Common.Infrastructure.Extension;
 using Snai.CMS.Manage.Common.Infrastructure.Filters;
 using Snai.CMS.Manage.Common.Infrastructure.ValidateCodes;
@@ -105,6 +106,42 @@ namespace Snai.CMS.Manage.Controllers
                 return new JsonResult(model);
             }
 
+        }
+
+        public ActionResult<Message> UpdateAdminState()
+        {
+            string[] idsStr = Request.Form["ids"];
+            string stateStr = Request.Form["state"];
+            byte state = 1;
+            if (Validator.IsNumbers(stateStr))
+            {
+                state = byte.Parse(stateStr);
+            }
+
+            var stateDes = state == 1 ? "启用" : "禁用";
+
+            var msg = new Message(10, $"{stateDes}失败");
+            var idsInt = new List<int>();
+
+            if (idsStr != null && idsStr.Count() > 0)
+            {
+                foreach (var id in idsStr)
+                {
+                    if (Validator.IsNumbers(id))
+                    {
+                        idsInt.Add(int.Parse(id));
+                    }
+                }
+
+                msg = CMSAdminBO.UpdateStateByIDs(idsInt, state);
+            }
+            else
+            {
+                msg.Code = 101;
+                msg.Msg = $"请选择要{stateDes}的账号";
+            }
+
+            return new JsonResult(msg);
         }
 
         #endregion
