@@ -8,5 +8,11 @@ namespace Snai.CMS.Manage.Models.BackManage
 {
     public class AdminListModel : LayoutModel
     {
+        public AdminListModel()
+        {
+            Roles = new List<Role>();
+        }
+
+        public IList<Role> Roles { get; set; }
     }
 }

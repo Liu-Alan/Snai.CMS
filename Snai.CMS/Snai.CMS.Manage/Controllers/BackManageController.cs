@@ -56,6 +56,12 @@ namespace Snai.CMS.Manage.Controllers
                     layoutModel.ToT(ref model);
                 }
 
+                var roles = CMSAdminBO.GetRoles(0);
+                if (roles != null)
+                {
+                    model.Roles = roles.ToList();
+                }
+
                 return View(model);
             }
             else
@@ -64,6 +70,7 @@ namespace Snai.CMS.Manage.Controllers
                 string userNameFilter = Request.Query["userName"];
 
                 int roleIDFilter = 0;
+                int.TryParse(Request.Query["roleID"], out roleIDFilter);
 
                 int pageIndex = 0;
                 int.TryParse(Request.Query["page"], out pageIndex);

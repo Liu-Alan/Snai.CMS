@@ -29,6 +29,21 @@ layui.use(['table', 'layer'], function () {
         }
     });
 
+    //数据重载
+    var dataReload = {
+        reload: function () {
+            table.reload('adminList', {
+                where: {
+                    userName: $('#userName').val()
+                    , roleID: $('#roleID').val()
+                }
+                , page: {
+                    curr: curPage //重载页数
+                }
+            });
+        }
+    };
+
     //头工具栏事件
     table.on('toolbar(adminList)', function (obj) {
         var checkStatus = table.checkStatus(obj.config.id);
@@ -64,15 +79,7 @@ layui.use(['table', 'layer'], function () {
                             layer.msg(data.msg, { icon: 2 });
                         } else {
                             layer.msg(data.msg, { icon: 1 });
-                            //数据重载
-                            table.reload('adminList', {
-                                where: { 
-                                    userName: 'xxx'
-                                }
-                                , page: {
-                                    curr: curPage //重载页
-                                }
-                            });
+                            dataReload.reload();
                         }
                     },
                     error: function (result, status) {
@@ -105,4 +112,9 @@ layui.use(['table', 'layer'], function () {
         } 
     });
 
+    //绑定重载事情
+    $('#btnReload').bind("click", function () {
+        curPage = 1;
+        dataReload.reload();
+    });
 });

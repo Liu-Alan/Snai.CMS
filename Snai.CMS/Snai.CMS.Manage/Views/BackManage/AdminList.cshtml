@@ -2,11 +2,20 @@
 
 @model AdminListModel
 
-<div>
+<div class="titleSearch">
     <div class="layui-inline">
-        <input name="userName" class="layui-input" id="userName" autocomplete="off">
+        <input id="userName" name="userName" placeholder="请输入用户名" class="layui-input" autocomplete="off">
     </div>
-    <button class="layui-btn" data-type="reload"></button>
+    <div class="layui-inline">
+        <select id="roleID" name="roleID">
+            <option value="0">请选择角色</option>
+            @foreach (var role in Model.Roles)
+            {
+                <option value="@role.ID">@role.Title</option>
+            }
+        </select>
+    </div>
+    <button id="btnReload" name="btnReload" class="layui-btn">查询</button>
 </div>
 
 <script type="text/html" id="adminToolbar">
