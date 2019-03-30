@@ -9,7 +9,7 @@ layui.use(['table', 'layer'], function () {
         elem: '#adminList'
         , url: '/BackManage/AdminList/Data/' //数据接口
         , page: {
-            layout: ['prev', 'page', 'next', 'skip', 'count'] //自定义分页布局
+            layout: ['count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
         }
         , limit: 20 //每页显示条数
         , cols: [[ //表头

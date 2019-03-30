@@ -2,12 +2,12 @@
 
 @model AdminListModel
 
-<div class="titleSearch">
+<div class="search-title">
     <div class="layui-inline">
         <input id="userName" name="userName" placeholder="请输入用户名" class="layui-input" autocomplete="off">
     </div>
     <div class="layui-inline">
-        <select id="roleID" name="roleID">
+        <select id="roleID" name="roleID" class="layui-input">
             <option value="0">请选择角色</option>
             @foreach (var role in Model.Roles)
             {
