@@ -99,8 +99,8 @@ namespace Snai.CMS.Manage.Controllers
                     id = s.ID,
                     userName = s.UserName,
                     roleTitle = s.RoleTitle,
-                    state = s.State == 1 ? "启用" : "禁用",
-                    lockDes = s.LockDes
+                    state = s.State,
+                    lockState = s.LockState
                 });
 
                 return new JsonResult(model);

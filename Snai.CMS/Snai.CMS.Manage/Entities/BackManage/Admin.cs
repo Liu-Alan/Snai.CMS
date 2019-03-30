@@ -54,6 +54,6 @@ namespace Snai.CMS.Manage.Entities.BackManage
         public int LockTime { get; set; }
 
         [NotMapped]
-        public string LockDes { get; set; }
+        public byte LockState { get; set; }
     }
 }

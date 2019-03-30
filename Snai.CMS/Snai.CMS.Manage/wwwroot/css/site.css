@@ -5,14 +5,32 @@
     padding: 0;
 }
 
-.font-size16 {
+.font-size-16 {
     font-size: 16px;
     line-height: 30px;
     vertical-align: middle;
 }
 
-.width290 {
+.font-color-normal {
+    color: #1e9fff;
+}
+
+.font-color-danger {
+    color: #ff5722;
+}
+
+.border-color-c9 {
+    border-color: #C9C9C9 !important;
+}
+
+.width-290 {
     width: 290px;
+}
+
+.height-30 {
+    height: 30px;
+    line-height: 30px;
+    vertical-align: middle;
 }
 
 /*登录 Begin*/
@@ -42,7 +60,7 @@
 }
 
 /*重写layui样式*/
-.layui-form-item .width150 {
+.layui-form-item .width-150 {
     width: 150px;
 }
 
@@ -52,7 +70,7 @@
 /*登录 End*/
 
 /*修改密码 Begin*/
-.layui-form-item .width290 {
+.layui-form-item .width-290 {
     width: 290px;
 }
 /*修改密码 End*/

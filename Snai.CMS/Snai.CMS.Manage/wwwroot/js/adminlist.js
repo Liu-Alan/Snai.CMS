@@ -17,8 +17,8 @@ layui.use(['table', 'layer'], function () {
             , { field: 'id', title: 'ID', fixed: 'left', width: 60 }
             , { field: 'userName', title: '用户名', width: 120 }
             , { field: 'roleTitle', title: '角色', width: 120 }
-            , { field: 'state', title: '账号状态', width: 120, sort: true }
-            , { field: 'lockDes', title: '登录状态', width: 120, sort: true }
+            , { field: 'state', title: '账号状态', templet: '#stateTpl', width: 120, sort: true }
+            , { field: 'lockState', title: '登录状态', templet: '#lockStateTpl', width: 120, sort: true }
             , { toolbar: '#adminBar', title: '操作', fixed: 'right', width: 80, align: 'center' } //这里的toolbar值是模板元素的选择器
         ]]
         , id: 'adminList'
@@ -53,7 +53,7 @@ layui.use(['table', 'layer'], function () {
                 break;
             case 'enable':
                 var data = checkStatus.data;
-                var ids=[]
+                var ids = [];
                 for(var i=0;i<data.length;i++)
                 {
                     ids.push(data[i].id);
@@ -94,7 +94,45 @@ layui.use(['table', 'layer'], function () {
                 });
                 break;
             case 'disable':
-                layer.msg(checkStatus.isAll ? '全选' : '未全选');
+                var data = checkStatus.data;
+                var ids = [];
+                for (var i = 0; i < data.length; i++) {
+                    ids.push(data[i].id);
+                }
+                //请求参数
+                var params = {
+                    ids: ids,
+                    state: 2
+                };
+
+                var ajaxUrl = '/BackManage/UpdateAdminState';
+
+                //发送请求
+                $.ajax({
+                    url: ajaxUrl,
+                    type: "POST",
+                    cache: false,
+                    async: true,
+                    dataType: "json",
+                    traditional: true,
+                    data: params,
+                    success: function (data, textStatus) {
+                        if (!data.success) {
+                            layer.msg(data.msg, { icon: 2 });
+                        } else {
+                            layer.msg(data.msg, { icon: 1 });
+                            dataReload.reload();
+                        }
+                    },
+                    error: function (result, status) {
+                        if (status == 'timeout') {
+                            alert('很抱歉，由于服务器繁忙，请您稍后再试');
+                        } else if (result.responseText != "") {
+                            eval("exception = " + result.responseText);
+                            alert(exception.Message);
+                        }
+                    }
+                });
                 break;
             case 'unlock':
                 layer.msg(checkStatus.isAll ? '全选' : '未全选');

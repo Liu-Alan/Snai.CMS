@@ -274,11 +274,11 @@ namespace Snai.CMS.Manage.Business.Implement
                 var timeStamp = (int)DateTimeUtils.DateTimeToUnixTimeStamp(DateTime.Now);
                 if (admin.LockTime > timeStamp)
                 {
-                    admin.LockDes = "锁定";
+                    admin.LockState = 2;
                 }
                 else
                 {
-                    admin.LockDes = "正常";
+                    admin.LockState = 1;
                 }
             }
 

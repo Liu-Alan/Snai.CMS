@@ -4,25 +4,31 @@
 
 <div class="search-title">
     <div class="layui-inline">
-        <input id="userName" name="userName" placeholder="请输入用户名" class="layui-input" autocomplete="off">
+        <input id="userName" name="userName" placeholder="请输入用户名" class="layui-input height-30" autocomplete="off">
     </div>
     <div class="layui-inline">
-        <select id="roleID" name="roleID" class="layui-input">
-            <option value="0">请选择角色</option>
+        <select id="roleID" name="roleID" class="height-30 border-color-c9">
+            <option value="0"></option>
             @foreach (var role in Model.Roles)
             {
                 <option value="@role.ID">@role.Title</option>
             }
         </select>
     </div>
-    <button id="btnReload" name="btnReload" class="layui-btn">查询</button>
+    <button id="btnReload" name="btnReload" class="layui-btn height-30">查询</button>
 </div>
 
 <script type="text/html" id="adminToolbar">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="add">添加</button>
-        <button class="layui-btn layui-btn-sm" lay-event="enable">启用</button>
-        <button class="layui-btn layui-btn-sm layui-btn-warm" lay-event="disable">禁用</button>
+        @if (Model.RoleModules.Select(s => new { s.Controller, s.Action }).Contains(new { Controller = "BackManage", Action = "ModifyAdmin" }))
+        {
+            <button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="add">添加</button>
+        }
+        @if (Model.RoleModules.Select(s => new { s.Controller, s.Action }).Contains(new { Controller = "BackManage", Action = "UpdateAdminState" }))
+        {
+            <button class="layui-btn layui-btn-sm" lay-event="enable">启用</button>
+            <button class="layui-btn layui-btn-sm layui-btn-warm" lay-event="disable">禁用</button>
+        }
         <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="unlock">解锁</button>
         <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delete">删除</button>
     </div>
@@ -30,9 +36,29 @@
 
 <table id="adminList" lay-filter="adminList"></table>
 
-<script type="text/html" id="adminBar">
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+<script type="text/html" id="stateTpl">
+    {{#  if(d.state == 1){ }}
+        <p class="font-color-normal">启用</p>
+    {{#  } else { }}
+        <p class="font-color-danger">禁用</p>
+    {{#  } }}
 </script>
+
+<script type="text/html" id="lockStateTpl">
+    {{#  if(d.lockState == 1){ }}
+    <p class="font-color-normal">正常</p>
+    {{#  } else { }}
+    <p class="font-color-danger">锁定</p>
+    {{#  } }}
+</script>
+
+<script type='text/html' id='adminBar'>
+    @if (Model.RoleModules.Select(s => new { s.Controller, s.Action }).Contains(new { Controller = "BackManage", Action = "ModifyAdmin" }))
+    {
+        <a class='layui-btn layui-btn-xs' lay-event='edit'>编辑</a>
+    }
+</script>
+
 
 @section Scripts{
     <script src="~/js/extensions.js"></script>

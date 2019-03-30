@@ -31,6 +31,8 @@ ALTER TABLE admins ADD UNIQUE INDEX ix_admins_user_name(user_name)  		-- UNIQUE 
 -- password:snai2019
 INSERT into admins(user_name,`password`,role_id,state,create_time)
 VALUES('snai','55F6E397AB652A987D12914F1766DA58',1,1,1550937600)
+INSERT into admins(user_name,`password`,role_id,state,create_time)
+VALUES('snai01','55F6E397AB652A987D12914F1766DA58',1,1,1550937600)
 ;
 
 CREATE TABLE modules(
@@ -57,6 +59,7 @@ UNION ALL select 2,'修改密码','Home','UpdatePassword',12,1
 UNION ALL select 0,'后台设置','BackManage','Index',2,1
 UNION ALL select 5,'管理员管理','','',20,1
 UNION ALL select 6,'账号管理','BackManage','AdminList',21,1
+UNION ALL select 7,'禁启用账号','BackManage','UpdateAdminState',21,1
 ;
 
 CREATE TABLE roles(
@@ -91,4 +94,5 @@ UNION ALL select 1,4
 UNION ALL select 1,5
 UNION ALL select 1,6
 UNION ALL select 1,7
+UNION ALL select 1,8
 ;
