@@ -31,8 +31,6 @@ ALTER TABLE admins ADD UNIQUE INDEX ix_admins_user_name(user_name)  		-- UNIQUE 
 -- password:snai2019
 INSERT into admins(user_name,`password`,role_id,state,create_time)
 VALUES('snai','55F6E397AB652A987D12914F1766DA58',1,1,1550937600)
-INSERT into admins(user_name,`password`,role_id,state,create_time)
-VALUES('snai01','55F6E397AB652A987D12914F1766DA58',1,1,1550937600)
 ;
 
 CREATE TABLE modules(
