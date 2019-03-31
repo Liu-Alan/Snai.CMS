@@ -29,9 +29,15 @@
             <button class="layui-btn layui-btn-sm" lay-event="enable">启用</button>
             <button class="layui-btn layui-btn-sm layui-btn-warm" lay-event="disable">禁用</button>
         }
-        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="unlock">解锁</button>
-        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delete">删除</button>
-    </div>
+        @if (Model.RoleModules.Select(s => new { s.Controller, s.Action }).Contains(new { Controller = "BackManage", Action = "UnlockAdmin" }))
+        {
+            <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="unlock">解锁</button>
+        }
+        @if (Model.RoleModules.Select(s => new { s.Controller, s.Action }).Contains(new { Controller = "BackManage", Action = "DeleteAdmin" }))
+        {
+            <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delete">删除</button>
+        }
+        </div>
 </script>
 
 <table id="adminList" lay-filter="adminList"></table>

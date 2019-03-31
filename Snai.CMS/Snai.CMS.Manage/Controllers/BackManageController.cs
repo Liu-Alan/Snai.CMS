@@ -45,6 +45,7 @@ namespace Snai.CMS.Manage.Controllers
 
         #region 管理员管理
 
+        //账号管理
         public IActionResult AdminList(string id)
         {
             if (id == null || !id.ToUpper().Equals("DATA", StringComparison.OrdinalIgnoreCase))
@@ -108,6 +109,7 @@ namespace Snai.CMS.Manage.Controllers
 
         }
 
+        //禁启用管理员
         public ActionResult<Message> UpdateAdminState()
         {
             string[] idsStr = Request.Form["ids"];
@@ -139,6 +141,64 @@ namespace Snai.CMS.Manage.Controllers
             {
                 msg.Code = 101;
                 msg.Msg = $"请选择要{stateDes}的账号";
+            }
+
+            return new JsonResult(msg);
+        }
+
+        //解锁管理员
+        public ActionResult<Message> UnlockAdmin()
+        {
+            string[] idsStr = Request.Form["ids"];
+
+            var msg = new Message(10, "解锁失败");
+            var idsInt = new List<int>();
+
+            if (idsStr != null && idsStr.Count() > 0)
+            {
+                foreach (var id in idsStr)
+                {
+                    if (Validator.IsNumbers(id))
+                    {
+                        idsInt.Add(int.Parse(id));
+                    }
+                }
+
+                msg = CMSAdminBO.UnlockByIDs(idsInt);
+            }
+            else
+            {
+                msg.Code = 101;
+                msg.Msg = "请选择要解锁的账号";
+            }
+
+            return new JsonResult(msg);
+        }
+
+        //删除管理员
+        public ActionResult<Message> DeleteAdmin()
+        {
+            string[] idsStr = Request.Form["ids"];
+
+            var msg = new Message(10, "删除失败");
+            var idsInt = new List<int>();
+
+            if (idsStr != null && idsStr.Count() > 0)
+            {
+                foreach (var id in idsStr)
+                {
+                    if (Validator.IsNumbers(id))
+                    {
+                        idsInt.Add(int.Parse(id));
+                    }
+                }
+
+                msg = CMSAdminBO.DeleteAdminByIDs(idsInt);
+            }
+            else
+            {
+                msg.Code = 101;
+                msg.Msg = "请选择要删除的账号";
             }
 
             return new JsonResult(msg);

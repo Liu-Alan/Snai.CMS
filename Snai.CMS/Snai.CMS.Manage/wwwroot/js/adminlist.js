@@ -47,6 +47,12 @@ layui.use(['table', 'layer'], function () {
     //头工具栏事件
     table.on('toolbar(adminList)', function (obj) {
         var checkStatus = table.checkStatus(obj.config.id);
+        if (obj.event != 'add') {
+            if (checkStatus.data.length <= 0) {
+                layer.msg('请选择要操作的账号', { icon: 2 });
+                return;
+            }
+        }
         switch (obj.event) {
             case 'add':
                 $.jump('/BackManage/ModifyAdmin');
@@ -135,10 +141,93 @@ layui.use(['table', 'layer'], function () {
                 });
                 break;
             case 'unlock':
-                layer.msg(checkStatus.isAll ? '全选' : '未全选');
+                var data = checkStatus.data;
+                var ids = [];
+                for (var i = 0; i < data.length; i++) {
+                    ids.push(data[i].id);
+                }
+                //请求参数
+                var params = {
+                    ids: ids
+                };
+
+                var ajaxUrl = '/BackManage/UnlockAdmin';
+
+                //发送请求
+                $.ajax({
+                    url: ajaxUrl,
+                    type: "POST",
+                    cache: false,
+                    async: true,
+                    dataType: "json",
+                    traditional: true,
+                    data: params,
+                    success: function (data, textStatus) {
+                        if (!data.success) {
+                            layer.msg(data.msg, { icon: 2 });
+                        } else {
+                            layer.msg(data.msg, { icon: 1 });
+                            dataReload.reload();
+                        }
+                    },
+                    error: function (result, status) {
+                        if (status == 'timeout') {
+                            alert('很抱歉，由于服务器繁忙，请您稍后再试');
+                        } else if (result.responseText != "") {
+                            eval("exception = " + result.responseText);
+                            alert(exception.Message);
+                        }
+                    }
+                });
                 break;
             case 'delete':
-                layer.msg(checkStatus.isAll ? '全选' : '未全选');
+                layer.confirm('您确定要删除选择的账号吗？', {
+                    btn: ['是', '否'] //按钮
+                    , icon: 3
+                    , title: '提示'
+                }, function () {
+                    var data = checkStatus.data;
+                    var ids = [];
+                    for (var i = 0; i < data.length; i++) {
+                        ids.push(data[i].id);
+                    }
+                    //请求参数
+                    var params = {
+                        ids: ids
+                    };
+
+                    var ajaxUrl = '/BackManage/DeleteAdmin';
+
+                    //发送请求
+                    $.ajax({
+                        url: ajaxUrl,
+                        type: "POST",
+                        cache: false,
+                        async: true,
+                        dataType: "json",
+                        traditional: true,
+                        data: params,
+                        success: function (data, textStatus) {
+                            if (!data.success) {
+                                layer.msg(data.msg, { icon: 2 });
+                            } else {
+                                layer.msg(data.msg, { icon: 1 });
+                                dataReload.reload();
+                            }
+                        },
+                        error: function (result, status) {
+                            if (status == 'timeout') {
+                                alert('很抱歉，由于服务器繁忙，请您稍后再试');
+                            } else if (result.responseText != "") {
+                                eval("exception = " + result.responseText);
+                                alert(exception.Message);
+                            }
+                        }
+                    });
+                }, function () {
+                    
+                });
+                
                 break;
         };
     });
