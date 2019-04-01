@@ -8,27 +8,27 @@ namespace Snai.CMS.Manage.DataAccess.Interface
 {
     public interface ICMSAdminDao
     {
-        #region 管理员操作
+        #region 账号操作
 
-        //添加管理员
+        //添加账号
         bool CreateAdmin(Admin admin);
 
-        //取全部管理员
+        //取全部账号
         IEnumerable<Admin> GetAdmins();
 
-        //取管理员
+        //取账号
         Admin GetAdminByID(int id);
 
-        //取管理员
+        //取账号
         Admin GetAdminByUserName(string userName);
 
-        //取管理员
+        //取账号
         IEnumerable<Admin> GetAdminsLikeUserName(string userName);
 
-        //取管理员
+        //取账号
         IEnumerable<Admin> GetAdminsByRoleID(int roleID);
 
-        //更新管理员
+        //更新账号
         bool UpdateAdminByID(int id, string userName, string password, byte state, int roleID, int updateTime);
 
         //修改密码
@@ -40,16 +40,16 @@ namespace Snai.CMS.Manage.DataAccess.Interface
         //更新错误登录信息
         bool UpdateErrorLogon(int id, int errorLogonTime,int errorLogonCount, int updateTime);
 
-        //锁定管理员
+        //锁定账号
         bool LockAdmin(int id, int lockTime, int updateTime);
 
         //解锁
         bool UnlockAdminByIDs(IEnumerable<int> ids, int updateTime);
 
-        //删除管理员
+        //删除账号
         bool DeleteAdminByIDs(IEnumerable<int> ids);
 
-        //更新管理员登录信息
+        //更新账号登录信息
         bool UpdateAdminLogon(int id, int lastLogonTime, string lastLogonIP);
 
         #endregion

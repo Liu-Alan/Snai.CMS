@@ -39,7 +39,7 @@ namespace Snai.CMS.Manage.Business.Implement
 
         #endregion
 
-        #region 管理员操作
+        #region 账号操作
 
         //验证密码是否合法
         public Message VerifyPassword(string password)
@@ -101,14 +101,14 @@ namespace Snai.CMS.Manage.Business.Implement
             return msg;
         }
 
-        //添加管理员
+        //添加账号
         public Message CreateAdmin(Admin admin)
         {
             var msg = new Message(10, "");
             if (admin == null)
             {
                 msg.Code = 101;
-                msg.Msg = "管理员不能为空";
+                msg.Msg = "账号不能为空";
 
                 return msg;
             }
@@ -133,7 +133,7 @@ namespace Snai.CMS.Manage.Business.Implement
             if (uAdmin != null && uAdmin.ID > 0)
             {
                 msg.Code = 11;
-                msg.Msg = "添加的管理员用户名已存在";
+                msg.Msg = "添加的账号用户名已存在";
 
                 return msg;
             }
@@ -155,7 +155,7 @@ namespace Snai.CMS.Manage.Business.Implement
             if (admin.RoleID <= 0)
             {
                 msg.Code = 104;
-                msg.Msg = "清选择用户的角色";
+                msg.Msg = "请选择账号的角色";
 
                 return msg;
             }
@@ -169,18 +169,18 @@ namespace Snai.CMS.Manage.Business.Implement
             if (addState)
             {
                 msg.Code = 0;
-                msg.Msg = "添加管理员成功";
+                msg.Msg = "添加账号成功";
             }
             else
             {
                 msg.Code = 1;
-                msg.Msg = "添加管理员失败";
+                msg.Msg = "添加账号失败";
             }
 
             return msg;
         }
 
-        //取全部管理员
+        //取全部账号
         public IEnumerable<Admin> GetAdmins()
         {
             var admins = CMSAdminDao.GetAdmins();
@@ -188,7 +188,7 @@ namespace Snai.CMS.Manage.Business.Implement
             return admins;
         }
 
-        //取管理员
+        //取账号
         public Admin GetAdminByID(int id)
         {
             var admin = CMSAdminDao.GetAdminByID(id);
@@ -203,7 +203,7 @@ namespace Snai.CMS.Manage.Business.Implement
             }
         }
 
-        //取管理员
+        //取账号
         public Admin GetAdminByUserName(string userName)
         {
             var admin = CMSAdminDao.GetAdminByUserName(userName);
@@ -218,7 +218,7 @@ namespace Snai.CMS.Manage.Business.Implement
             }
         }
 
-        //取管理员
+        //取账号
         public IEnumerable<Admin> GetAdmins(string userName, int roleID,int pageLimit,int pageIndex)
         {
             IEnumerable<Admin> adminIE = new List<Admin>();
@@ -285,7 +285,7 @@ namespace Snai.CMS.Manage.Business.Implement
             return admins;
         }
 
-        //取管理员数
+        //取账号数
         public int GetAdminCount(string userName, int roleID)
         {
             IEnumerable<Admin> adminIE = new List<Admin>();
@@ -320,7 +320,7 @@ namespace Snai.CMS.Manage.Business.Implement
             }
         }
 
-        //更新管理员
+        //更新账号
         public Message UpdateAdminByID(Admin admin)
         {
             var msg = new Message(10, "");
@@ -345,7 +345,7 @@ namespace Snai.CMS.Manage.Business.Implement
             if (upAdmin == null || upAdmin.ID <= 0)
             {
                 msg.Code = 11;
-                msg.Msg = "修改的管理员不存在";
+                msg.Msg = "修改的账号不存在";
 
                 return msg;
             }
@@ -354,7 +354,7 @@ namespace Snai.CMS.Manage.Business.Implement
             if (upAdmin != null && upAdmin.ID != admin.ID)
             {
                 msg.Code = 12;
-                msg.Msg = "修改的管理员用户名已存在";
+                msg.Msg = "修改的账号用户名已存在";
 
                 return msg;
             }
@@ -378,6 +378,14 @@ namespace Snai.CMS.Manage.Business.Implement
                 admin.Password = EncryptMd5.EncryptByte(admin.Password.Trim());
             }
 
+            if (admin.RoleID <= 0)
+            {
+                msg.Code = 103;
+                msg.Msg = "请选择账号的角色";
+
+                return msg;
+            }
+
             admin.UpdateTime = (int)DateTimeUtils.DateTimeToUnixTimeStamp(DateTime.Now);
 
             var upState = CMSAdminDao.UpdateAdminByID(admin.ID, admin.UserName, admin.Password, admin.State, admin.RoleID, admin.UpdateTime);
@@ -385,12 +393,12 @@ namespace Snai.CMS.Manage.Business.Implement
             if (upState)
             {
                 msg.Code = 0;
-                msg.Msg = "修改管理员成功";
+                msg.Msg = "修改账号成功";
             }
             else
             {
                 msg.Code = 1;
-                msg.Msg = "修改管理员失败";
+                msg.Msg = "修改账号失败";
             }
 
             return msg;
@@ -406,7 +414,7 @@ namespace Snai.CMS.Manage.Business.Implement
             if (admin == null || admin.ID <= 0)
             {
                 msg.Code = 11;
-                msg.Msg = "修改的管理员不存在";
+                msg.Msg = "修改的账号不存在";
 
                 return msg;
             }
@@ -511,7 +519,7 @@ namespace Snai.CMS.Manage.Business.Implement
             if (admin == null || admin.ID <= 0)
             {
                 msg.Code = 11;
-                msg.Msg = "更新的管理员不存在";
+                msg.Msg = "更新的账号不存在";
 
                 return msg;
             }
@@ -534,7 +542,7 @@ namespace Snai.CMS.Manage.Business.Implement
             return msg;
         }
 
-        //锁定管理员
+        //锁定账号
         public Message LockAdmin(int id, int lockTime)
         {
             var msg = new Message(10, "");
@@ -543,7 +551,7 @@ namespace Snai.CMS.Manage.Business.Implement
             if (admin == null || admin.ID <= 0)
             {
                 msg.Code = 11;
-                msg.Msg = "锁定的管理员不存在";
+                msg.Msg = "锁定的账号不存在";
 
                 return msg;
             }
@@ -555,12 +563,12 @@ namespace Snai.CMS.Manage.Business.Implement
             if (upState)
             {
                 msg.Code = 0;
-                msg.Msg = "锁定的管理员成功";
+                msg.Msg = "锁定的账号成功";
             }
             else
             {
                 msg.Code = 1;
-                msg.Msg = "锁定的管理员失败";
+                msg.Msg = "锁定的账号失败";
             }
 
             return msg;
@@ -574,7 +582,7 @@ namespace Snai.CMS.Manage.Business.Implement
             if (ids == null || ids.Count() <= 0)
             {
                 msg.Code = 101;
-                msg.Msg = "请选择要解锁的管理员";
+                msg.Msg = "请选择要解锁的账号";
 
                 return msg;
             }
@@ -597,7 +605,7 @@ namespace Snai.CMS.Manage.Business.Implement
             return msg;
         }
 
-        //删除管理员
+        //删除账号
         public Message DeleteAdminByIDs(IEnumerable<int> ids)
         {
             var msg = new Message(10, "");
@@ -605,7 +613,7 @@ namespace Snai.CMS.Manage.Business.Implement
             if (ids == null || ids.Count() <= 0)
             {
                 msg.Code = 101;
-                msg.Msg = "请选择要删除的管理员";
+                msg.Msg = "请选择要删除的账号";
 
                 return msg;
             }
@@ -626,7 +634,7 @@ namespace Snai.CMS.Manage.Business.Implement
             return msg;
         }
 
-        //更新管理员登录信息
+        //更新账号登录信息
         public Message UpdateAdminLogon(int id, int lastLogonTime, string lastLogonIP)
         {
             var msg = new Message(10, "");
@@ -635,7 +643,7 @@ namespace Snai.CMS.Manage.Business.Implement
             if (admin == null || admin.ID <= 0)
             {
                 msg.Code = 11;
-                msg.Msg = "更新的管理员不存在";
+                msg.Msg = "更新的账号不存在";
 
                 return msg;
             }
@@ -647,12 +655,12 @@ namespace Snai.CMS.Manage.Business.Implement
             if (upState)
             {
                 msg.Code = 0;
-                msg.Msg = "更新管理员登录信息成功";
+                msg.Msg = "更新账号登录信息成功";
             }
             else
             {
                 msg.Code = 1;
-                msg.Msg = "更新管理员登录信息失败";
+                msg.Msg = "更新账号登录信息失败";
             }
 
             return msg;
@@ -660,7 +668,7 @@ namespace Snai.CMS.Manage.Business.Implement
 
         #endregion
 
-        #region 管理员登录
+        #region 账号登录
 
         //登录
         public Message AdminLogin(AdminLogin adminLogin)
@@ -790,7 +798,7 @@ namespace Snai.CMS.Manage.Business.Implement
             admin.LockTime = 0;
             admin.LastLogonIP = HttpExtension.GetUserIP();
 
-            //更新管理员登录信息
+            //更新账号登录信息
             this.UpdateAdminLogon(admin.ID, admin.LastLogonTime, admin.LastLogonIP);
 
             CMSAdminCookie.SetAdiminCookie(adminLogin);

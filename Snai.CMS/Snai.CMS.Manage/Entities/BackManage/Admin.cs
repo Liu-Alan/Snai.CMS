@@ -10,6 +10,25 @@ namespace Snai.CMS.Manage.Entities.BackManage
     [Table("admins")]
     public class Admin
     {
+        public Admin()
+        {
+            ID = 0;
+            UserName = "";
+            Password = "";
+            RePassword = "";
+            State = 1;
+            RoleID = 0;
+            RoleTitle = "";
+            CreateTime = 0;
+            UpdateTime = 0;
+            LastLogonTime = 0;
+            LastLogonIP = "";
+            ErrorLogonTime = 0;
+            ErrorLogonCount = 0;
+            LockTime = 0;
+            LockState = 1;
+        }
+
         [Key]
         [Column("id")]
         public int ID { get; set; }

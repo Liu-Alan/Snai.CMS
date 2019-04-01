@@ -9,27 +9,27 @@ namespace Snai.CMS.Manage.Business.Interface
 {
     public interface ICMSAdminBO
     {
-        #region 管理员操作
+        #region 账号操作
 
-        //添加管理员
+        //添加账号
         Message CreateAdmin(Admin admin);
 
-        //取全部管理员
+        //取全部账号
         IEnumerable<Admin> GetAdmins();
 
-        //取管理员
+        //取账号
         Admin GetAdminByID(int id);
 
-        //取管理员
+        //取账号
         Admin GetAdminByUserName(string userName);
 
-        //取管理员
+        //取账号
         IEnumerable<Admin> GetAdmins(string userName, int roleID, int pageLimit, int pageIndex);
 
-        //取管理员数
+        //取账号数
         int GetAdminCount(string userName, int roleID);
 
-        //更新管理员
+        //更新账号
         Message UpdateAdminByID(Admin admin);
 
         //修改密码
@@ -41,21 +41,21 @@ namespace Snai.CMS.Manage.Business.Interface
         //更新错误登录信息
         Message UpdateErrorLogon(int id, int errorLogonTime, int errorLogonCount);
 
-        //锁定管理员
+        //锁定账号
         Message LockAdmin(int id, int lockTime);
 
         //解锁
         Message UnlockByIDs(IEnumerable<int> ids);
 
-        //删除管理员
+        //删除账号
         Message DeleteAdminByIDs(IEnumerable<int> ids);
 
-        //更新管理员登录信息
+        //更新账号登录信息
         Message UpdateAdminLogon(int id, int lastLogonTime, string lastLogonIP);
 
         #endregion
 
-        #region 管理员登录
+        #region 账号登录
 
         //登录
         Message AdminLogin(AdminLogin admin);

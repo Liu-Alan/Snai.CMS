@@ -57,6 +57,7 @@ UNION ALL select 2,'修改密码','Home','UpdatePassword',12,1
 UNION ALL select 0,'后台设置','BackManage','Index',2,1
 UNION ALL select 5,'管理员管理','','',20,1
 UNION ALL select 6,'账号管理','BackManage','AdminList',21,1
+UNION ALL select 7,'添加修改账号','BackManage','ModifyAdmin',21,1
 UNION ALL select 7,'禁启用账号','BackManage','UpdateAdminState',21,1
 UNION ALL select 7,'解锁账号','BackManage','UnlockAdmin',21,1
 UNION ALL select 7,'删除账号','BackManage','DeleteAdmin',21,1
@@ -97,4 +98,5 @@ UNION ALL select 1,7
 UNION ALL select 1,8
 UNION ALL select 1,9
 UNION ALL select 1,10
+UNION ALL select 1,11
 ;

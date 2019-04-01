@@ -43,7 +43,7 @@ namespace Snai.CMS.Manage.Controllers
             return View(model);
         }
 
-        #region 管理员管理
+        #region 账号管理
 
         //账号管理
         public IActionResult AdminList(string id)
@@ -109,7 +109,82 @@ namespace Snai.CMS.Manage.Controllers
 
         }
 
-        //禁启用管理员
+        public IActionResult ModifyAdmin()
+        {
+            //展示页面
+            if (!Request.Method.ToUpper().Equals("POST", StringComparison.OrdinalIgnoreCase) || !Request.HasFormContentType)
+            {
+                // 权限和菜单
+                ModifyAdminModel model = new ModifyAdminModel();
+                var layoutModel = this.GetLayoutModel();
+                if (layoutModel != null)
+                {
+                    layoutModel.ToT(ref model);
+                }
+
+                var roles = CMSAdminBO.GetRoles(0);
+                if (roles != null)
+                {
+                    model.Roles = roles.ToList();
+                }
+
+                int id = 0;
+                int.TryParse(Request.Query["id"], out id);
+
+                if (id > 0)
+                {
+                    model.PageTitle = "修改账号";
+                    var admin = CMSAdminBO.GetAdminByID(id);
+                    if (admin != null && admin.ID > 0)
+                    {
+                        model.Admin = admin;
+                    }
+                }
+                else
+                {
+                    model.PageTitle = "添加账号";
+                }
+
+                return View(model);
+            }
+            else
+            {
+                var msg = new Message(10, "修改失败！");
+
+                int id = 0;
+                int.TryParse(Request.Form["id"], out id);
+                string userName = Request.Form["userName"];
+                string password = Request.Form["password"];
+                string rePassword = Request.Form["rePassword"];
+                int roleID = 0;
+                int.TryParse(Request.Form["roleID"], out roleID);
+                byte state = 0;
+                byte.TryParse(Request.Form["state"], out state);
+
+                var admin = new Admin()
+                {
+                    ID = id,
+                    UserName = userName,
+                    Password = password,
+                    RePassword = rePassword,
+                    RoleID = roleID,
+                    State = state
+                };
+
+                if (admin.ID > 0)
+                {
+                    msg = CMSAdminBO.UpdateAdminByID(admin);
+                }
+                else
+                {
+                    msg = CMSAdminBO.CreateAdmin(admin);
+                }
+
+                return new JsonResult(msg);
+            }
+        }
+
+        //禁启用账号
         public ActionResult<Message> UpdateAdminState()
         {
             string[] idsStr = Request.Form["ids"];
@@ -146,7 +221,7 @@ namespace Snai.CMS.Manage.Controllers
             return new JsonResult(msg);
         }
 
-        //解锁管理员
+        //解锁账号
         public ActionResult<Message> UnlockAdmin()
         {
             string[] idsStr = Request.Form["ids"];
@@ -175,7 +250,7 @@ namespace Snai.CMS.Manage.Controllers
             return new JsonResult(msg);
         }
 
-        //删除管理员
+        //删除账号
         public ActionResult<Message> DeleteAdmin()
         {
             string[] idsStr = Request.Form["ids"];

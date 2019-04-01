@@ -25,46 +25,46 @@ namespace Snai.CMS.Manage.DataAccess.Implement
 
         #endregion
 
-        #region 管理员操作
+        #region 账号操作
 
-        //添加管理员
+        //添加账号
         public bool CreateAdmin(Admin admin)
         {
             Context.Admins.Add(admin);
             return Context.SaveChanges() > 0;
         }
 
-        //取全部管理员
+        //取全部账号
         public IEnumerable<Admin> GetAdmins()
         {
             return Context.Admins;
         }
 
-        //取管理员
+        //取账号
         public Admin GetAdminByID(int id)
         {
             return Context.Admins.SingleOrDefault(s => s.ID == id);
         }
 
-        //取管理员
+        //取账号
         public Admin GetAdminByUserName(string userName)
         {
             return Context.Admins.SingleOrDefault(s => s.UserName == userName);
         }
 
-        //取管理员
+        //取账号
         public IEnumerable<Admin> GetAdminsLikeUserName(string userName)
         {
             return Context.Admins.Where(s => s.UserName.Contains(userName));
         }
 
-        //取管理员
+        //取账号
         public IEnumerable<Admin> GetAdminsByRoleID(int roleID)
         {
             return Context.Admins.Where(s => s.RoleID == roleID);
         }
 
-        //更新管理员
+        //更新账号
         public bool UpdateAdminByID(int id, string userName, string password, byte state, int roleID, int updateTime)
         {
             var upState = false;
@@ -141,7 +141,7 @@ namespace Snai.CMS.Manage.DataAccess.Implement
             return upState;
         }
 
-        //锁定管理员
+        //锁定账号
         public bool LockAdmin(int id, int lockTime, int updateTime)
         {
             var upState = false;
@@ -182,7 +182,7 @@ namespace Snai.CMS.Manage.DataAccess.Implement
             return upState;
         }
 
-        //删除管理员
+        //删除账号
         public bool DeleteAdminByIDs(IEnumerable<int> ids)
         {
             var admins = Context.Admins.Where(s => ids.Contains(s.ID));
@@ -191,7 +191,7 @@ namespace Snai.CMS.Manage.DataAccess.Implement
         }
 
 
-        //更新管理员登录信息
+        //更新账号登录信息
         public bool UpdateAdminLogon(int id, int lastLogonTime, string lastLogonIP)
         {
             var upState = false;
