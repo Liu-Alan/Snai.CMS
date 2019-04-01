@@ -1,0 +1,77 @@
+﻿@using Snai.CMS.Manage.Models.BackManage
+
+@model ModifyAdminModel
+
+<form class="layui-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户名</label>
+        <div class="layui-input-block width-290">
+            <input type="hidden" id="id" name="id" value="@Model.Admin.ID" />
+            <input type="text" id="userName" name="userName" value="@Model.Admin.UserName" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码</label>
+        <div class="layui-input-inline width-290">
+            <input type="password" id="password" name="password" placeholder="请输入密码" autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-form-mid layui-word-aux">
+            @if (Model.Admin.ID > 0)
+            {
+                @Html.Raw("不修改密码请为空")
+            }，密码至少6位，且必须是字母与(数字或特殊符号)组合
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">重复密码</label>
+        <div class="layui-input-block width-290">
+            <input type="password" id="rePassword" name="rePassword" placeholder="请重复输入密码" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">角色</label>
+        <div class="layui-input-block">
+            <select id="roleID" name="roleID">
+                <option value="0">请选择角色</option>
+                @foreach (var role in Model.Roles)
+                {
+                    if (role.ID == Model.Admin.RoleID)
+                    {
+                        <option value="@role.ID" selected>@role.Title</option>
+                    }
+                    else
+                    {
+                        <option value="@role.ID">@role.Title</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block">
+            @if (Model.Admin.State == 1)
+            {
+                <input type="radio" id="state" name="state" value="1" title="启用" checked>
+                <input type="radio" id="state" name="state" value="2" title="禁用">
+            }
+            else
+            {
+                <input type="radio" id="state" name="state" value="1" title="启用">
+                <input type="radio" id="state" name="state" value="2" title="禁用" checked>
+            }
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="button" id="btnSubmit" name="btnSubmit" class="layui-btn">提 交</button>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script src="~/js/extensions.js"></script>
+    <script src="~/js/utils.js"></script>
+    <script src="~/js/modifyadmin.js"></script>
+}
