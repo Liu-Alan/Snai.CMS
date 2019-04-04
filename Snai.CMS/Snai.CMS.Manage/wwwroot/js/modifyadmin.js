@@ -128,15 +128,18 @@ MA.Password = {
 
     onkeydown: function () {
         var passwordCheck = MA.Password.check();
-        if (passwordCheck > 0) {
+        if ((MA.Form.id.val() <= 0 && passwordCheck > 0) || (MA.Form.id.val() >0 && passwordCheck > 0 && passwordCheck != 4)) {
             MA.Form.password.focus();
         } else {
+            var idValue = MA.Form.id.val();
             var rePasswordCheck = MA.RePassword.check();
-            if (rePasswordCheck > 0) {
+            if ((idValue <= 0 && rePasswordCheck > 0) 
+                || (idValue >0 && passwordCheck > 0 && passwordCheck != 4 && rePasswordCheck > 0)
+                || (idValue >0 && passwordCheck == 4 && rePasswordCheck == 2)) {
                 MA.Form.rePassword.focus();
             }
             else {
-                MA.Form.btnSubmit.trigger('click');
+                MA.Form.roleID.focus();
             }
         }
     },
@@ -178,11 +181,15 @@ MA.RePassword = {
     },
 
     onkeydown: function () {
+        var idValue = MA.Form.id.val();
+        var passwordCheck = MA.Password.check();
         var rePasswordCheck = MA.RePassword.check();
-        if (rePasswordCheck > 0) {
+        if ((idValue <= 0 && rePasswordCheck > 0) 
+            || (idValue >0 && passwordCheck > 0 && passwordCheck != 4 && rePasswordCheck > 0)
+            || (idValue >0 && passwordCheck == 4 && rePasswordCheck == 2)) {
             MA.Form.rePassword.focus();
         } else {
-            MA.Form.btnSubmit.trigger('click');
+            MA.Form.roleID.focus();
         }
     },
 
