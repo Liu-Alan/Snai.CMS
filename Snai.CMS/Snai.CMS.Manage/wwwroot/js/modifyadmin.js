@@ -39,7 +39,6 @@ MA.Form = {
     roleID: null,
     state1: null,
     state2: null,
-    stateChecked: null,
     btnSubmit: null,
 
     inti: function () {
@@ -50,7 +49,6 @@ MA.Form = {
         this.roleID = $("#roleID");
         this.state1 = $("input[name='state'][value=1]");
         this.state2 = $("input[name='state'][value=2]");
-        this.stateChecked = $("input[name='state']:checked");
         this.btnSubmit = $("#btnSubmit");
     },
 
@@ -216,7 +214,7 @@ MA.RoleID = {
 
 MA.State = {
     check: function () {
-        var state = MA.Form.stateChecked.val();
+        var state = $("input[name='state']:checked").val();
         if (state != 1 && state != 2) {
             return true;
         }
@@ -319,7 +317,7 @@ MA.onsubmit = function () {
         password: MA.Form.password.val(),
         rePassword: MA.Form.rePassword.val(),
         roleID: MA.Form.roleID.val(),
-        state: MA.Form.stateChecked.val()
+        state: $("input[name='state']:checked").val()
     };
 
     var ajaxUrl = MA.Const.url.doModifyAdmin;
@@ -339,8 +337,10 @@ MA.onsubmit = function () {
                 MA.RePassword.clear();
                 MA.layui.layer.msg(data.msg, { icon: 2 });
             } else {
-                MA.layui.layer.msg(data.msg, { icon: 1 });
-                $.jump(MA.Const.url.doAdminList);
+                MA.layui.layer.msg(data.msg, { icon: 1 }, function () {
+                    $.jump(MA.Const.url.doAdminList);
+                });
+                
             }
         },
         error: function (result, status) {
@@ -357,12 +357,19 @@ MA.onsubmit = function () {
 };
 
 MA.bind = function () {
-    layui.use('form', function () {
+    layui.use(['form', 'layer'], function () {
         MA.layui.form = layui.form;
-    });
-
-    layui.use('layer', function () {
         MA.layui.layer = layui.layer;
+
+        MA.layui.form.on('radio(state)', function (data) {
+            if (data.value == 1) {
+                MA.Form.state1.attr("checked", true);
+                MA.Form.state2.attr("checked", false);
+            } else {
+                MA.Form.state1.attr("checked", false);
+                MA.Form.state2.attr("checked", true);
+            }
+        });
     });
 
     MA.Form.inti();

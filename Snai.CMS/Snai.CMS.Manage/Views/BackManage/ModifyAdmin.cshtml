@@ -33,7 +33,7 @@
         <label class="layui-form-label">角色</label>
         <div class="layui-input-inline">
             <select id="roleID" name="roleID">
-                <option value="0"></option>
+                <option value="">请选择角色</option>
                 @foreach (var role in Model.Roles)
                 {
                     if (role.ID == Model.Admin.RoleID)
@@ -53,13 +53,13 @@
         <div class="layui-input-block">
             @if (Model.Admin.State == 1)
             {
-                <input type="radio" id="state_1" name="state" value="1" title="启用" checked>
-                <input type="radio" id="state_2" name="state" value="2" title="禁用">
+                <input type="radio" id="state_1" name="state" value="1" title="启用" lay-filter="state" checked="checked">
+                <input type="radio" id="state_2" name="state" value="2" title="禁用" lay-filter="state">
             }
             else
             {
-                <input type="radio" id="state_1" name="state" value="1" title="启用">
-                <input type="radio" id="state_2" name="state" value="2" title="禁用" checked>
+                <input type="radio" id="state_1" name="state" value="1" title="启用" lay-filter="state">
+                <input type="radio" id="state_2" name="state" value="2" title="禁用" lay-filter="state" checked="checked">
             }
         </div>
     </div>

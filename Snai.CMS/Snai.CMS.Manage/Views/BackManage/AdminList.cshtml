@@ -3,19 +3,25 @@
 @model AdminListModel
 
 <div class="search-title">
-    <div class="layui-inline">
-        <input id="userName" name="userName" placeholder="请输入用户名" class="layui-input height-30" autocomplete="off">
-    </div>
-    <div class="layui-inline">
-        <select id="roleID" name="roleID" class="height-30 border-color-c9">
-            <option value="0"></option>
-            @foreach (var role in Model.Roles)
-            {
-                <option value="@role.ID">@role.Title</option>
-            }
-        </select>
-    </div>
-    <button id="btnReload" name="btnReload" class="layui-btn height-30">查询</button>
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <input id="userName" name="userName" placeholder="请输入用户名" class="layui-input" autocomplete="off">
+            </div>
+            <div class="layui-input-inline">
+                <select id="roleID" name="roleID">
+                    <option value="">请选择角色</option>
+                    @foreach (var role in Model.Roles)
+                    {
+                        <option value="@role.ID">@role.Title</option>
+                    }
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <button type="button" id="btnReload" name="btnReload" class="layui-btn">查询</button>
+            </div>
+        </div>
+</form>
 </div>
 
 <script type="text/html" id="adminToolbar">

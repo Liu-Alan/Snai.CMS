@@ -1,8 +1,9 @@
 ﻿//当前页码
 var curPage = 1;
 
-layui.use(['table', 'layer'], function () {
+layui.use(['table', 'form', 'layer'], function () {
     var table = layui.table;
+    var form = layui.form;
     var layer = layui.layer;
 
     table.render({
