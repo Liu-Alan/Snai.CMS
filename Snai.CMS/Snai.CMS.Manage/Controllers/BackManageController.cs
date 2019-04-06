@@ -159,7 +159,7 @@ namespace Snai.CMS.Manage.Controllers
                 string rePassword = Request.Form["rePassword"];
                 int roleID = 0;
                 int.TryParse(Request.Form["roleID"], out roleID);
-                byte state = 0;
+                byte state = 1;
                 byte.TryParse(Request.Form["state"], out state);
 
                 var admin = new Admin()

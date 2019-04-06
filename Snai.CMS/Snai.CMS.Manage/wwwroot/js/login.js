@@ -28,14 +28,14 @@ Logon.Form = {
     password: null,
     verifyCode: null,
     imgVerify: null,
-    loginBtn: null,
+    btnLogin: null,
 
     inti: function () {
         this.userName = $("#userName");
         this.password = $("#password");
         this.verifyCode = $("#verifyCode");
         this.imgVerify = $("#imgVerify");
-        this.loginBtn = $("#loginBtn");
+        this.btnLogin = $("#btnLogin");
     },
 
     focus: function (obj) {
@@ -86,7 +86,7 @@ Logon.UserName = {
                     Logon.Form.verifyCode.focus();
                 }
                 else {
-                    Logon.Form.loginBtn.trigger('click');
+                    Logon.Form.btnLogin.trigger('click');
                 }
             }
         }
@@ -136,7 +136,7 @@ Logon.Password = {
                 Logon.Form.verifyCode.focus();
             }
             else {
-                Logon.Form.loginBtn.trigger('click');
+                Logon.Form.btnLogin.trigger('click');
             }
         }
     },
@@ -196,7 +196,7 @@ Logon.VerifyCode = {
     }
 };
 
-Logon.LoginBtn = {
+Logon.BtnLogin = {
     disable: function (obj) {
         obj.text("登录中...");
         $.disableButton(obj);
@@ -207,11 +207,11 @@ Logon.LoginBtn = {
     },
 
     bind: function () {
-        Logon.Form.loginBtn.bind("click", function () {
+        Logon.Form.btnLogin.bind("click", function () {
             return Logon.onsubmit();
         });
 
-        Logon.Form.loginBtn.bind("keypress", function (e) {
+        Logon.Form.btnLogin.bind("keypress", function (e) {
             var event = e || window.event;
             if (event.keyCode == 13) {
                 Logon.onsubmit();
@@ -257,7 +257,7 @@ Logon.onsubmit = function () {
         return false;
     }
 
-    Logon.LoginBtn.disable(Logon.Form.loginBtn);
+    Logon.BtnLogin.disable(Logon.Form.btnLogin);
 
     //请求参数
     var params = {
@@ -278,7 +278,7 @@ Logon.onsubmit = function () {
         data: params,
         success: function (data, textStatus) {
             if (!data.success) {
-                Logon.LoginBtn.enable(Logon.Form.loginBtn);
+                Logon.BtnLogin.enable(Logon.Form.btnLogin);
                 Logon.Password.clear();
                 Logon.VerifyCode.onrefresh();
                 Logon.layui.layer.msg(data.msg, { icon: 2 }); 
@@ -314,14 +314,14 @@ Logon.bind = function () {
     Logon.UserName.bind();
     Logon.Password.bind();
     Logon.VerifyCode.bind();
-    Logon.LoginBtn.bind();
+    Logon.BtnLogin.bind();
 
     /* 整页面监听回车键提交，跟上面每个框回车键重复
     $("body").keydown(function (event) {
         var e = event || window.event; //兼容ie
         //keyCode=13是回车键 且 按钮没有聚焦
         if (e.keyCode == "13" && !window.buttonIsFocused) {
-            Logon.Form.loginBtn.click();
+            Logon.Form.btnLogin.click();
         }
     });
     */

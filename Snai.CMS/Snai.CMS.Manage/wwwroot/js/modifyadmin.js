@@ -26,7 +26,8 @@ MA.Const = {
     ajaxErr: "很抱歉，由于服务器繁忙，请您稍后再试",
 
     url: {
-        doMA: "/BackManage/ModifyAdmin"
+        doModifyAdmin: "/BackManage/ModifyAdmin",
+        doAdminList: "/BackManage/AdminList"
     }
 };
 
@@ -36,7 +37,9 @@ MA.Form = {
     password: null,
     rePassword: null,
     roleID: null,
-    state: null,
+    state1: null,
+    state2: null,
+    stateChecked: null,
     btnSubmit: null,
 
     inti: function () {
@@ -45,7 +48,9 @@ MA.Form = {
         this.password = $("#password");
         this.rePassword = $("#rePassword");
         this.roleID = $("#roleID");
-        this.state = $("#state");
+        this.state1 = $("input[name='state'][value=1]");
+        this.state2 = $("input[name='state'][value=2]");
+        this.stateChecked = $("input[name='state']:checked");
         this.btnSubmit = $("#btnSubmit");
     },
 
@@ -131,16 +136,7 @@ MA.Password = {
         if ((MA.Form.id.val() <= 0 && passwordCheck > 0) || (MA.Form.id.val() >0 && passwordCheck > 0 && passwordCheck != 4)) {
             MA.Form.password.focus();
         } else {
-            var idValue = MA.Form.id.val();
-            var rePasswordCheck = MA.RePassword.check();
-            if ((idValue <= 0 && rePasswordCheck > 0) 
-                || (idValue >0 && passwordCheck > 0 && passwordCheck != 4 && rePasswordCheck > 0)
-                || (idValue >0 && passwordCheck == 4 && rePasswordCheck == 2)) {
-                MA.Form.rePassword.focus();
-            }
-            else {
-                MA.Form.roleID.focus();
-            }
+            MA.Form.rePassword.focus();
         }
     },
 
@@ -168,6 +164,12 @@ MA.RePassword = {
         return 0;
     },
 
+    equals: function () {
+        var rePassword = MA.Form.rePassword.val();
+        var password = MA.Form.password.val();
+        return password == rePassword;
+    },
+
     clear: function () {
         MA.Form.rePassword.val("");
         MA.Form.rePassword.focus();
@@ -182,15 +184,12 @@ MA.RePassword = {
 
     onkeydown: function () {
         var idValue = MA.Form.id.val();
-        var passwordCheck = MA.Password.check();
         var rePasswordCheck = MA.RePassword.check();
-        if ((idValue <= 0 && rePasswordCheck > 0) 
-            || (idValue >0 && passwordCheck > 0 && passwordCheck != 4 && rePasswordCheck > 0)
-            || (idValue >0 && passwordCheck == 4 && rePasswordCheck == 2)) {
+        var pwdEquals = MA.RePassword.equals();
+        if ((idValue <= 0 && rePasswordCheck > 0)
+            || (idValue > 0 && !pwdEquals)){
             MA.Form.rePassword.focus();
-        } else {
-            MA.Form.roleID.focus();
-        }
+        } 
     },
 
     bind: function () {
@@ -199,6 +198,35 @@ MA.RePassword = {
         MA.Form.rePassword.bind("keydown", function (e) {
             $.enterSubmit(e, function () { MA.RePassword.onkeydown(); });
         });
+    }
+};
+
+MA.RoleID = {
+    check: function () {
+        var roleID = MA.Form.roleID.val();
+
+        return roleID <= 0 ? true : false;
+    },
+
+    clear: function () {
+        MA.Form.roleID.val(0);
+        MA.Form.roleID.focus();
+    }
+};
+
+MA.State = {
+    check: function () {
+        var state = MA.Form.stateChecked.val();
+        if (state != 1 && state != 2) {
+            return true;
+        }
+
+        return false;
+    },
+
+    clear: function () {
+        MA.Form.state1.attr("checked", true);
+        MA.Form.state1.focus();
     }
 };
 
@@ -225,21 +253,22 @@ MA.BtnSubmit = {
 };
 
 MA.checkInput = function () {
-    if (MA.OldPassword.check()) {
-        MA.Form.error(MA.Form.oldPassword);
-        MA.layui.layer.msg(MA.Const.oldPassword.empty, { icon: 2 });
-        MA.Form.oldPassword.focus();
+    if (MA.UserName.check()) {
+        MA.Form.error(MA.Form.userName);
+        MA.layui.layer.msg(MA.Const.userName.empty, { icon: 2 });
+        MA.Form.userName.focus();
         return false;
     }
 
+    var idValue = MA.Form.id.val();
     var passwordCheck = MA.Password.check();
-    if (passwordCheck == 4) {
+    if ((idValue <= 0 && passwordCheck == 4)) {
         MA.Form.error(MA.Form.password);
         MA.layui.layer.msg(MA.Const.password.empty, { icon: 2 });
         MA.Form.password.focus();
         return false;
     }
-    else if (passwordCheck > 0) {
+    else if ((idValue <= 0 && passwordCheck > 0) || (idValue > 0 && passwordCheck > 0 && passwordCheck != 4)) {
         MA.Form.error(MA.Form.password);
         MA.layui.layer.msg(MA.Const.password.error, { icon: 2 });
         MA.Form.password.focus();
@@ -247,16 +276,29 @@ MA.checkInput = function () {
     }
 
     var rePasswordCheck = MA.RePassword.check();
-    if (rePasswordCheck == 1) {
+    var pwdEquals = MA.RePassword.equals();
+    if ((idValue <= 0 && rePasswordCheck == 1)
+        || (idValue > 0 && passwordCheck > 0 && passwordCheck != 4 && rePasswordCheck == 1)) {
         MA.Form.error(MA.Form.rePassword);
         MA.layui.layer.msg(MA.Const.rePassword.empty, { icon: 2 });
         MA.Form.rePassword.focus();
         return false;
     }
-    if (rePasswordCheck == 2) {
+    else if (!pwdEquals) {
         MA.Form.error(MA.Form.rePassword);
         MA.layui.layer.msg(MA.Const.rePassword.error, { icon: 2 });
         MA.Form.rePassword.focus();
+        return false;
+    }
+
+    if (MA.RoleID.check()) {
+        MA.Form.error(MA.Form.roleID);
+        MA.layui.layer.msg(MA.Const.roleID.empty, { icon: 2 });
+        return false;
+    }
+
+    if (MA.State.check()) {
+        MA.layui.layer.msg(MA.Const.state.empty, { icon: 2 });
         return false;
     }
 
@@ -272,12 +314,15 @@ MA.onsubmit = function () {
 
     //请求参数
     var params = {
-        oldPassword: MA.Form.oldPassword.val(),
+        id: MA.Form.id.val(),
+        userName: MA.Form.userName.val(),
         password: MA.Form.password.val(),
-        rePassword: MA.Form.rePassword.val()
+        rePassword: MA.Form.rePassword.val(),
+        roleID: MA.Form.roleID.val(),
+        state: MA.Form.stateChecked.val()
     };
 
-    var ajaxUrl = MA.Const.url.doMA;
+    var ajaxUrl = MA.Const.url.doModifyAdmin;
 
     //发送请求
     $.ajax({
@@ -290,16 +335,12 @@ MA.onsubmit = function () {
         success: function (data, textStatus) {
             if (!data.success) {
                 MA.BtnSubmit.enable(MA.Form.btnSubmit);
-                MA.RePassword.clear();
                 MA.Password.clear();
-                MA.OldPassword.clear();
+                MA.RePassword.clear();
                 MA.layui.layer.msg(data.msg, { icon: 2 });
             } else {
-                MA.BtnSubmit.enable(MA.Form.btnSubmit);
-                MA.RePassword.clear();
-                MA.Password.clear();
-                MA.OldPassword.clear();
                 MA.layui.layer.msg(data.msg, { icon: 1 });
+                $.jump(MA.Const.url.doAdminList);
             }
         },
         error: function (result, status) {
@@ -325,7 +366,7 @@ MA.bind = function () {
     });
 
     MA.Form.inti();
-    MA.OldPassword.bind();
+    MA.UserName.bind();
     MA.Password.bind();
     MA.RePassword.bind();
     MA.BtnSubmit.bind();

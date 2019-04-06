@@ -19,8 +19,8 @@
         <div class="layui-form-mid layui-word-aux">
             @if (Model.Admin.ID > 0)
             {
-                @Html.Raw("不修改密码请为空")
-            }，密码至少6位，且必须是字母与(数字或特殊符号)组合
+                @Html.Raw("不修改密码请为空，")
+            }密码至少6位，且必须是字母与(数字或特殊符号)组合
         </div>
     </div>
     <div class="layui-form-item">
@@ -31,9 +31,9 @@
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">角色</label>
-        <div class="layui-input-block">
+        <div class="layui-input-inline">
             <select id="roleID" name="roleID">
-                <option value="0">请选择角色</option>
+                <option value="0"></option>
                 @foreach (var role in Model.Roles)
                 {
                     if (role.ID == Model.Admin.RoleID)
@@ -53,13 +53,13 @@
         <div class="layui-input-block">
             @if (Model.Admin.State == 1)
             {
-                <input type="radio" id="state" name="state" value="1" title="启用" checked>
-                <input type="radio" id="state" name="state" value="2" title="禁用">
+                <input type="radio" id="state_1" name="state" value="1" title="启用" checked>
+                <input type="radio" id="state_2" name="state" value="2" title="禁用">
             }
             else
             {
-                <input type="radio" id="state" name="state" value="1" title="启用">
-                <input type="radio" id="state" name="state" value="2" title="禁用" checked>
+                <input type="radio" id="state_1" name="state" value="1" title="启用">
+                <input type="radio" id="state_2" name="state" value="2" title="禁用" checked>
             }
         </div>
     </div>
