@@ -17,6 +17,9 @@ namespace Snai.CMS.Manage.Entities.BackManage
         [Column("parent_id")]
         public int ParentID { get; set; }
 
+        [NotMapped]
+        public string ParentTitle { get; set; }
+
         [Column("title")]
         public string Title { get; set; }
 

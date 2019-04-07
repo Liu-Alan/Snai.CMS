@@ -57,10 +57,22 @@ namespace Snai.CMS.Manage.DataAccess.Interface
         #region 菜单
 
         //取菜单
+        Module GetModule(int id);
+
+        //取菜单
         Module GetModule(string controller, string action);
 
         //取菜单
         IEnumerable<Module> GetModulesByIDs(IEnumerable<int> ids, int state);
+
+        //取全部菜单
+        IEnumerable<Module> GetModules(byte state);
+
+        //取菜单
+        IEnumerable<Module> GetModulesLikeTitle(string title);
+
+        //取菜单
+        IEnumerable<Module> GetModulesByParentID(int parentID);
 
         #endregion
 

@@ -217,6 +217,12 @@ namespace Snai.CMS.Manage.DataAccess.Implement
         #region 菜单
 
         //取菜单
+        public Module GetModule(int id)
+        {
+            return Context.Modules.SingleOrDefault(s => s.ID == id);
+        }
+
+        //取菜单
         public Module GetModule(string controller, string action)
         {
             return Context.Modules.FirstOrDefault(s => s.Controller == controller && s.Action == action);
@@ -241,6 +247,31 @@ namespace Snai.CMS.Manage.DataAccess.Implement
                 var modules = Context.Modules.Where(s => idList.Contains(s.ID) && s.State == state);
                 return modules;
             }
+        }
+
+        //取全部菜单
+        public IEnumerable<Module> GetModules(byte state)
+        {
+            if (state > 0)
+            {
+                return Context.Modules.Where(s => s.State == state);
+            }
+            else
+            {
+                return Context.Modules;
+            }
+        }
+
+        //取菜单
+        public IEnumerable<Module> GetModulesLikeTitle(string title)
+        {
+            return Context.Modules.Where(s => s.Title.Contains(title));
+        }
+
+        //取菜单
+        public IEnumerable<Module> GetModulesByParentID(int parentID)
+        {
+            return Context.Modules.Where(s => s.ParentID == parentID);
         }
 
         #endregion

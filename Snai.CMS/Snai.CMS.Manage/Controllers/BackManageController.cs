@@ -68,7 +68,7 @@ namespace Snai.CMS.Manage.Controllers
             }
             else
             {
-                //取管理员列表分布
+                //取账号列表
                 string userNameFilter = Request.Query["userName"];
 
                 int roleIDFilter = 0;
@@ -278,6 +278,75 @@ namespace Snai.CMS.Manage.Controllers
             }
 
             return new JsonResult(msg);
+        }
+
+        #endregion
+
+        #region 菜单管理
+
+        //菜单管理
+        public IActionResult ModuleList(string id)
+        {
+            if (id == null || !id.ToUpper().Equals("DATA", StringComparison.OrdinalIgnoreCase))
+            {
+                // 权限和菜单
+                ModuleListModel model = new ModuleListModel();
+                var layoutModel = this.GetLayoutModel();
+                if (layoutModel != null)
+                {
+                    layoutModel.ToT(ref model);
+                }
+
+                var modules = CMSAdminBO.GetModules(0);
+                if (modules != null)
+                {
+                    model.Modules = modules.ToList();
+                }
+
+                return View(model);
+            }
+            else
+            {
+                //取菜单列表
+                string titleFilter = Request.Query["title"];
+
+                int parentIDFilter = 0;
+                int.TryParse(Request.Query["parentID"], out parentIDFilter);
+
+                int pageIndex = 0;
+                int.TryParse(Request.Query["page"], out pageIndex);
+
+                int pageLimit = Consts.Page_Limit;
+                int totCount = CMSAdminBO.GetModuleCount(titleFilter, parentIDFilter);
+                int pageCount = (int)Math.Ceiling(totCount / (float)pageLimit);
+                var modules = new List<Module>();
+                if (totCount > 0)
+                {
+                    IEnumerable<Module> moduleIE = CMSAdminBO.GetModules(titleFilter, parentIDFilter, pageLimit, pageIndex);
+                    if (moduleIE != null)
+                    {
+                        modules = moduleIE.ToList();
+                    }
+                }
+
+                dynamic model = new ExpandoObject();
+
+                model.code = 0;
+                model.msg = "";
+                model.count = totCount;
+                model.data = modules.Select(s => new
+                {
+                    id = s.ID,
+                    title = s.Title,
+                    parentTitle = s.ParentTitle,
+                    controller = s.Controller,
+                    action = s.Action,
+                    state = s.State
+                });
+
+                return new JsonResult(model);
+            }
+
         }
 
         #endregion

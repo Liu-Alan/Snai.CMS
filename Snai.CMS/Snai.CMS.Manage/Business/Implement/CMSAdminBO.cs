@@ -841,6 +841,20 @@ namespace Snai.CMS.Manage.Business.Implement
         #region 菜单
 
         //取菜单
+        public Module GetModule(int id)
+        {
+            var module = this.GetModule(id);
+            if (module != null)
+            {
+                return module;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        //取菜单
         public Module GetModule(string controller, string action)
         {
             var module = CMSAdminDao.GetModule(controller, action);
@@ -863,6 +877,133 @@ namespace Snai.CMS.Manage.Business.Implement
             }
 
             return CMSAdminDao.GetModulesByIDs(ids, state).OrderBy(s => s.Sort);
+        }
+
+        //取全部菜单
+        public IEnumerable<Module> GetModules(byte state)
+        {
+            return CMSAdminDao.GetModules(state);
+        }
+
+        //取菜单
+        public IEnumerable<Module> GetModulesByParentID(int parentID)
+        {
+            IList<Module> moduleP = new List<Module>();
+            List<Module> modules = new List<Module>();
+
+            var moduleIE = CMSAdminDao.GetModulesByParentID(parentID);
+            if (moduleIE != null)
+            {
+                moduleP = moduleIE.ToList();
+            }
+
+            if (moduleP != null && moduleP.Count() > 0)
+            {
+                foreach (var module in moduleP)
+                {
+                    var moduleZ = CMSAdminDao.GetModulesByParentID(module.ID);
+                    if (moduleZ != null)
+                    {
+                        modules.AddRange(moduleZ);
+                    }
+                }
+
+                modules.AddRange(moduleP);
+            }
+
+            return modules.OrderBy(s => s.Sort);
+        }
+
+        //取菜单
+        public IEnumerable<Module> GetModules(string title, int parentID, int pageLimit, int pageIndex)
+        {
+            IEnumerable<Module> moduleIE = new List<Module>();
+            IList<Module> modules = new List<Module>();
+            if (parentID <= 0 && string.IsNullOrEmpty(title))
+            {
+                moduleIE = CMSAdminDao.GetModules(0);
+            }
+            else if (parentID <= 0 && !string.IsNullOrEmpty(title))
+            {
+                moduleIE = CMSAdminDao.GetModulesLikeTitle(title);
+            }
+            else
+            {
+                moduleIE = this.GetModulesByParentID(parentID);
+                if (!string.IsNullOrEmpty(title))
+                {
+                    if (moduleIE != null)
+                    {
+                        var moduleList = moduleIE.ToList();
+                        moduleIE = moduleList.Where(s => s.Title.Contains(title));
+                    }
+                }
+            }
+
+            if (moduleIE != null)
+            {
+                modules = moduleIE.ToList();
+            }
+
+            if (modules == null || modules.Count() < 0)
+            {
+                return null;
+            }
+
+            pageIndex = pageIndex < 1 ? 1 : pageIndex;
+
+            if (modules.Count() <= (pageIndex - 1) * pageLimit)
+            {
+                return null;
+            }
+
+            modules = modules.Skip((pageIndex - 1) * pageLimit).Take(pageLimit).ToList();
+
+            foreach (var module in modules)
+            {
+                var moduleP = this.GetModule(module.ParentID);
+                if (moduleP != null)
+                {
+                    module.ParentTitle = moduleP.Title;
+                }
+            }
+
+            return modules;
+        }
+
+        //取取菜单数
+        public int GetModuleCount(string title, int parentID)
+        {
+            IEnumerable<Module> moduleIE = new List<Module>();
+            if (parentID <= 0 && string.IsNullOrEmpty(title))
+            {
+                moduleIE = CMSAdminDao.GetModules(0);
+            }
+            else if (parentID <= 0 && !string.IsNullOrEmpty(title))
+            {
+                moduleIE = CMSAdminDao.GetModulesLikeTitle(title);
+            }
+            else
+            {
+                moduleIE = this.GetModulesByParentID(parentID);
+                if (!string.IsNullOrEmpty(title))
+                {
+                    if (moduleIE != null)
+                    {
+                        var moduleList = moduleIE.ToList();
+                        moduleIE = moduleList.Where(s => s.Title.Contains(title));
+                    }
+                }
+            }
+
+            if (moduleIE != null)
+            {
+                return moduleIE.ToList().Count();
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         #endregion

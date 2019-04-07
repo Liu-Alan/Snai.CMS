@@ -71,10 +71,25 @@ namespace Snai.CMS.Manage.Business.Interface
         #region 菜单
 
         //取菜单
+        Module GetModule(int id);
+
+        //取菜单
         Module GetModule(string controller, string action);
 
         //取菜单
         IEnumerable<Module> GetModulesByIDs(IEnumerable<int> ids, int state);
+
+        //取全部菜单
+        IEnumerable<Module> GetModules(byte state);
+
+        //取菜单
+        IEnumerable<Module> GetModules(string title, int parentID, int pageLimit, int pageIndex);
+
+        //取菜单
+        IEnumerable<Module> GetModulesByParentID(int parentID);
+
+        //取菜单数
+        int GetModuleCount(string title, int parentID);
 
         #endregion
 
