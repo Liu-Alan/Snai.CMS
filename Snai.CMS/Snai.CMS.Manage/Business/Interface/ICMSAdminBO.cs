@@ -92,7 +92,7 @@ namespace Snai.CMS.Manage.Business.Interface
         IEnumerable<Module> GetModules(string title, int parentID, int pageLimit, int pageIndex);
 
         //取菜单
-        IEnumerable<Module> GetModulesByParentID(int parentID);
+        IEnumerable<Module> GetModulesByParentID(int parentID, byte getSub);
 
         //取菜单数
         int GetModuleCount(string title, int parentID);

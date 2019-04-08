@@ -873,43 +873,25 @@ namespace Snai.CMS.Manage.Business.Implement
                 }
             }
 
-            if (string.IsNullOrEmpty(admin.Password.Trim()) || !admin.Password.Trim().Equals(admin.RePassword))
+            if (module.Sort <= 0)
             {
                 msg.Code = 103;
-                msg.Msg = "密码为空或两次密码不一致";
+                msg.Msg = "菜单排序不能小于0";
 
                 return msg;
             }
 
-            var pwdMsg = this.VerifyPassword(admin.Password);
-            if (!pwdMsg.Success)
-            {
-                return msg;
-            }
-
-            if (admin.RoleID <= 0)
-            {
-                msg.Code = 104;
-                msg.Msg = "请选择账号的角色";
-
-                return msg;
-            }
-
-            admin.Password = EncryptMd5.EncryptByte(admin.Password.Trim());
-            admin.CreateTime = (int)DateTimeUtils.DateTimeToUnixTimeStamp(DateTime.Now);
-            admin.UpdateTime = (int)DateTimeUtils.DateTimeToUnixTimeStamp(DateTime.Now);
-
-            var addState = CMSAdminDao.CreateAdmin(admin);
+            var addState = CMSAdminDao.CreateModule(module);
 
             if (addState)
             {
                 msg.Code = 0;
-                msg.Msg = "添加账号成功";
+                msg.Msg = "添加菜单成功";
             }
             else
             {
                 msg.Code = 1;
-                msg.Msg = "添加账号失败";
+                msg.Msg = "添加菜单失败";
             }
 
             return msg;
@@ -919,85 +901,57 @@ namespace Snai.CMS.Manage.Business.Implement
         public Message UpdateModule(Module module)
         {
             var msg = new Message(10, "");
-
-            if (string.IsNullOrEmpty(admin.UserName.Trim()))
+            if (module == null)
             {
                 msg.Code = 101;
-                msg.Msg = "用户名不能为空";
+                msg.Msg = "菜单不能为空";
 
                 return msg;
             }
 
-            if (admin.UserName.Length > 32)
+            if (string.IsNullOrEmpty(module.Title.Trim()))
             {
-                msg.Code = 101;
-                msg.Msg = "用户名长度不能多于32个字符";
+                msg.Code = 102;
+                msg.Msg = "菜单名不能为空";
 
                 return msg;
             }
 
-            var upAdmin = this.GetAdminByID(admin.ID);
-            if (upAdmin == null || upAdmin.ID <= 0)
+            var uModules = this.GetModulesByParentID(module.ParentID, 0);
+            if (uModules != null)
             {
-                msg.Code = 11;
-                msg.Msg = "修改的账号不存在";
-
-                return msg;
-            }
-
-            upAdmin = this.GetAdminByUserName(admin.UserName);
-            if (upAdmin != null && upAdmin.ID != admin.ID)
-            {
-                msg.Code = 12;
-                msg.Msg = "修改的账号用户名已存在";
-
-                return msg;
-            }
-
-            if (!string.IsNullOrEmpty(admin.Password.Trim()))
-            {
-                if (!admin.Password.Trim().Equals(admin.RePassword))
+                var uModule = uModules.FirstOrDefault(s => s.Title == module.Title && s.ID != module.ID);
+                if (uModule != null && uModule.ID > 0)
                 {
-                    msg.Code = 102;
-                    msg.Msg = "两次密码不一致";
+                    msg.Code = 11;
+                    msg.Msg = "修改的菜单名已存在";
 
                     return msg;
                 }
-
-                var pwdMsg = this.VerifyPassword(admin.Password);
-                if (!pwdMsg.Success)
-                {
-                    return msg;
-                }
-
-                admin.Password = EncryptMd5.EncryptByte(admin.Password.Trim());
             }
 
-            if (admin.RoleID <= 0)
+            if (module.Sort <= 0)
             {
                 msg.Code = 103;
-                msg.Msg = "请选择账号的角色";
+                msg.Msg = "菜单排序不能小于0";
 
                 return msg;
             }
 
-            admin.UpdateTime = (int)DateTimeUtils.DateTimeToUnixTimeStamp(DateTime.Now);
+            var addState = CMSAdminDao.UpdateModule(module);
 
-            var upState = CMSAdminDao.UpdateAdminByID(admin.ID, admin.UserName, admin.Password, admin.State, admin.RoleID, admin.UpdateTime);
-
-            if (upState)
+            if (addState)
             {
                 msg.Code = 0;
-                msg.Msg = "修改账号成功";
+                msg.Msg = "修改菜单成功";
             }
             else
             {
                 msg.Code = 1;
-                msg.Msg = "修改账号失败";
+                msg.Msg = "修改菜单失败";
             }
 
             return msg;
-
         }
 
         //取菜单

@@ -349,6 +349,86 @@ namespace Snai.CMS.Manage.Controllers
 
         }
 
+        //添加修改菜单
+        public IActionResult ModifyModule()
+        {
+            //展示页面
+            if (!Request.Method.ToUpper().Equals("POST", StringComparison.OrdinalIgnoreCase) || !Request.HasFormContentType)
+            {
+                // 权限和菜单
+                ModifyModuleModel model = new ModifyModuleModel();
+                var layoutModel = this.GetLayoutModel();
+                if (layoutModel != null)
+                {
+                    layoutModel.ToT(ref model);
+                }
+
+                var modules = CMSAdminBO.GetModules(0);
+                if (modules != null)
+                {
+                    model.Modules = modules.ToList();
+                }
+
+                int id = 0;
+                int.TryParse(Request.Query["id"], out id);
+
+                if (id > 0)
+                {
+                    model.PageTitle = "修改菜单";
+                    var module = CMSAdminBO.GetModule(id);
+                    if (module != null && module.ID > 0)
+                    {
+                        model.Module = module;
+                    }
+                }
+                else
+                {
+                    model.PageTitle = "添加菜单";
+                }
+
+                return View(model);
+            }
+            else
+            {
+                var msg = new Message(10, "修改失败！");
+
+                int id = 0;
+                int.TryParse(Request.Form["id"], out id);
+                int parentID = 0;
+                int.TryParse(Request.Form["parentID"], out parentID);
+                string title = Request.Form["title"];
+                string controller = Request.Form["controller"];
+                string action = Request.Form["action"];
+                int sort = 0;
+                int.TryParse(Request.Form["sort"], out sort);
+                byte state = 1;
+                byte.TryParse(Request.Form["state"], out state);
+
+                var module = new Module()
+                {
+                    ID = id,
+                    ParentID = parentID,
+                    Title = title,
+                    Controller = controller,
+                    Action = action,
+                    Sort = sort,
+                    State = state
+
+                };
+
+                if (module.ID > 0)
+                {
+                    msg = CMSAdminBO.UpdateModule(module);
+                }
+                else
+                {
+                    msg = CMSAdminBO.CreateModule(module);
+                }
+
+                return new JsonResult(msg);
+            }
+        }
+
         #endregion
     }
 }

@@ -1,0 +1,104 @@
+﻿@using Snai.CMS.Manage.Models.BackManage
+
+@model ModifyModuleModel
+
+<form class="layui-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜单名</label>
+        <div class="layui-input-block width-290">
+            <input type="hidden" id="id" name="id" value="@Model.Module.ID" />
+            <input type="text" id="title" name="title" value="@Model.Module.Title" placeholder="请输入菜单名" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">父类菜单</label>
+        <div class="layui-input-inline">
+            <select id="parentID" name="parentID">
+                <option value="">请选择父类菜单</option>
+                @foreach (var module1 in Model.Modules.Where(s => s.ParentID == 0))
+                {
+                    if (module1.ID == Model.Module.ParentID)
+                    {
+                        <option value="@module1.ID" selected>@module1.Title</option>
+                    }
+                    else
+                    {
+                        <option value="@module1.ID">@module1.Title</option>
+                    }
+
+                    foreach (var module2 in Model.Modules.Where(s => s.ParentID == module1.ID))
+                    {
+                        if (module2.ID == Model.Module.ParentID)
+                        {
+                            <option value="@module2.ID" selected>&nbsp;&nbsp;&nbsp;&nbsp;@module2.Title</option>
+                        }
+                        else
+                        {
+                            <option value="@module2.ID">&nbsp;&nbsp;&nbsp;&nbsp;@module2.Title</option>
+                        }
+
+                        foreach (var module3 in Model.Modules.Where(s => s.ParentID == module2.ID))
+                        {
+                            if (module3.ID == Model.Module.ParentID)
+                            {
+                                <option value="@module3.ID" selected>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@module3.Title</option>
+                            }
+                            else
+                            {
+                                <option value="@module3.ID">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@module3.Title</option>
+                            }
+
+                        }
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">控制器名</label>
+        <div class="layui-input-block width-290">
+            <input type="text" id="controller" name="controller" value="@Model.Module.Controller" placeholder="请输入控制器名" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">方法名</label>
+        <div class="layui-input-block width-290">
+            <input type="text" id="action" name="action" value="@Model.Module.Action" placeholder="请输入方法名" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序</label>
+        <div class="layui-input-inline width-290">
+            <input type="text" id="sort" name="sort" value="@Model.Module.Sort" placeholder="请输入排序值" autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-form-mid layui-word-aux">
+            小排在前
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block">
+            @if (Model.Module.State == 1)
+            {
+                <input type="radio" id="state_1" name="state" value="1" title="启用" lay-filter="state" checked="checked">
+                <input type="radio" id="state_2" name="state" value="2" title="禁用" lay-filter="state">
+            }
+            else
+            {
+                <input type="radio" id="state_1" name="state" value="1" title="启用" lay-filter="state">
+                <input type="radio" id="state_2" name="state" value="2" title="禁用" lay-filter="state" checked="checked">
+            }
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="button" id="btnSubmit" name="btnSubmit" class="layui-btn">提 交</button>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script src="~/js/extensions.js"></script>
+    <script src="~/js/utils.js"></script>
+    <script src="~/js/modifymodule.js"></script>
+}

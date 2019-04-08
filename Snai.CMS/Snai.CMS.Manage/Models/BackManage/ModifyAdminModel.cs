@@ -10,8 +10,8 @@ namespace Snai.CMS.Manage.Models.BackManage
     {
         public ModifyAdminModel()
         {
-            Roles = new List<Role>();
             Admin = new Admin();
+            Roles = new List<Role>();
         }
 
         public Admin Admin { get; set; }
