@@ -843,7 +843,7 @@ namespace Snai.CMS.Manage.Business.Implement
         //取菜单
         public Module GetModule(int id)
         {
-            var module = this.GetModule(id);
+            var module = CMSAdminDao.GetModule(id);
             if (module != null)
             {
                 return module;
@@ -888,30 +888,33 @@ namespace Snai.CMS.Manage.Business.Implement
         //取菜单
         public IEnumerable<Module> GetModulesByParentID(int parentID)
         {
-            IList<Module> moduleP = new List<Module>();
             List<Module> modules = new List<Module>();
 
-            var moduleIE = CMSAdminDao.GetModulesByParentID(parentID);
-            if (moduleIE != null)
+            var modules1 = CMSAdminDao.GetModulesByParentID(parentID);
+            if (modules1 != null)
             {
-                moduleP = moduleIE.ToList();
-            }
-
-            if (moduleP != null && moduleP.Count() > 0)
-            {
-                foreach (var module in moduleP)
+                foreach (var item1 in modules1)
                 {
-                    var moduleZ = CMSAdminDao.GetModulesByParentID(module.ID);
-                    if (moduleZ != null)
+                    var modules2 = CMSAdminDao.GetModulesByParentID(item1.ID);
+                    if (modules2 != null)
                     {
-                        modules.AddRange(moduleZ);
+                        foreach (var item2 in modules2)
+                        {
+                            var modules3 = CMSAdminDao.GetModulesByParentID(item2.ID);
+                            if (modules3 != null)
+                            {
+                                modules.AddRange(modules3);
+                            }
+                        }
+
+                        modules.AddRange(modules2);
                     }
                 }
 
-                modules.AddRange(moduleP);
+                modules.AddRange(modules1);
             }
 
-            return modules.OrderBy(s => s.Sort);
+            return modules;
         }
 
         //取菜单
@@ -942,7 +945,7 @@ namespace Snai.CMS.Manage.Business.Implement
 
             if (moduleIE != null)
             {
-                modules = moduleIE.ToList();
+                modules = moduleIE.OrderBy(s => s.ID).OrderBy(s => s.Sort).ToList();
             }
 
             if (modules == null || modules.Count() < 0)
