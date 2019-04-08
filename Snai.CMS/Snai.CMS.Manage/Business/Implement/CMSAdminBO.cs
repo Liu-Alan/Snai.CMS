@@ -840,6 +840,166 @@ namespace Snai.CMS.Manage.Business.Implement
 
         #region 菜单
 
+        //添加菜单
+        public Message CreateModule(Module module)
+        {
+            var msg = new Message(10, "");
+            if (module == null)
+            {
+                msg.Code = 101;
+                msg.Msg = "菜单不能为空";
+
+                return msg;
+            }
+
+            if (string.IsNullOrEmpty(module.Title.Trim()))
+            {
+                msg.Code = 102;
+                msg.Msg = "菜单名不能为空";
+
+                return msg;
+            }
+
+            var uModules = this.GetModulesByParentID(module.ParentID, 0);
+            if (uModules != null)
+            {
+                var uModule = uModules.FirstOrDefault(s => s.Title == module.Title);
+                if (uModule != null && uModule.ID > 0)
+                {
+                    msg.Code = 11;
+                    msg.Msg = "添加的菜单名已存在";
+
+                    return msg;
+                }
+            }
+
+            if (string.IsNullOrEmpty(admin.Password.Trim()) || !admin.Password.Trim().Equals(admin.RePassword))
+            {
+                msg.Code = 103;
+                msg.Msg = "密码为空或两次密码不一致";
+
+                return msg;
+            }
+
+            var pwdMsg = this.VerifyPassword(admin.Password);
+            if (!pwdMsg.Success)
+            {
+                return msg;
+            }
+
+            if (admin.RoleID <= 0)
+            {
+                msg.Code = 104;
+                msg.Msg = "请选择账号的角色";
+
+                return msg;
+            }
+
+            admin.Password = EncryptMd5.EncryptByte(admin.Password.Trim());
+            admin.CreateTime = (int)DateTimeUtils.DateTimeToUnixTimeStamp(DateTime.Now);
+            admin.UpdateTime = (int)DateTimeUtils.DateTimeToUnixTimeStamp(DateTime.Now);
+
+            var addState = CMSAdminDao.CreateAdmin(admin);
+
+            if (addState)
+            {
+                msg.Code = 0;
+                msg.Msg = "添加账号成功";
+            }
+            else
+            {
+                msg.Code = 1;
+                msg.Msg = "添加账号失败";
+            }
+
+            return msg;
+        }
+
+        //更新菜单
+        public Message UpdateModule(Module module)
+        {
+            var msg = new Message(10, "");
+
+            if (string.IsNullOrEmpty(admin.UserName.Trim()))
+            {
+                msg.Code = 101;
+                msg.Msg = "用户名不能为空";
+
+                return msg;
+            }
+
+            if (admin.UserName.Length > 32)
+            {
+                msg.Code = 101;
+                msg.Msg = "用户名长度不能多于32个字符";
+
+                return msg;
+            }
+
+            var upAdmin = this.GetAdminByID(admin.ID);
+            if (upAdmin == null || upAdmin.ID <= 0)
+            {
+                msg.Code = 11;
+                msg.Msg = "修改的账号不存在";
+
+                return msg;
+            }
+
+            upAdmin = this.GetAdminByUserName(admin.UserName);
+            if (upAdmin != null && upAdmin.ID != admin.ID)
+            {
+                msg.Code = 12;
+                msg.Msg = "修改的账号用户名已存在";
+
+                return msg;
+            }
+
+            if (!string.IsNullOrEmpty(admin.Password.Trim()))
+            {
+                if (!admin.Password.Trim().Equals(admin.RePassword))
+                {
+                    msg.Code = 102;
+                    msg.Msg = "两次密码不一致";
+
+                    return msg;
+                }
+
+                var pwdMsg = this.VerifyPassword(admin.Password);
+                if (!pwdMsg.Success)
+                {
+                    return msg;
+                }
+
+                admin.Password = EncryptMd5.EncryptByte(admin.Password.Trim());
+            }
+
+            if (admin.RoleID <= 0)
+            {
+                msg.Code = 103;
+                msg.Msg = "请选择账号的角色";
+
+                return msg;
+            }
+
+            admin.UpdateTime = (int)DateTimeUtils.DateTimeToUnixTimeStamp(DateTime.Now);
+
+            var upState = CMSAdminDao.UpdateAdminByID(admin.ID, admin.UserName, admin.Password, admin.State, admin.RoleID, admin.UpdateTime);
+
+            if (upState)
+            {
+                msg.Code = 0;
+                msg.Msg = "修改账号成功";
+            }
+            else
+            {
+                msg.Code = 1;
+                msg.Msg = "修改账号失败";
+            }
+
+            return msg;
+
+        }
+
         //取菜单
         public Module GetModule(int id)
         {
@@ -886,28 +1046,31 @@ namespace Snai.CMS.Manage.Business.Implement
         }
 
         //取菜单
-        public IEnumerable<Module> GetModulesByParentID(int parentID)
+        public IEnumerable<Module> GetModulesByParentID(int parentID,byte getSub)
         {
             List<Module> modules = new List<Module>();
 
             var modules1 = CMSAdminDao.GetModulesByParentID(parentID);
             if (modules1 != null)
             {
-                foreach (var item1 in modules1)
+                if (getSub == 1)
                 {
-                    var modules2 = CMSAdminDao.GetModulesByParentID(item1.ID);
-                    if (modules2 != null)
+                    foreach (var item1 in modules1)
                     {
-                        foreach (var item2 in modules2)
+                        var modules2 = CMSAdminDao.GetModulesByParentID(item1.ID);
+                        if (modules2 != null)
                         {
-                            var modules3 = CMSAdminDao.GetModulesByParentID(item2.ID);
-                            if (modules3 != null)
+                            foreach (var item2 in modules2)
                             {
-                                modules.AddRange(modules3);
+                                var modules3 = CMSAdminDao.GetModulesByParentID(item2.ID);
+                                if (modules3 != null)
+                                {
+                                    modules.AddRange(modules3);
+                                }
                             }
-                        }
 
-                        modules.AddRange(modules2);
+                            modules.AddRange(modules2);
+                        }
                     }
                 }
 
@@ -932,7 +1095,7 @@ namespace Snai.CMS.Manage.Business.Implement
             }
             else
             {
-                moduleIE = this.GetModulesByParentID(parentID);
+                moduleIE = this.GetModulesByParentID(parentID, 1);
                 if (!string.IsNullOrEmpty(title))
                 {
                     if (moduleIE != null)
@@ -988,7 +1151,7 @@ namespace Snai.CMS.Manage.Business.Implement
             }
             else
             {
-                moduleIE = this.GetModulesByParentID(parentID);
+                moduleIE = this.GetModulesByParentID(parentID, 1);
                 if (!string.IsNullOrEmpty(title))
                 {
                     if (moduleIE != null)

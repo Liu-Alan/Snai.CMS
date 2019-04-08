@@ -70,6 +70,12 @@ namespace Snai.CMS.Manage.Business.Interface
 
         #region 菜单
 
+        //添加菜单
+        Message CreateModule(Module module);
+
+        //更新菜单
+        Message UpdateModule(Module module);
+
         //取菜单
         Module GetModule(int id);
 

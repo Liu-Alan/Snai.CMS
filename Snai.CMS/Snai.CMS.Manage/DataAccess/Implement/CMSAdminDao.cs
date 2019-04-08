@@ -216,6 +216,34 @@ namespace Snai.CMS.Manage.DataAccess.Implement
 
         #region 菜单
 
+        //添加菜单
+        public bool CreateModule(Module module)
+        {
+            Context.Modules.Add(module);
+            return Context.SaveChanges() > 0;
+        }
+
+        //更新菜单
+        public bool UpdateModule(Module module)
+        {
+            var upState = false;
+            var upModule = Context.Modules.SingleOrDefault(s => s.ID == module.ID);
+
+            if (upModule != null)
+            {
+                upModule.ParentID = module.ParentID;
+                upModule.Title = module.Title;
+                upModule.Controller = module.Controller;
+                upModule.Action = module.Action;
+                upModule.Sort = module.Sort;
+                upModule.State = module.State;
+
+                upState = Context.SaveChanges() > 0;
+            }
+
+            return upState;
+        }
+
         //取菜单
         public Module GetModule(int id)
         {

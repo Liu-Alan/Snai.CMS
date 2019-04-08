@@ -56,6 +56,12 @@ namespace Snai.CMS.Manage.DataAccess.Interface
 
         #region 菜单
 
+        //添加菜单
+        bool CreateModule(Module module);
+
+        //更新菜单
+        bool UpdateModule(Module module);
+
         //取菜单
         Module GetModule(int id);
 
