@@ -62,6 +62,7 @@ UNION ALL select 7,'禁启用账号','BackManage','UpdateAdminState',21,1
 UNION ALL select 7,'解锁账号','BackManage','UnlockAdmin',21,1
 UNION ALL select 7,'删除账号','BackManage','DeleteAdmin',21,1
 UNION ALL select 6,'菜单管理','BackManage','ModuleList',22,1
+UNION ALL select 12,'添加修改菜单','BackManage','ModifyModule',22,1
 ;
 
 CREATE TABLE roles(
@@ -101,4 +102,5 @@ UNION ALL select 1,9
 UNION ALL select 1,10
 UNION ALL select 1,11
 UNION ALL select 1,12
+UNION ALL select 1,13
 ;

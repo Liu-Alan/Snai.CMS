@@ -19,10 +19,6 @@ MA.Const = {
         empty: "请选择角色"
     },
 
-    state: {
-        empty: "请选择状态"
-    },
-
     ajaxErr: "很抱歉，由于服务器繁忙，请您稍后再试",
 
     url: {
@@ -208,23 +204,12 @@ MA.RoleID = {
 
     clear: function () {
         MA.Form.roleID.val(0);
-        MA.Form.roleID.focus();
     }
 };
 
 MA.State = {
-    check: function () {
-        var state = $("input[name='state']:checked").val();
-        if (state != 1 && state != 2) {
-            return true;
-        }
-
-        return false;
-    },
-
     clear: function () {
         MA.Form.state1.attr("checked", true);
-        MA.Form.state1.focus();
     }
 };
 
@@ -292,11 +277,6 @@ MA.checkInput = function () {
     if (MA.RoleID.check()) {
         MA.Form.error(MA.Form.roleID);
         MA.layui.layer.msg(MA.Const.roleID.empty, { icon: 2 });
-        return false;
-    }
-
-    if (MA.State.check()) {
-        MA.layui.layer.msg(MA.Const.state.empty, { icon: 2 });
         return false;
     }
 

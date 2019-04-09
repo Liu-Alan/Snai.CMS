@@ -13,39 +13,39 @@
     <div class="layui-form-item">
         <label class="layui-form-label">父类菜单</label>
         <div class="layui-input-inline">
-            <select id="parentID" name="parentID">
-                <option value="">请选择父类菜单</option>
+            <select id="parentID" name="parentID" lay-filter="parentID">
+                <option value="0">头部菜单</option>
                 @foreach (var module1 in Model.Modules.Where(s => s.ParentID == 0))
                 {
                     if (module1.ID == Model.Module.ParentID)
                     {
-                        <option value="@module1.ID" selected>@module1.Title</option>
+                        <option value="@module1.ID" data-parentID="@module1.ParentID" selected>@module1.Title</option>
                     }
                     else
                     {
-                        <option value="@module1.ID">@module1.Title</option>
+                        <option value="@module1.ID" data-parentID="@module1.ParentID">@module1.Title</option>
                     }
 
                     foreach (var module2 in Model.Modules.Where(s => s.ParentID == module1.ID))
                     {
                         if (module2.ID == Model.Module.ParentID)
                         {
-                            <option value="@module2.ID" selected>&nbsp;&nbsp;&nbsp;&nbsp;@module2.Title</option>
+                            <option value="@module2.ID" data-parentID="@module2.ParentID" selected>&nbsp;&nbsp;&nbsp;&nbsp;@module2.Title</option>
                         }
                         else
                         {
-                            <option value="@module2.ID">&nbsp;&nbsp;&nbsp;&nbsp;@module2.Title</option>
+                            <option value="@module2.ID" data-parentID="@module2.ParentID">&nbsp;&nbsp;&nbsp;&nbsp;@module2.Title</option>
                         }
 
                         foreach (var module3 in Model.Modules.Where(s => s.ParentID == module2.ID))
                         {
                             if (module3.ID == Model.Module.ParentID)
                             {
-                                <option value="@module3.ID" selected>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@module3.Title</option>
+                                <option value="@module3.ID" data-parentID="@module3.ParentID" selected>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@module3.Title</option>
                             }
                             else
                             {
-                                <option value="@module3.ID">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@module3.Title</option>
+                                <option value="@module3.ID" data-parentID="@module3.ParentID">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@module3.Title</option>
                             }
 
                         }
