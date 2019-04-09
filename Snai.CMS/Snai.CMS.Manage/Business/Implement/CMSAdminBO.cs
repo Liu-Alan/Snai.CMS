@@ -470,7 +470,7 @@ namespace Snai.CMS.Manage.Business.Implement
         }
 
         //更新状态
-        public Message UpdateStateByIDs(IEnumerable<int> ids, byte state)
+        public Message UpdateAdminStateByIDs(IEnumerable<int> ids, byte state)
         {
             var msg = new Message(10, "");
 
@@ -494,7 +494,7 @@ namespace Snai.CMS.Manage.Business.Implement
 
             var updateTime = (int)DateTimeUtils.DateTimeToUnixTimeStamp(DateTime.Now);
 
-            var upState = CMSAdminDao.UpdateStateByIDs(ids, state, updateTime);
+            var upState = CMSAdminDao.UpdateAdminStateByIDs(ids, state, updateTime);
 
             if (upState)
             {
@@ -1124,6 +1124,74 @@ namespace Snai.CMS.Manage.Business.Implement
             {
                 return 0;
             }
+        }
+
+        //更新状态
+        public Message UpdateModuleState(IEnumerable<int> ids, byte state)
+        {
+            var msg = new Message(10, "");
+
+            if (state != 1 && state != 2)
+            {
+                msg.Code = 101;
+                msg.Msg = "要更改的状态有误";
+
+                return msg;
+            }
+
+            var stateDes = state == 1 ? "启用" : "禁用";
+
+            if (ids == null || ids.Count() <= 0)
+            {
+                msg.Code = 101;
+                msg.Msg = $"请选择要{stateDes}的菜单";
+
+                return msg;
+            }
+
+            var upState = CMSAdminDao.UpdateModuleState(ids, state);
+
+            if (upState)
+            {
+                msg.Code = 0;
+                msg.Msg = $"{stateDes}成功";
+            }
+            else
+            {
+                msg.Code = 1;
+                msg.Msg = $"{stateDes}失败";
+            }
+
+            return msg;
+        }
+
+        //删除菜单
+        public Message DeleteModule(IEnumerable<int> ids)
+        {
+            var msg = new Message(10, "");
+
+            if (ids == null || ids.Count() <= 0)
+            {
+                msg.Code = 101;
+                msg.Msg = "请选择要删除的菜单";
+
+                return msg;
+            }
+
+            var upState = CMSAdminDao.DeleteModule(ids);
+
+            if (upState)
+            {
+                msg.Code = 0;
+                msg.Msg = "删除成功";
+            }
+            else
+            {
+                msg.Code = 1;
+                msg.Msg = "删除失败";
+            }
+
+            return msg;
         }
 
         #endregion

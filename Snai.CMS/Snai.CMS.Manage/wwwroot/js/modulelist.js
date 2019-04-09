@@ -16,11 +16,11 @@ layui.use(['table', 'form', 'layer'], function () {
         , cols: [[ //表头
             { type: 'checkbox', fixed: true }
             , { field: 'id', title: 'ID', fixed: 'left', width: 60 }
-            , { field: 'title', title: '菜单名', width: 120 }
-            , { field: 'parentTitle', title: '父类菜单', width: 120, sort: true }
-            , { field: 'controller', title: 'Controller', width: 150, sort: true }
-            , { field: 'action', title: 'Action', width: 150 }
-            , { field: 'state', title: '状态', templet: '#stateTpl', width: 120, sort: true }//这里的templet值是自定义模板id的选择器
+            , { field: 'title', title: '菜单名', width: 130 }
+            , { field: 'parentTitle', title: '父类菜单', width: 130, sort: true }
+            , { field: 'controller', title: 'Controller', width: 200, sort: true }
+            , { field: 'action', title: 'Action', width: 200 }
+            , { field: 'state', title: '状态', templet: '#stateTpl', width: 80, sort: true }//这里的templet值是自定义模板id的选择器
             , { toolbar: '#moduleBar', title: '操作', fixed: 'right', width: 80, align: 'center' } //这里的toolbar值是模板id的选择器
         ]]
         , id: 'moduleList'

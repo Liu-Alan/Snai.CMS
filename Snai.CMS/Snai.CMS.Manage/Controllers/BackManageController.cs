@@ -211,7 +211,7 @@ namespace Snai.CMS.Manage.Controllers
                     }
                 }
 
-                msg = CMSAdminBO.UpdateStateByIDs(idsInt, state);
+                msg = CMSAdminBO.UpdateAdminStateByIDs(idsInt, state);
             }
             else
             {
@@ -427,6 +427,72 @@ namespace Snai.CMS.Manage.Controllers
 
                 return new JsonResult(msg);
             }
+        }
+
+        //禁启用菜单
+        public ActionResult<Message> UpdateModuleState()
+        {
+            string[] idsStr = Request.Form["ids"];
+            string stateStr = Request.Form["state"];
+            byte state = 1;
+            if (Validator.IsNumbers(stateStr))
+            {
+                state = byte.Parse(stateStr);
+            }
+
+            var stateDes = state == 1 ? "启用" : "禁用";
+
+            var msg = new Message(10, $"{stateDes}失败");
+            var idsInt = new List<int>();
+
+            if (idsStr != null && idsStr.Count() > 0)
+            {
+                foreach (var id in idsStr)
+                {
+                    if (Validator.IsNumbers(id))
+                    {
+                        idsInt.Add(int.Parse(id));
+                    }
+                }
+
+                msg = CMSAdminBO.UpdateModuleState(idsInt, state);
+            }
+            else
+            {
+                msg.Code = 101;
+                msg.Msg = $"请选择要{stateDes}的菜单";
+            }
+
+            return new JsonResult(msg);
+        }
+
+        //删除菜单
+        public ActionResult<Message> DeleteModule()
+        {
+            string[] idsStr = Request.Form["ids"];
+
+            var msg = new Message(10, "删除失败");
+            var idsInt = new List<int>();
+
+            if (idsStr != null && idsStr.Count() > 0)
+            {
+                foreach (var id in idsStr)
+                {
+                    if (Validator.IsNumbers(id))
+                    {
+                        idsInt.Add(int.Parse(id));
+                    }
+                }
+
+                msg = CMSAdminBO.DeleteModule(idsInt);
+            }
+            else
+            {
+                msg.Code = 101;
+                msg.Msg = "请选择要删除的菜单";
+            }
+
+            return new JsonResult(msg);
         }
 
         #endregion

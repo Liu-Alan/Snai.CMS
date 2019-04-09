@@ -105,7 +105,7 @@ namespace Snai.CMS.Manage.DataAccess.Implement
         }
 
         //更新状态
-        public bool UpdateStateByIDs(IEnumerable<int> ids, byte state, int updateTime)
+        public bool UpdateAdminStateByIDs(IEnumerable<int> ids, byte state, int updateTime)
         {
             var upState = false;
             var admins = Context.Admins.Where(s => ids.Contains(s.ID));
@@ -300,6 +300,32 @@ namespace Snai.CMS.Manage.DataAccess.Implement
         public IEnumerable<Module> GetModulesByParentID(int parentID)
         {
             return Context.Modules.Where(s => s.ParentID == parentID);
+        }
+
+        //更新状态
+        public bool UpdateModuleState(IEnumerable<int> ids, byte state)
+        {
+            var upState = false;
+            var modules = Context.Modules.Where(s => ids.Contains(s.ID));
+            if (modules != null && modules.Count() > 0)
+            {
+                foreach (var module in modules)
+                {
+                    module.State = state;
+                }
+
+                upState = Context.SaveChanges() > 0;
+            }
+
+            return upState;
+        }
+
+        //删除菜单
+        public bool DeleteModule(IEnumerable<int> ids)
+        {
+            var modules = Context.Modules.Where(s => ids.Contains(s.ID));
+            Context.Modules.RemoveRange(modules);
+            return Context.SaveChanges() > 0;
         }
 
         #endregion

@@ -36,7 +36,7 @@ namespace Snai.CMS.Manage.Business.Interface
         Message UpdatePasswordByID(int id,string oldPassword, string password,string rePassword);
 
         //更新状态
-        Message UpdateStateByIDs(IEnumerable<int> ids, byte state);
+        Message UpdateAdminStateByIDs(IEnumerable<int> ids, byte state);
 
         //更新错误登录信息
         Message UpdateErrorLogon(int id, int errorLogonTime, int errorLogonCount);
@@ -96,6 +96,12 @@ namespace Snai.CMS.Manage.Business.Interface
 
         //取菜单数
         int GetModuleCount(string title, int parentID);
+
+        //更新状态
+        Message UpdateModuleState(IEnumerable<int> ids, byte state);
+
+        //删除菜单
+        Message DeleteModule(IEnumerable<int> ids);
 
         #endregion
 

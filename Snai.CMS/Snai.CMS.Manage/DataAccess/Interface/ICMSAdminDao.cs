@@ -35,7 +35,7 @@ namespace Snai.CMS.Manage.DataAccess.Interface
         bool UpdatePasswordByID(int id, string password, int updateTime);
 
         //更新状态
-        bool UpdateStateByIDs(IEnumerable<int> ids, byte state, int updateTime);
+        bool UpdateAdminStateByIDs(IEnumerable<int> ids, byte state, int updateTime);
 
         //更新错误登录信息
         bool UpdateErrorLogon(int id, int errorLogonTime,int errorLogonCount, int updateTime);
@@ -79,6 +79,12 @@ namespace Snai.CMS.Manage.DataAccess.Interface
 
         //取菜单
         IEnumerable<Module> GetModulesByParentID(int parentID);
+
+        //更新状态
+        bool UpdateModuleState(IEnumerable<int> ids, byte state);
+
+        //删除菜单
+        bool DeleteModule(IEnumerable<int> ids);
 
         #endregion
 

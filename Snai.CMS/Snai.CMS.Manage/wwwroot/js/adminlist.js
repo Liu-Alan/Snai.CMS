@@ -16,8 +16,8 @@ layui.use(['table', 'form', 'layer'], function () {
         , cols: [[ //表头
             { type: 'checkbox', fixed: true }
             , { field: 'id', title: 'ID', fixed: 'left', width: 60 }
-            , { field: 'userName', title: '用户名', width: 120 }
-            , { field: 'roleTitle', title: '角色', width: 120 }
+            , { field: 'userName', title: '用户名', width: 130 }
+            , { field: 'roleTitle', title: '角色', width: 130 }
             , { field: 'state', title: '账号状态', templet: '#stateTpl', width: 120, sort: true }
             , { field: 'lockState', title: '登录状态', templet: '#lockStateTpl', width: 120, sort: true }
             , { toolbar: '#adminBar', title: '操作', fixed: 'right', width: 80, align: 'center' } //这里的toolbar值是模板元素的选择器

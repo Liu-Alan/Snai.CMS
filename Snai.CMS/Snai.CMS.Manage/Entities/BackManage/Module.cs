@@ -10,6 +10,18 @@ namespace Snai.CMS.Manage.Entities.BackManage
     [Table("modules")]
     public class Module
     {
+        public Module()
+        {
+            ID = 0;
+            ParentID = 0;
+            ParentTitle = "";
+            Title = "";
+            Controller = "";
+            Action = "";
+            Sort = 1;
+            State = 1;
+        }
+
         [Key]
         [Column("id")]
         public int ID { get; set; }
