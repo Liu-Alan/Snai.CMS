@@ -35,8 +35,10 @@
             @Html.Raw("<li class='layui-nav-item'>")
         }
             @Html.Raw("</li>")
-    6. 加基类控制器 ControllerBase : Controller，抽出GetLayoutModel()，再通过泛型 ToT<T>(ref T t) 方法，得到子类页面Model，简化控制器取 LayoutModel Model值
-    7. layui重新渲染后的单选按钮，选择后直接用 $("input[name='state']:checked").val() 是取不值的（如果用layui的表单取值不确定是否能取到）后面用layui监听事件，监听按钮选择修改原单选按钮选中状态，然后再用 $("input[name='state']:checked").val() 取值
+    6. 加基类控制器 ControllerBase : Controller，抽出GetLayoutModel()，再通过泛型 ToT<T>(ref T t) 方法，得到子类页面Model，  
+        简化控制器取 LayoutModel Model值
+    7. layui重新渲染后的单选按钮，选择后直接用 $("input[name='state']:checked").val() 是取不值的（用layui的表单取值不确定是否能取到）  
+        后面用layui监听事件，监听按钮选择修改原单选按钮选中状态，然后再用 $("input[name='state']:checked").val() 取值
         MA.layui.form.on('radio(state)', function (data) {
             if (data.value == 1) {
                 MA.Form.state1.attr("checked", true);
