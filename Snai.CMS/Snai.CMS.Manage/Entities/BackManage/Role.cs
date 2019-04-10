@@ -10,6 +10,13 @@ namespace Snai.CMS.Manage.Entities.BackManage
     [Table("roles")]
     public class Role
     {
+        public Role()
+        {
+            ID = 0;
+            Title = "";
+            State = 1;
+        }
+
         [Key]
         [Column("id")]
         public int ID { get; set; }

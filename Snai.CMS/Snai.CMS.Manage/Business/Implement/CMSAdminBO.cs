@@ -1218,6 +1218,65 @@ namespace Snai.CMS.Manage.Business.Implement
             return CMSAdminDao.GetRoles(state);
         }
 
+        //取角色
+        public IEnumerable<Role> GetRoles(string title, int pageLimit, int pageIndex)
+        {
+            IEnumerable<Role> roleIE = new List<Role>();
+            IList<Role> roles = new List<Role>();
+            if (string.IsNullOrEmpty(title))
+            {
+                roleIE = CMSAdminDao.GetRoles(0);
+            }
+            else
+            {
+                roleIE = CMSAdminDao.GetRolesLikeTitle(title);
+            }
+
+            if (roleIE != null)
+            {
+                roles = roleIE.ToList();
+            }
+
+            if (roles == null || roles.Count() < 0)
+            {
+                return null;
+            }
+
+            pageIndex = pageIndex < 1 ? 1 : pageIndex;
+
+            if (roles.Count() <= (pageIndex - 1) * pageLimit)
+            {
+                return null;
+            }
+
+            roles = roles.Skip((pageIndex - 1) * pageLimit).Take(pageLimit).ToList();
+
+            return roles;
+        }
+
+        //取角色数
+        public int GetRoleCount(string title)
+        {
+            IEnumerable<Role> roleIE = new List<Role>();
+            if (string.IsNullOrEmpty(title))
+            {
+                roleIE = CMSAdminDao.GetRoles(0);
+            }
+            else
+            {
+                roleIE = CMSAdminDao.GetRolesLikeTitle(title);
+            }
+
+            if (roleIE != null)
+            {
+                return roleIE.ToList().Count();
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
         #endregion
 
         #region 权限
@@ -1241,10 +1300,6 @@ namespace Snai.CMS.Manage.Business.Implement
         {
             return CMSAdminDao.GetRoleRights(roleID);
         }
-
-        #endregion
-
-        #region 用户权限
 
         //权限判断（Message.Success true 权限成功，false 权限失败）
         public Message VerifyUserRole(string UserName, string controller, string action)

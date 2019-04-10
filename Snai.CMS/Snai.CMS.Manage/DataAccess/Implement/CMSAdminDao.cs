@@ -351,6 +351,12 @@ namespace Snai.CMS.Manage.DataAccess.Implement
             }
         }
 
+        //取角色
+        public IEnumerable<Role> GetRolesLikeTitle(string title)
+        {
+            return Context.Roles.Where(s => s.Title.Contains(title));
+        }
+
         #endregion
 
         #region 权限

@@ -106,7 +106,6 @@ namespace Snai.CMS.Manage.Controllers
 
                 return new JsonResult(model);
             }
-
         }
 
         //添加修改账号
@@ -346,7 +345,6 @@ namespace Snai.CMS.Manage.Controllers
 
                 return new JsonResult(model);
             }
-
         }
 
         //添加修改菜单
@@ -493,6 +491,63 @@ namespace Snai.CMS.Manage.Controllers
             }
 
             return new JsonResult(msg);
+        }
+
+        #endregion
+
+        #region 角色管理
+
+        //角色管理
+        public IActionResult RoleList(string id)
+        {
+            if (id == null || !id.ToUpper().Equals("DATA", StringComparison.OrdinalIgnoreCase))
+            {
+                // 权限和菜单
+                RoleListModel model = new RoleListModel();
+                var layoutModel = this.GetLayoutModel();
+                if (layoutModel != null)
+                {
+                    layoutModel.ToT(ref model);
+                }
+
+                return View(model);
+            }
+            else
+            {
+                //取角色列表
+                string titleFilter = Request.Query["title"];
+
+                int pageIndex = 0;
+                int.TryParse(Request.Query["page"], out pageIndex);
+
+                int pageLimit = Consts.Page_Limit;
+                int totCount = CMSAdminBO.GetRoleCount(titleFilter);
+                int pageCount = (int)Math.Ceiling(totCount / (float)pageLimit);
+                var roles = new List<Role>();
+                if (totCount > 0)
+                {
+                    IEnumerable<Role> roleIE = CMSAdminBO.GetRoles(titleFilter, pageLimit, pageIndex);
+                    if (roleIE != null)
+                    {
+                        roles = roleIE.ToList();
+                    }
+                }
+
+                dynamic model = new ExpandoObject();
+
+                model.code = 0;
+                model.msg = "";
+                model.count = totCount;
+                model.data = roles.Select(s => new
+                {
+                    id = s.ID,
+                    title = s.Title,
+                    state = s.State
+                });
+
+                return new JsonResult(model);
+            }
+
         }
 
         #endregion

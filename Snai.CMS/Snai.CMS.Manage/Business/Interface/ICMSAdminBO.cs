@@ -113,6 +113,12 @@ namespace Snai.CMS.Manage.Business.Interface
         //取全部角色
         IEnumerable<Role> GetRoles(byte state);
 
+        //取角色
+        IEnumerable<Role> GetRoles(string title, int pageLimit, int pageIndex);
+
+        //取角色数
+        int GetRoleCount(string title);
+
         #endregion
 
         #region 权限
@@ -122,10 +128,6 @@ namespace Snai.CMS.Manage.Business.Interface
 
         //取权限
         IEnumerable<RoleRight> GetRoleRights(int roleID);
-
-        #endregion
-
-        #region 用户权限
 
         //权限判断（Message.Success true 权限成功，false 权限失败）
         Message VerifyUserRole(string UserName, string controller, string action);
