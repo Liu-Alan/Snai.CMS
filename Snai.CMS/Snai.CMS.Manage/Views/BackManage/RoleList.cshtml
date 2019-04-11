@@ -1,0 +1,59 @@
+﻿@using Snai.CMS.Manage.Models.BackManage
+
+@model RoleListModel
+
+<div class="search-title">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <input id="title" name="title" placeholder="请输入角色名" class="layui-input" autocomplete="off">
+            </div>
+            <div class="layui-input-inline">
+                <button type="button" id="btnReload" name="btnReload" class="layui-btn">查询</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/html" id="roleToolbar">
+    <div class="layui-btn-container">
+        @if (Model.RoleModules.Select(s => new { s.Controller, s.Action }).Contains(new { Controller = "BackManage", Action = "ModifyRole" }))
+        {
+            <button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="add">添加</button>
+        }
+        @if (Model.RoleModules.Select(s => new { s.Controller, s.Action }).Contains(new { Controller = "BackManage", Action = "UpdateRoleState" }))
+        {
+            <button class="layui-btn layui-btn-sm" lay-event="enable">启用</button>
+            <button class="layui-btn layui-btn-sm layui-btn-warm" lay-event="disable">禁用</button>
+        }
+        @if (Model.RoleModules.Select(s => new { s.Controller, s.Action }).Contains(new { Controller = "BackManage", Action = "DeleteRole" }))
+        {
+            <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delete">删除</button>
+        }
+    </div>
+</script>
+
+<table id="roleList" lay-filter="roleList"></table>
+
+<script type="text/html" id="stateTpl">
+    {{#  if(d.state == 1){ }}
+    <p class="font-color-normal">启用</p>
+    {{#  } else { }}
+    <p class="font-color-danger">禁用</p>
+    {{#  } }}
+</script>
+
+<script type='text/html' id='roleBar'>
+    @if (Model.RoleModules.Select(s => new { s.Controller, s.Action }).Contains(new { Controller = "BackManage", Action = "ModifyRole" }))
+    {
+        <a class='layui-btn layui-btn-xs' lay-event='edit'>编辑</a>
+    }
+</script>
+
+
+@section Scripts{
+    <script src="~/js/extensions.js"></script>
+    <script src="~/js/utils.js"></script>
+    <script src="~/js/rolelist.js"></script>
+}
+

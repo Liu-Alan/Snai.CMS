@@ -332,6 +332,30 @@ namespace Snai.CMS.Manage.DataAccess.Implement
 
         #region 角色
 
+        //添加角色
+        public bool CreateRole(Role role)
+        {
+            Context.Roles.Add(role);
+            return Context.SaveChanges() > 0;
+        }
+
+        //更新角色
+        public bool UpdateRole(Role role)
+        {
+            var upState = false;
+            var upRole = Context.Roles.SingleOrDefault(s => s.ID == role.ID);
+
+            if (upRole != null)
+            {
+                upRole.Title = role.Title;
+                upRole.State = role.State;
+
+                upState = Context.SaveChanges() > 0;
+            }
+
+            return upState;
+        }
+
         //取角色
         public Role GetRoleByID(int id)
         {

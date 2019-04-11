@@ -90,6 +90,12 @@ namespace Snai.CMS.Manage.DataAccess.Interface
 
         #region 角色
 
+        //添加角色
+        bool CreateRole(Role role);
+
+        //更新角色
+        bool UpdateRole(Role role);
+
         //取角色
         Role GetRoleByID(int id);
 

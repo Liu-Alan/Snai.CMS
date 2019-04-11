@@ -65,6 +65,7 @@ UNION ALL select 6,'菜单管理','BackManage','ModuleList',22,1
 UNION ALL select 12,'添加修改菜单','BackManage','ModifyModule',22,1
 UNION ALL select 12,'禁启用菜单','BackManage','UpdateModuleState',22,1
 UNION ALL select 12,'删除菜单','BackManage','DeleteModule',22,1
+UNION ALL select 6,'角色管理','BackManage','RoleList',23,1
 ;
 
 CREATE TABLE roles(
@@ -107,4 +108,5 @@ UNION ALL select 1,12
 UNION ALL select 1,13
 UNION ALL select 1,14
 UNION ALL select 1,15
+UNION ALL select 1,16
 ;
