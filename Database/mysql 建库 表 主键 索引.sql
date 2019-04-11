@@ -49,23 +49,26 @@ ALTER TABLE modules ADD UNIQUE INDEX ix_modules_parent_id_title(parent_id,title)
 ALTER TABLE modules ADD INDEX ix_modules_controller_action(controller,action)  			
 ;
 
-INSERT into modules(parent_id,title,controller,action,sort,state)
-select 0,'首页','Home','Index',1,1
-UNION ALL select 1,'首页','','',10,1
-UNION ALL select 2,'登录信息','Home','LoginInfo',11,1
-UNION ALL select 2,'修改密码','Home','UpdatePassword',12,1
-UNION ALL select 0,'后台设置','BackManage','Index',2,1
-UNION ALL select 5,'管理员管理','','',20,1
-UNION ALL select 6,'账号管理','BackManage','AdminList',21,1
-UNION ALL select 7,'添加修改账号','BackManage','ModifyAdmin',21,1
-UNION ALL select 7,'禁启用账号','BackManage','UpdateAdminState',21,1
-UNION ALL select 7,'解锁账号','BackManage','UnlockAdmin',21,1
-UNION ALL select 7,'删除账号','BackManage','DeleteAdmin',21,1
-UNION ALL select 6,'菜单管理','BackManage','ModuleList',22,1
-UNION ALL select 12,'添加修改菜单','BackManage','ModifyModule',22,1
-UNION ALL select 12,'禁启用菜单','BackManage','UpdateModuleState',22,1
-UNION ALL select 12,'删除菜单','BackManage','DeleteModule',22,1
-UNION ALL select 6,'角色管理','BackManage','RoleList',23,1
+INSERT into modules(id,parent_id,title,controller,action,sort,state)
+select 1,0,'首页','Home','Index',1,1
+UNION ALL select 2,1,'首页','','',10,1
+UNION ALL select 3,2,'登录信息','Home','LoginInfo',11,1
+UNION ALL select 4,2,'修改密码','Home','UpdatePassword',12,1
+UNION ALL select 5,0,'后台设置','BackManage','Index',2,1
+UNION ALL select 6,5,'管理员管理','','',20,1
+UNION ALL select 7,6,'账号管理','BackManage','AdminList',21,1
+UNION ALL select 8,7,'添加修改账号','BackManage','ModifyAdmin',21,1
+UNION ALL select 9,7,'禁启用账号','BackManage','UpdateAdminState',21,1
+UNION ALL select 10,7,'解锁账号','BackManage','UnlockAdmin',21,1
+UNION ALL select 11,7,'删除账号','BackManage','DeleteAdmin',21,1
+UNION ALL select 12,6,'菜单管理','BackManage','ModuleList',22,1
+UNION ALL select 13,12,'添加修改菜单','BackManage','ModifyModule',22,1
+UNION ALL select 14,12,'禁启用菜单','BackManage','UpdateModuleState',22,1
+UNION ALL select 15,12,'删除菜单','BackManage','DeleteModule',22,1
+UNION ALL select 16,6,'角色管理','BackManage','RoleList',23,1
+UNION ALL select 17,16,'添加修改角色','BackManage','ModifyRole',22,1
+UNION ALL select 18,16,'禁启用角色','BackManage','UpdateRoleState',22,1
+UNION ALL select 19,16,'删除角色','BackManage','DeleteRole',22,1
 ;
 
 CREATE TABLE roles(
@@ -109,4 +112,7 @@ UNION ALL select 1,13
 UNION ALL select 1,14
 UNION ALL select 1,15
 UNION ALL select 1,16
+UNION ALL select 1,17
+UNION ALL select 1,18
+UNION ALL select 1,19
 ;

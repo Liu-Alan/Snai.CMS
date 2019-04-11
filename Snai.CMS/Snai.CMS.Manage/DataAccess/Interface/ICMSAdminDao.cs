@@ -99,21 +99,36 @@ namespace Snai.CMS.Manage.DataAccess.Interface
         //取角色
         Role GetRoleByID(int id);
 
+        //取角色
+        Role GetRoleByTitle(string title);
+
         //取全部角色
         IEnumerable<Role> GetRoles(byte state);
 
         //取角色
         IEnumerable<Role> GetRolesLikeTitle(string title);
 
+        //更新状态
+        bool UpdateRoleState(IEnumerable<int> ids, byte state);
+
+        //删除角色
+        bool DeleteRole(IEnumerable<int> ids);
+
         #endregion
 
         #region 权限
+
+        //添加权限
+        bool CreateRoleRight(IEnumerable<RoleRight> roleRights);
 
         //取权限
         RoleRight GetRoleRight(int roleID, int moduleID);
 
         //取权限
         IEnumerable<RoleRight> GetRoleRights(int roleID);
+
+        //删除权限
+        bool DeleteRoleRight(int roleID);
 
         #endregion
     }

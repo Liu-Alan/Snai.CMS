@@ -1,0 +1,39 @@
+﻿@using Snai.CMS.Manage.Models.BackManage
+
+@model ModifyRoleModel
+
+<form class="layui-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label">角色名</label>
+        <div class="layui-input-block width-290">
+            <input type="hidden" id="id" name="id" value="@Model.Role.ID" />
+            <input type="text" id="title" name="title" value="@Model.Role.Title" placeholder="请输入角色名" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block">
+            @if (Model.Role.State == 1)
+            {
+                <input type="radio" id="state_1" name="state" value="1" title="启用" lay-filter="state" checked="checked">
+                <input type="radio" id="state_2" name="state" value="2" title="禁用" lay-filter="state">
+            }
+            else
+            {
+                <input type="radio" id="state_1" name="state" value="1" title="启用" lay-filter="state">
+                <input type="radio" id="state_2" name="state" value="2" title="禁用" lay-filter="state" checked="checked">
+            }
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="button" id="btnSubmit" name="btnSubmit" class="layui-btn">提 交</button>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script src="~/js/extensions.js"></script>
+    <script src="~/js/utils.js"></script>
+    <script src="~/js/modifyrole.js"></script>
+}

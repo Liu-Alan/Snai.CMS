@@ -107,6 +107,12 @@ namespace Snai.CMS.Manage.Business.Interface
 
         #region 角色
 
+        //添加角色
+        Message CreateRole(Role role);
+
+        //更新角色
+        Message UpdateRole(Role role);
+
         //取角色
         Role GetRoleByID(int id);
 
@@ -119,9 +125,18 @@ namespace Snai.CMS.Manage.Business.Interface
         //取角色数
         int GetRoleCount(string title);
 
+        //更新状态
+        Message UpdateRoleState(IEnumerable<int> ids, byte state);
+
+        //删除角色
+        Message DeleteRole(IEnumerable<int> ids);
+
         #endregion
 
         #region 权限
+
+        //添加权限
+        Message CreateRoleRight(int roleID, IEnumerable<int> moduleIDs);
 
         //取权限
         RoleRight GetRoleRight(int roleID, int moduleID);
@@ -129,13 +144,16 @@ namespace Snai.CMS.Manage.Business.Interface
         //取权限
         IEnumerable<RoleRight> GetRoleRights(int roleID);
 
+        //删除权限
+        Message DeleteRoleRight(int roleID);
+
         //权限判断（Message.Success true 权限成功，false 权限失败）
         Message VerifyUserRole(string UserName, string controller, string action);
 
         //取角色下菜单
         IEnumerable<Module> GetModulesByRoleID(int roleID);
 
-        //取当前菜单
+        //取当前菜单和父类菜单
         IEnumerable<int> GetThisModuleIDs(IEnumerable<Module> modules,int moduleID);
 
         #endregion

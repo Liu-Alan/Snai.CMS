@@ -219,7 +219,7 @@ namespace Snai.CMS.Manage.Business.Implement
         }
 
         //取账号
-        public IEnumerable<Admin> GetAdmins(string userName, int roleID,int pageLimit,int pageIndex)
+        public IEnumerable<Admin> GetAdmins(string userName, int roleID, int pageLimit, int pageIndex)
         {
             IEnumerable<Admin> adminIE = new List<Admin>();
             IList<Admin> admins = new List<Admin>();
@@ -1000,7 +1000,7 @@ namespace Snai.CMS.Manage.Business.Implement
         }
 
         //取菜单
-        public IEnumerable<Module> GetModulesByParentID(int parentID,byte getSub)
+        public IEnumerable<Module> GetModulesByParentID(int parentID, byte getSub)
         {
             List<Module> modules = new List<Module>();
 
@@ -1198,6 +1198,96 @@ namespace Snai.CMS.Manage.Business.Implement
 
         #region 角色
 
+        //添加角色
+        public Message CreateRole(Role role)
+        {
+            var msg = new Message(10, "");
+            if (role == null)
+            {
+                msg.Code = 101;
+                msg.Msg = "角色不能为空";
+
+                return msg;
+            }
+
+            if (string.IsNullOrEmpty(role.Title.Trim()))
+            {
+                msg.Code = 102;
+                msg.Msg = "角色名不能为空";
+
+                return msg;
+            }
+
+            var uRole = CMSAdminDao.GetRoleByTitle(role.Title);
+            if (uRole != null && uRole.ID > 0)
+            {
+                msg.Code = 11;
+                msg.Msg = "添加的角色名已存在";
+
+                return msg;
+            }
+
+            var addState = CMSAdminDao.CreateRole(role);
+
+            if (addState)
+            {
+                msg.Code = 0;
+                msg.Msg = "添加角色成功";
+            }
+            else
+            {
+                msg.Code = 1;
+                msg.Msg = "添加角色失败";
+            }
+
+            return msg;
+        }
+
+        //更新角色
+        public Message UpdateRole(Role role)
+        {
+            var msg = new Message(10, "");
+            if (role == null)
+            {
+                msg.Code = 101;
+                msg.Msg = "角色不能为空";
+
+                return msg;
+            }
+
+            if (string.IsNullOrEmpty(role.Title.Trim()))
+            {
+                msg.Code = 102;
+                msg.Msg = "角色名不能为空";
+
+                return msg;
+            }
+
+            var uRole = CMSAdminDao.GetRoleByTitle(role.Title);
+            if (uRole != null && uRole.ID != role.ID)
+            {
+                msg.Code = 11;
+                msg.Msg = "修改的角色名已存在";
+
+                return msg;
+            }
+
+            var addState = CMSAdminDao.UpdateRole(role);
+
+            if (addState)
+            {
+                msg.Code = 0;
+                msg.Msg = "修改角色成功";
+            }
+            else
+            {
+                msg.Code = 1;
+                msg.Msg = "修改角色失败";
+            }
+
+            return msg;
+        }
+
         //取角色
         public Role GetRoleByID(int id)
         {
@@ -1277,14 +1367,119 @@ namespace Snai.CMS.Manage.Business.Implement
             }
         }
 
+        //更新状态
+        public Message UpdateRoleState(IEnumerable<int> ids, byte state)
+        {
+            var msg = new Message(10, "");
+
+            if (state != 1 && state != 2)
+            {
+                msg.Code = 101;
+                msg.Msg = "要更改的状态有误";
+
+                return msg;
+            }
+
+            var stateDes = state == 1 ? "启用" : "禁用";
+
+            if (ids == null || ids.Count() <= 0)
+            {
+                msg.Code = 101;
+                msg.Msg = $"请选择要{stateDes}的角色";
+
+                return msg;
+            }
+
+            var upState = CMSAdminDao.UpdateRoleState(ids, state);
+
+            if (upState)
+            {
+                msg.Code = 0;
+                msg.Msg = $"{stateDes}成功";
+            }
+            else
+            {
+                msg.Code = 1;
+                msg.Msg = $"{stateDes}失败";
+            }
+
+            return msg;
+        }
+
+        //删除角色
+        public Message DeleteRole(IEnumerable<int> ids)
+        {
+            var msg = new Message(10, "");
+
+            if (ids == null || ids.Count() <= 0)
+            {
+                msg.Code = 101;
+                msg.Msg = "请选择要删除的角色";
+
+                return msg;
+            }
+
+            var upState = CMSAdminDao.DeleteRole(ids);
+
+            if (upState)
+            {
+                msg.Code = 0;
+                msg.Msg = "删除成功";
+            }
+            else
+            {
+                msg.Code = 1;
+                msg.Msg = "删除失败";
+            }
+
+            return msg;
+        }
+
         #endregion
 
         #region 权限
 
+        //添加权限
+        public Message CreateRoleRight(int roleID, IEnumerable<int> moduleIDs)
+        {
+            var msg = new Message(10, "");
+            if (roleID <= 0 || moduleIDs == null || moduleIDs.ToList().Count() <= 0)
+            {
+                msg.Code = 101;
+                msg.Msg = "添加权限不能为空";
+
+                return msg;
+            }
+
+            var uRole = this.GetRoleRights(roleID);
+            if (uRole != null && uRole.ToList().Count() > 0)
+            {
+                this.DeleteRoleRight(roleID);
+            }
+
+            var roleRights = new List<RoleRight>();
+            roleRights.AddRange(moduleIDs.Select(s => new RoleRight { RoleID = roleID, ModuleID = s }));
+
+            var addState = CMSAdminDao.CreateRoleRight(roleRights);
+
+            if (addState)
+            {
+                msg.Code = 0;
+                msg.Msg = "添加权限成功";
+            }
+            else
+            {
+                msg.Code = 1;
+                msg.Msg = "添加权限失败";
+            }
+
+            return msg;
+        }
+
         //取权限
         public RoleRight GetRoleRight(int roleID, int moduleID)
         {
-            var roleRight = CMSAdminDao.GetRoleRight(roleID,moduleID);
+            var roleRight = CMSAdminDao.GetRoleRight(roleID, moduleID);
             if (roleRight != null)
             {
                 return roleRight;
@@ -1299,6 +1494,35 @@ namespace Snai.CMS.Manage.Business.Implement
         public IEnumerable<RoleRight> GetRoleRights(int roleID)
         {
             return CMSAdminDao.GetRoleRights(roleID);
+        }
+
+        //删除权限
+        public Message DeleteRoleRight(int roleID)
+        {
+            var msg = new Message(10, "");
+
+            if (roleID <= 0)
+            {
+                msg.Code = 101;
+                msg.Msg = "要删除的权限不存在";
+
+                return msg;
+            }
+
+            var upState = CMSAdminDao.DeleteRoleRight(roleID);
+
+            if (upState)
+            {
+                msg.Code = 0;
+                msg.Msg = "删除成功";
+            }
+            else
+            {
+                msg.Code = 1;
+                msg.Msg = "删除失败";
+            }
+
+            return msg;
         }
 
         //权限判断（Message.Success true 权限成功，false 权限失败）
@@ -1362,17 +1586,17 @@ namespace Snai.CMS.Manage.Business.Implement
             return this.GetModulesByIDs(ids, 1);
         }
 
-        //取当前菜单
+        //取当前菜单和父类菜单
         public IEnumerable<int> GetThisModuleIDs(IEnumerable<Module> modules, int moduleID)
         {
-            
+
             if (moduleID <= 0 || modules == null)
             {
                 return null;
             }
 
             var moduleList = modules.ToList();
-            if(!moduleList.Any())
+            if (!moduleList.Any())
             {
                 return null;
             }

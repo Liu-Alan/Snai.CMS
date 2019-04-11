@@ -362,6 +362,12 @@ namespace Snai.CMS.Manage.DataAccess.Implement
             return Context.Roles.SingleOrDefault(s => s.ID == id);
         }
 
+        //取角色
+        public Role GetRoleByTitle(string title)
+        {
+            return Context.Roles.SingleOrDefault(s => s.Title == title);
+        }
+
         //取全部角色
         public IEnumerable<Role> GetRoles(byte state)
         {
@@ -381,9 +387,42 @@ namespace Snai.CMS.Manage.DataAccess.Implement
             return Context.Roles.Where(s => s.Title.Contains(title));
         }
 
+        //更新状态
+        public bool UpdateRoleState(IEnumerable<int> ids, byte state)
+        {
+            var upState = false;
+            var roles = Context.Roles.Where(s => ids.Contains(s.ID));
+            if (roles != null && roles.Count() > 0)
+            {
+                foreach (var role in roles)
+                {
+                    role.State = state;
+                }
+
+                upState = Context.SaveChanges() > 0;
+            }
+
+            return upState;
+        }
+
+        //删除角色
+        public bool DeleteRole(IEnumerable<int> ids)
+        {
+            var roles = Context.Roles.Where(s => ids.Contains(s.ID));
+            Context.Roles.RemoveRange(roles);
+            return Context.SaveChanges() > 0;
+        }
+
         #endregion
 
         #region 权限
+
+        //添加权限
+        public bool CreateRoleRight(IEnumerable<RoleRight> roleRights)
+        {
+            Context.RoleRights.AddRange(roleRights);
+            return Context.SaveChanges() > 0;
+        }
 
         //取权限
         public RoleRight GetRoleRight(int roleID, int moduleID)
@@ -395,6 +434,14 @@ namespace Snai.CMS.Manage.DataAccess.Implement
         public IEnumerable<RoleRight> GetRoleRights(int roleID)
         {
             return Context.RoleRights.Where(s => s.RoleID == roleID);
+        }
+
+        //删除权限
+        public bool DeleteRoleRight(int roleID)
+        {
+            var roleRights = Context.RoleRights.Where(s => s.RoleID == roleID);
+            Context.RoleRights.RemoveRange(roleRights);
+            return Context.SaveChanges() > 0;
         }
 
         #endregion

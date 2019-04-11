@@ -495,7 +495,7 @@ namespace Snai.CMS.Manage.Controllers
 
         #endregion
 
-        #region 角色管理
+        #region 角色权限管理
 
         //角色管理
         public IActionResult RoleList(string id)
@@ -548,6 +548,207 @@ namespace Snai.CMS.Manage.Controllers
                 return new JsonResult(model);
             }
 
+        }
+
+        //添加修改角色
+        public IActionResult ModifyRole()
+        {
+            //展示页面
+            if (!Request.Method.ToUpper().Equals("POST", StringComparison.OrdinalIgnoreCase) || !Request.HasFormContentType)
+            {
+                // 权限和菜单
+                ModifyRoleModel model = new ModifyRoleModel();
+                var layoutModel = this.GetLayoutModel();
+                if (layoutModel != null)
+                {
+                    layoutModel.ToT(ref model);
+                }
+
+                int id = 0;
+                int.TryParse(Request.Query["id"], out id);
+
+                if (id > 0)
+                {
+                    model.PageTitle = "修改角色";
+                    var role = CMSAdminBO.GetRoleByID(id);
+                    if (role != null && role.ID > 0)
+                    {
+                        model.Role = role;
+                    }
+                }
+                else
+                {
+                    model.PageTitle = "添加角色";
+                }
+
+                return View(model);
+            }
+            else
+            {
+                var msg = new Message(10, "修改失败！");
+
+                int id = 0;
+                int.TryParse(Request.Form["id"], out id);
+                string title = Request.Form["title"];
+                byte state = 1;
+                byte.TryParse(Request.Form["state"], out state);
+
+                var role = new Role()
+                {
+                    ID = id,
+                    Title = title,
+                    State = state
+
+                };
+
+                if (role.ID > 0)
+                {
+                    msg = CMSAdminBO.UpdateRole(role);
+                }
+                else
+                {
+                    msg = CMSAdminBO.CreateRole(role);
+                }
+
+                return new JsonResult(msg);
+            }
+        }
+
+        //禁启用角色
+        public ActionResult<Message> UpdateRoleState()
+        {
+            string[] idsStr = Request.Form["ids"];
+            string stateStr = Request.Form["state"];
+            byte state = 1;
+            if (Validator.IsNumbers(stateStr))
+            {
+                state = byte.Parse(stateStr);
+            }
+
+            var stateDes = state == 1 ? "启用" : "禁用";
+
+            var msg = new Message(10, $"{stateDes}失败");
+            var idsInt = new List<int>();
+
+            if (idsStr != null && idsStr.Count() > 0)
+            {
+                foreach (var id in idsStr)
+                {
+                    if (Validator.IsNumbers(id))
+                    {
+                        idsInt.Add(int.Parse(id));
+                    }
+                }
+
+                msg = CMSAdminBO.UpdateRoleState(idsInt, state);
+            }
+            else
+            {
+                msg.Code = 101;
+                msg.Msg = $"请选择要{stateDes}的角色";
+            }
+
+            return new JsonResult(msg);
+        }
+
+        //删除角色
+        public ActionResult<Message> DeleteRole()
+        {
+            string[] idsStr = Request.Form["ids"];
+
+            var msg = new Message(10, "删除失败");
+            var idsInt = new List<int>();
+
+            if (idsStr != null && idsStr.Count() > 0)
+            {
+                foreach (var id in idsStr)
+                {
+                    if (Validator.IsNumbers(id))
+                    {
+                        idsInt.Add(int.Parse(id));
+                    }
+                }
+
+                msg = CMSAdminBO.DeleteRole(idsInt);
+            }
+            else
+            {
+                msg.Code = 101;
+                msg.Msg = "请选择要删除的角色";
+            }
+
+            return new JsonResult(msg);
+        }
+
+        //添加权限
+        public IActionResult ModifyRoleRight()
+        {
+            //展示页面
+            if (!Request.Method.ToUpper().Equals("POST", StringComparison.OrdinalIgnoreCase) || !Request.HasFormContentType)
+            {
+                // 权限和菜单
+                ModifyRoleRightModel model = new ModifyRoleRightModel();
+                var layoutModel = this.GetLayoutModel();
+                if (layoutModel != null)
+                {
+                    layoutModel.ToT(ref model);
+                }
+
+                int id = 0;
+                int.TryParse(Request.Query["id"], out id);
+
+                if (id > 0)
+                {
+                    var role = CMSAdminBO.GetRoleByID(id);
+                    if (role != null && role.ID > 0)
+                    {
+                        model.Role = role;
+
+                        var modules = CMSAdminBO.GetModules(1);
+                        if (modules != null)
+                        {
+                            model.Modules = modules.ToList();
+                        }
+
+                        var roleRights = CMSAdminBO.GetRoleRights(role.ID);
+                        if (roleRights != null)
+                        {
+                            model.RoleModuleIDs = roleRights.Select(s => s.ModuleID).ToList();
+                        }
+                    }
+                }
+
+                return View(model);
+            }
+            else
+            {
+                var msg = new Message(10, "分配失败！");
+
+                int id = 0;
+                int.TryParse(Request.Form["id"], out id);
+                string title = Request.Form["title"];
+                byte state = 1;
+                byte.TryParse(Request.Form["state"], out state);
+
+                var role = new Role()
+                {
+                    ID = id,
+                    Title = title,
+                    State = state
+
+                };
+
+                if (role.ID > 0)
+                {
+                    msg = CMSAdminBO.UpdateRole(role);
+                }
+                else
+                {
+                    msg = CMSAdminBO.CreateRole(role);
+                }
+
+                return new JsonResult(msg);
+            }
         }
 
         #endregion
