@@ -724,27 +724,25 @@ namespace Snai.CMS.Manage.Controllers
             {
                 var msg = new Message(10, "分配失败！");
 
-                int id = 0;
-                int.TryParse(Request.Form["id"], out id);
-                string title = Request.Form["title"];
-                byte state = 1;
-                byte.TryParse(Request.Form["state"], out state);
+                int roleID = 0;
+                int.TryParse(Request.Form["roleID"], out roleID);
 
-                var role = new Role()
+                string[] moduleIDsStr = Request.Form["moduleIDs"];
+                var moduleIDsInt = new List<int>();
+                if (moduleIDsStr != null && moduleIDsStr.Count() > 0)
                 {
-                    ID = id,
-                    Title = title,
-                    State = state
-
-                };
-
-                if (role.ID > 0)
-                {
-                    msg = CMSAdminBO.UpdateRole(role);
+                    foreach (var moduleID in moduleIDsStr)
+                    {
+                        if (Validator.IsNumbers(moduleID))
+                        {
+                            moduleIDsInt.Add(int.Parse(moduleID));
+                        }
+                    }
                 }
-                else
+
+                if (roleID > 0 && moduleIDsInt != null && moduleIDsInt.Count() > 0)
                 {
-                    msg = CMSAdminBO.CreateRole(role);
+                    msg = CMSAdminBO.CreateRoleRight(roleID, moduleIDsInt);
                 }
 
                 return new JsonResult(msg);

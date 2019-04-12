@@ -48,6 +48,10 @@
     {
         <a class='layui-btn layui-btn-xs' lay-event='edit'>编辑</a>
     }
+    @if (Model.RoleModules.Select(s => new { s.Controller, s.Action }).Contains(new { Controller = "BackManage", Action = "ModifyRoleRight" }))
+    {
+        <a class='layui-btn layui-btn-xs layui-btn-normal' lay-event='editright'>分配权限</a>
+    }
 </script>
 
 

@@ -18,7 +18,7 @@ layui.use(['table', 'form', 'layer'], function () {
             , { field: 'id', title: 'ID', fixed: 'left', width: 60 }
             , { field: 'title', title: '角色名', width: 130 }
             , { field: 'state', title: '状态', templet: '#stateTpl', width: 120, sort: true }
-            , { toolbar: '#roleBar', title: '操作', fixed: 'right', width: 80, align: 'center' } //这里的toolbar值是模板元素的选择器
+            , { toolbar: '#roleBar', title: '操作', fixed: 'right', width: 150, align: 'center' } //这里的toolbar值是模板元素的选择器
         ]]
         , id: 'roleList'
         , toolbar: '#roleToolbar'
@@ -194,6 +194,8 @@ layui.use(['table', 'form', 'layer'], function () {
         var data = obj.data;
         if (obj.event === 'edit') {
             $.jump('/BackManage/ModifyRole?id=' + data.id);
+        } else if (obj.event === 'editright') {
+            $.jump('/BackManage/ModifyRoleRight?id=' + data.id);
         }
     });
 

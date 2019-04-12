@@ -1,0 +1,82 @@
+﻿@using Snai.CMS.Manage.Models.BackManage
+
+@model ModifyRoleRightModel
+
+@Html.Raw("<form class='layui-form'>")
+    <div class="layui-form-item">
+        <label class="layui-form-label">角色</label>
+        <div class="layui-input-block width-290">
+            <input type="hidden" id="roleID" name="roleID" value="@Model.Role.ID" />
+            <label class="layui-form-label">@Model.Role.Title</label>
+        </div>
+    </div>
+    @Html.Raw("<div class='layui-form-item'>")
+        <label class="layui-form-label">权限</label>
+        @Html.Raw("<div class='layui-input-block'>")
+            @foreach (var module1 in Model.Modules.Where(s => s.ParentID == 0))
+            {
+                @Html.Raw("<fieldset class='layui-elem-field'>")
+                    @if (Model.RoleModuleIDs.Contains(module1.ID))
+                    {
+                        <legend><input type="checkbox" id="moduleIDs_@module1.ID" name="moduleIDs" value="@module1.ID" title="@module1.Title" lay-filter="moduleIDs" lay-skin="primary" checked="checked"></legend>
+                    }
+                    else
+                    {
+                        <legend><input type="checkbox" id="moduleIDs_@module1.ID" name="moduleIDs" value="@module1.ID" title="@module1.Title" lay-filter="moduleIDs" lay-skin="primary"></legend>
+                    }
+                        @Html.Raw("<div class='layui-field-box'>")
+                            @foreach (var module2 in Model.Modules.Where(s => s.ParentID == module1.ID))
+                            {
+                                @Html.Raw("<fieldset class='layui-elem-field'>")
+                                @if (Model.RoleModuleIDs.Contains(module2.ID))
+                                {
+                                <legend><input type="checkbox" id="moduleIDs_@module2.ID" name="moduleIDs" value="@module2.ID" title="@module2.Title" lay-filter="moduleIDs" lay-skin="primary" checked="checked"></legend>
+                                }
+                                else
+                                {
+                                <legend><input type="checkbox" id="moduleIDs_@module2.ID" name="moduleIDs" value="@module2.ID" title="@module2.Title" lay-filter="moduleIDs" lay-skin="primary"></legend>
+                                }
+                                @Html.Raw("<div class='layui-field-box'>")
+                                @foreach (var module3 in Model.Modules.Where(s => s.ParentID == module2.ID))
+                                {
+                                    @if (Model.RoleModuleIDs.Contains(module3.ID))
+                                    {
+                                        <input type="checkbox" id="moduleIDs_@module3.ID" name="moduleIDs" value="@module3.ID" title="@module3.Title" lay-filter="moduleIDs" lay-skin="primary" checked="checked">
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" id="moduleIDs_@module3.ID" name="moduleIDs" value="@module3.ID" title="@module3.Title" lay-filter="moduleIDs" lay-skin="primary">
+                                    }
+                                    <hr>
+                                    @foreach (var module4 in Model.Modules.Where(s => s.ParentID == module3.ID))
+                                    {
+                                        @if (Model.RoleModuleIDs.Contains(module4.ID))
+                                        {
+                                            <input type="checkbox" id="moduleIDs_@module4.ID" name="moduleIDs" value="@module4.ID" title="@module4.Title" lay-filter="moduleIDs" lay-skin="primary" checked="checked">
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" id="moduleIDs_@module4.ID" name="moduleIDs" value="@module4.ID" title="@module4.Title" lay-filter="moduleIDs" lay-skin="primary">
+                                        }
+                                    }
+                                }
+                                @Html.Raw("</div>")
+                            @Html.Raw("</fieldset>")
+                            }
+                        @Html.Raw("</div>")
+                @Html.Raw("</fieldset>")
+            }
+        @Html.Raw("</div>")
+    @Html.Raw("</div>")
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="button" id="btnSubmit" name="btnSubmit" class="layui-btn">提 交</button>
+        </div>
+    </div>
+@Html.Raw("</form>")
+
+@section Scripts{
+    <script src="~/js/extensions.js"></script>
+    <script src="~/js/utils.js"></script>
+    <script src="~/js/modifyroleright.js"></script>
+}
