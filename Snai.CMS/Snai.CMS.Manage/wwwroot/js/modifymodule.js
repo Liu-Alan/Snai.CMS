@@ -102,11 +102,9 @@ MM.ParentID = {
         if (parentID1 == 0) {
             MM.Form.controller.attr("disabled", true);
             MM.Form.action.attr("disabled", true);
-            //MM.layui.form.render('select');
         }else{
             MM.Form.controller.attr("disabled", false);
             MM.Form.action.attr("disabled", false);
-            //MM.layui.form.render('select');
         }
     }
 };
