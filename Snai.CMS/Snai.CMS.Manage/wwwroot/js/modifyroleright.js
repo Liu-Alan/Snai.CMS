@@ -18,7 +18,7 @@ MRR.Form = {
     btnSubmit: null,
 
     inti: function () {
-        this.id = $("#roleID");
+        this.roleID = $("#roleID");
         this.btnSubmit = $("#btnSubmit");
     },
 
@@ -50,48 +50,9 @@ MRR.ModuleIDs = {
     },
 
     clear: function () {
-        MRR.Form.title.val("");
-        MRR.Form.title.focus();
-    },
-
-    onfocus: function () {
-        MRR.Form.focus(MRR.Form.title);
-    },
-    onblur: function (e) {
-        MRR.Form.blur(MRR.Form.title);
-    },
-
-    onkeydown: function () {
-        if (this.check()) {
-            MRR.Form.title.focus();
-        }
-    },
-
-    bind: function () {
-        MRR.Form.title.bind("focus", MRR.Title.onfocus);
-        MRR.Form.title.bind("blur", MRR.Title.onblur);
-
-        MRR.Form.title.bind("keydown", function (e) {
-            $.enterSubmit(e, function () { MRR.Title.onkeydown(); });
-        });
-    },
-
-    select: function (value) {
-        var parentID1 = -1;
-        parentID1 = $("select[name='parentID'] option[value=" + value + "]").attr("data-parentID");
-        if (parentID1 == 0) {
-            MRR.Form.controller.attr("disabled", true);
-            MRR.Form.action.attr("disabled", true);
-        } else {
-            MRR.Form.controller.attr("disabled", false);
-            MRR.Form.action.attr("disabled", false);
-        }
-    }
-};
-
-MRR.State = {
-    clear: function () {
-        MRR.Form.state1.attr("checked", true);
+        $("input[name='moduleIDs']").each(function () {
+            $(this).prop("checked", false);
+        }); 
     }
 };
 
@@ -118,24 +79,8 @@ MRR.BtnSubmit = {
 };
 
 MRR.checkInput = function () {
-    if (MRR.Title.check()) {
-        MRR.Form.error(MRR.Form.title);
-        MRR.layui.layer.msg(MRR.Const.title.empty, { icon: 2 });
-        MRR.Form.title.focus();
-        return false;
-    }
-
-    var sortCheck = MRR.Sort.check();
-    if (sortCheck == 1) {
-        MRR.Form.error(MRR.Form.sort);
-        MRR.layui.layer.msg(MRR.Const.sort.empty, { icon: 2 });
-        MRR.Form.sort.focus();
-        return false;
-    }
-    else if (sortCheck == 2) {
-        MRR.Form.error(MRR.Form.sort);
-        MRR.layui.layer.msg(MRR.Const.sort.error, { icon: 2 });
-        MRR.Form.sort.focus();
+    if (MRR.ModuleIDs.check()) {
+        MRR.layui.layer.msg(MRR.Const.moduleIDs.empty, { icon: 2 });
         return false;
     }
 
@@ -151,16 +96,11 @@ MRR.onsubmit = function () {
 
     //请求参数
     var params = {
-        id: MRR.Form.id.val(),
-        title: MRR.Form.title.val(),
-        parentID: MRR.Form.parentID.val(),
-        controller: MRR.Form.controller.val(),
-        action: MRR.Form.action.val(),
-        sort: MRR.Form.sort.val(),
-        state: $("input[name='state']:checked").val()
+        roleID: MRR.Form.roleID.val(),
+        moduleIDs: $("input[name='moduleIDs']:checked").val()
     };
 
-    var ajaxUrl = MRR.Const.url.doModifyModule;
+    var ajaxUrl = MRR.Const.url.doModifyRoleRight;
 
     //发送请求
     $.ajax({
@@ -169,6 +109,7 @@ MRR.onsubmit = function () {
         cache: false,
         async: true,
         dataType: "json",
+        traditional: true,
         data: params,
         success: function (data, textStatus) {
             if (!data.success) {
@@ -176,7 +117,7 @@ MRR.onsubmit = function () {
                 MRR.layui.layer.msg(data.msg, { icon: 2 });
             } else {
                 MRR.layui.layer.msg(data.msg, { icon: 1 }, function () {
-                    $.jump(MRR.Const.url.doModuleList);
+                    $.jump(MRR.Const.url.doRoleList);
                 });
 
             }
@@ -199,28 +140,50 @@ MRR.bind = function () {
         MRR.layui.form = layui.form;
         MRR.layui.layer = layui.layer;
 
-        MRR.layui.form.on('radio(state)', function (data) {
-            if (data.value == 1) {
-                MRR.Form.state1.attr("checked", true);
-                MRR.Form.state2.attr("checked", false);
+        MRR.layui.form.on('checkbox(moduleIDs)', function (data) {
+            if (data.elem.checked) {
+                //往上
+                var parentID1 = $("input[name='moduleIDs'][value=" + data.value + "]").attr("data-parentID");
+                if (parentID1 != 0) {
+                    $("input[name='moduleIDs'][value=" + parentID1 + "]").prop("checked", true);
+                    var parentID2 = $("input[name='moduleIDs'][value=" + parentID1 + "]").attr("data-parentID");
+                    if (parentID2 != 0) {
+                        $("input[name='moduleIDs'][value=" + parentID2 + "]").prop("checked", true);
+                        var parentID3 = $("input[name='moduleIDs'][value=" + parentID2 + "]").attr("data-parentID");
+                    }
+                    if (parentID3 != 0) {
+                        $("input[name='moduleIDs'][value=" + parentID3 + "]").prop("checked", true);
+                    }
+                }
+                //往下
+                $("input[name='moduleIDs'][data-parentID=" + data.value + "]").each(function () {
+                    $(this).prop("checked", true);
+                    $("input[name='moduleIDs'][data-parentID=" + $(this).val() + "]").each(function () {
+                        $(this).prop("checked", true);
+                        $("input[name='moduleIDs'][data-parentID=" + $(this).val() + "]").each(function () {
+                            $(this).prop("checked", true);
+                        });
+                    });
+                }); 
             } else {
-                MRR.Form.state1.attr("checked", false);
-                MRR.Form.state2.attr("checked", true);
+                //往下
+                $("input[name='moduleIDs'][data-parentID=" + data.value + "]").each(function () {
+                    $(this).prop("checked", false);
+                    $("input[name='moduleIDs'][data-parentID=" + $(this).val() + "]").each(function () {
+                        $(this).prop("checked", false);
+                        $("input[name='moduleIDs'][data-parentID=" + $(this).val() + "]").each(function () {
+                            $(this).prop("checked", false);
+                        });
+                    });
+                });
             }
-        });
 
-        MRR.layui.form.on('select(parentID)', function (data) {
-            MRR.ParentID.select(data.value);
+            MRR.layui.form.render('checkbox');
         });
     });
 
     MRR.Form.inti();
-    MRR.Title.bind();
-    MRR.Controller.bind();
-    MRR.Action.bind();
-    MRR.Sort.bind();
     MRR.BtnSubmit.bind();
-    MRR.ParentID.select(MRR.Form.parentID.val());
 };
 
 /*

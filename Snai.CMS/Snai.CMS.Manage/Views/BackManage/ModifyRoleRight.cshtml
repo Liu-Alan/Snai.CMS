@@ -18,11 +18,11 @@
                 @Html.Raw("<fieldset class='layui-elem-field'>")
                     @if (Model.RoleModuleIDs.Contains(module1.ID))
                     {
-                        <legend><input type="checkbox" id="moduleIDs_@module1.ID" name="moduleIDs" value="@module1.ID" title="@module1.Title" lay-filter="moduleIDs" lay-skin="primary" checked="checked"></legend>
+                        <legend><input type="checkbox" id="moduleIDs_@module1.ID" name="moduleIDs" value="@module1.ID" data-parentID="@module1.ParentID" title="@module1.Title" lay-filter="moduleIDs" lay-skin="primary" checked="checked"></legend>
                     }
                     else
                     {
-                        <legend><input type="checkbox" id="moduleIDs_@module1.ID" name="moduleIDs" value="@module1.ID" title="@module1.Title" lay-filter="moduleIDs" lay-skin="primary"></legend>
+                        <legend><input type="checkbox" id="moduleIDs_@module1.ID" name="moduleIDs" value="@module1.ID" data-parentID="@module1.ParentID" title="@module1.Title" lay-filter="moduleIDs" lay-skin="primary"></legend>
                     }
                         @Html.Raw("<div class='layui-field-box'>")
                             @foreach (var module2 in Model.Modules.Where(s => s.ParentID == module1.ID))
@@ -30,33 +30,33 @@
                                 @Html.Raw("<fieldset class='layui-elem-field'>")
                                 @if (Model.RoleModuleIDs.Contains(module2.ID))
                                 {
-                                <legend><input type="checkbox" id="moduleIDs_@module2.ID" name="moduleIDs" value="@module2.ID" title="@module2.Title" lay-filter="moduleIDs" lay-skin="primary" checked="checked"></legend>
+                                <legend><input type="checkbox" id="moduleIDs_@module2.ID" name="moduleIDs" value="@module2.ID" data-parentID="@module2.ParentID" title="@module2.Title" lay-filter="moduleIDs" lay-skin="primary" checked="checked"></legend>
                                 }
                                 else
                                 {
-                                <legend><input type="checkbox" id="moduleIDs_@module2.ID" name="moduleIDs" value="@module2.ID" title="@module2.Title" lay-filter="moduleIDs" lay-skin="primary"></legend>
+                                <legend><input type="checkbox" id="moduleIDs_@module2.ID" name="moduleIDs" value="@module2.ID" data-parentID="@module2.ParentID" title="@module2.Title" lay-filter="moduleIDs" lay-skin="primary"></legend>
                                 }
                                 @Html.Raw("<div class='layui-field-box'>")
                                 @foreach (var module3 in Model.Modules.Where(s => s.ParentID == module2.ID))
                                 {
                                     @if (Model.RoleModuleIDs.Contains(module3.ID))
                                     {
-                                        <input type="checkbox" id="moduleIDs_@module3.ID" name="moduleIDs" value="@module3.ID" title="@module3.Title" lay-filter="moduleIDs" lay-skin="primary" checked="checked">
+                                        <input type="checkbox" id="moduleIDs_@module3.ID" name="moduleIDs" value="@module3.ID" data-parentID="@module3.ParentID" title="@module3.Title" lay-filter="moduleIDs" lay-skin="primary" checked="checked">
                                     }
                                     else
                                     {
-                                        <input type="checkbox" id="moduleIDs_@module3.ID" name="moduleIDs" value="@module3.ID" title="@module3.Title" lay-filter="moduleIDs" lay-skin="primary">
+                                        <input type="checkbox" id="moduleIDs_@module3.ID" name="moduleIDs" value="@module3.ID" data-parentID="@module3.ParentID" title="@module3.Title" lay-filter="moduleIDs" lay-skin="primary">
                                     }
                                     <hr>
                                     @foreach (var module4 in Model.Modules.Where(s => s.ParentID == module3.ID))
                                     {
                                         @if (Model.RoleModuleIDs.Contains(module4.ID))
                                         {
-                                            <input type="checkbox" id="moduleIDs_@module4.ID" name="moduleIDs" value="@module4.ID" title="@module4.Title" lay-filter="moduleIDs" lay-skin="primary" checked="checked">
+                                            <input type="checkbox" id="moduleIDs_@module4.ID" name="moduleIDs" value="@module4.ID" data-parentID="@module4.ParentID" title="@module4.Title" lay-filter="moduleIDs" lay-skin="primary" checked="checked">
                                         }
                                         else
                                         {
-                                            <input type="checkbox" id="moduleIDs_@module4.ID" name="moduleIDs" value="@module4.ID" title="@module4.Title" lay-filter="moduleIDs" lay-skin="primary">
+                                            <input type="checkbox" id="moduleIDs_@module4.ID" name="moduleIDs" value="@module4.ID" data-parentID="@module4.ParentID" title="@module4.Title" lay-filter="moduleIDs" lay-skin="primary">
                                         }
                                     }
                                 }
