@@ -41,8 +41,12 @@ MRR.layui = {
 
 MRR.ModuleIDs = {
     check: function () {
-        var strTitle = $("input[name='moduleIDs']:checked").val();
-        return Utils.String(strTitle).isNullOrEmptyTrim();
+        var strModuleIDs = $("input[name='moduleIDs']:checked").val();
+        if (strModuleIDs == 'undefined' || strModuleIDs == '' || strModuleIDs.length <= 0) {
+            return true;
+        } else {
+            return false;
+        }
     },
 
     clear: function () {
