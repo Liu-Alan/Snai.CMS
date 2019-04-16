@@ -48,6 +48,7 @@
                                         <input type="checkbox" id="moduleIDs_@module3.ID" name="moduleIDs" value="@module3.ID" data-parentID="@module3.ParentID" title="@module3.Title" lay-filter="moduleIDs" lay-skin="primary">
                                     }
                                     <hr>
+                                    @Html.Raw("<div class='roleright-parent'>")
                                     @foreach (var module4 in Model.Modules.Where(s => s.ParentID == module3.ID))
                                     {
                                         @if (Model.RoleModuleIDs.Contains(module4.ID))
@@ -59,6 +60,7 @@
                                             <input type="checkbox" id="moduleIDs_@module4.ID" name="moduleIDs" value="@module4.ID" data-parentID="@module4.ParentID" title="@module4.Title" lay-filter="moduleIDs" lay-skin="primary">
                                         }
                                     }
+                                    @Html.Raw("</div>")
                                 }
                                 @Html.Raw("</div>")
                             @Html.Raw("</fieldset>")

@@ -51,7 +51,7 @@ MRR.ModuleIDs = {
 
     clear: function () {
         $("input[name='moduleIDs']").each(function () {
-            $(this).prop("checked", false);
+            $(this).attr("checked", false);
         }); 
     }
 };
@@ -142,37 +142,39 @@ MRR.bind = function () {
 
         MRR.layui.form.on('checkbox(moduleIDs)', function (data) {
             if (data.elem.checked) {
+                $("input[name='moduleIDs'][value=" + data.value + "]").attr("checked", true);
                 //往上
                 var parentID1 = $("input[name='moduleIDs'][value=" + data.value + "]").attr("data-parentID");
                 if (parentID1 != 0) {
-                    $("input[name='moduleIDs'][value=" + parentID1 + "]").prop("checked", true);
+                    $("input[name='moduleIDs'][value=" + parentID1 + "]").attr("checked", true);
                     var parentID2 = $("input[name='moduleIDs'][value=" + parentID1 + "]").attr("data-parentID");
                     if (parentID2 != 0) {
-                        $("input[name='moduleIDs'][value=" + parentID2 + "]").prop("checked", true);
+                        $("input[name='moduleIDs'][value=" + parentID2 + "]").attr("checked", true);
                         var parentID3 = $("input[name='moduleIDs'][value=" + parentID2 + "]").attr("data-parentID");
                     }
                     if (parentID3 != 0) {
-                        $("input[name='moduleIDs'][value=" + parentID3 + "]").prop("checked", true);
+                        $("input[name='moduleIDs'][value=" + parentID3 + "]").attr("checked", true);
                     }
                 }
                 //往下
                 $("input[name='moduleIDs'][data-parentID=" + data.value + "]").each(function () {
-                    $(this).prop("checked", true);
+                    $(this).attr("checked", true);
                     $("input[name='moduleIDs'][data-parentID=" + $(this).val() + "]").each(function () {
-                        $(this).prop("checked", true);
+                        $(this).attr("checked", true);
                         $("input[name='moduleIDs'][data-parentID=" + $(this).val() + "]").each(function () {
-                            $(this).prop("checked", true);
+                            $(this).attr("checked", true);
                         });
                     });
                 }); 
             } else {
+                $("input[name='moduleIDs'][value=" + data.value + "]").attr("checked", false);
                 //往下
                 $("input[name='moduleIDs'][data-parentID=" + data.value + "]").each(function () {
-                    $(this).prop("checked", false);
+                    $(this).attr("checked", false);
                     $("input[name='moduleIDs'][data-parentID=" + $(this).val() + "]").each(function () {
-                        $(this).prop("checked", false);
+                        $(this).attr("checked", false);
                         $("input[name='moduleIDs'][data-parentID=" + $(this).val() + "]").each(function () {
-                            $(this).prop("checked", false);
+                            $(this).attr("checked", false);
                         });
                     });
                 });
