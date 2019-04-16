@@ -66,10 +66,10 @@ UNION ALL select 13,12,'添加修改菜单','BackManage','ModifyModule',22,1
 UNION ALL select 14,12,'禁启用菜单','BackManage','UpdateModuleState',22,1
 UNION ALL select 15,12,'删除菜单','BackManage','DeleteModule',22,1
 UNION ALL select 16,6,'角色管理','BackManage','RoleList',23,1
-UNION ALL select 17,16,'添加修改角色','BackManage','ModifyRole',22,1
-UNION ALL select 18,16,'禁启用角色','BackManage','UpdateRoleState',22,1
-UNION ALL select 19,16,'删除角色','BackManage','DeleteRole',22,1
-UNION ALL select 20,16,'分配权限','BackManage','ModifyRoleRight',22,1
+UNION ALL select 17,16,'添加修改角色','BackManage','ModifyRole',23,1
+UNION ALL select 18,16,'禁启用角色','BackManage','UpdateRoleState',23,1
+UNION ALL select 19,16,'删除角色','BackManage','DeleteRole',23,1
+UNION ALL select 20,16,'分配权限','BackManage','ModifyRoleRight',23,1
 ;
 
 CREATE TABLE roles(

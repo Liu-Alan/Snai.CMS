@@ -1423,6 +1423,11 @@ namespace Snai.CMS.Manage.Business.Implement
 
             if (upState)
             {
+                foreach (var id in ids)
+                {
+                    this.DeleteRoleRight(id);
+                }
+
                 msg.Code = 0;
                 msg.Msg = "删除成功";
             }

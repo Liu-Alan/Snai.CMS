@@ -6,6 +6,7 @@
     ... 完成 登录、修改密码
     2019-4-6 完成 账号管理（账号列表，添加，删除，修改，禁/启用，解锁）
     2019-4-9 完成 菜单管理（菜单列表，添加，删除，修改，禁/启用）
+    2019-4-17 完成 角色权限管理（角色列表，添加，删除，修改，禁/启用，分配权限）
 
 ### 开发踩过的坑
     1. 注册HttpContext，用于在Controller之外的地方使用  
@@ -48,8 +49,19 @@
                 MA.Form.state2.attr("checked", true);
             }
         });
+    8. 对于checkbox提交，用 jquery 组合成数组提交
+        var moduleIDs =[];   
+        $("input[name='moduleIDs']:checked").each(function(){   
+            moduleIDs.push($(this).val());   
+        });
 
-
+        //请求参数
+        var params = {
+            roleID: MRR.Form.roleID.val(),
+            moduleIDs: moduleIDs 
+        };
+    9. 对于分配权限时checkbox选择与联动选择，也用的是layui监听事件MRR.layui.form.on('checkbox(moduleIDs)', function (data) {}); 来设置原checkbox的值  
+        对于联动后重新渲染checkbox用MRR.layui.form.render('checkbox')，要注意用prop而不用attr，$(this).prop("checked", false)，否则已经做过选择复选框联动无效
 ### 菜单层级
     后台配置  
     -------管理员管理  
